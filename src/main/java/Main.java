@@ -7,17 +7,21 @@ import java.util.Scanner;
 
 public class Main {
     public static void main(String[] args) {
-        String user = "uid=arnaud,ou=system";
+
         String mdp = "@Arnaudisthebest83";
 
         Scanner sc = new Scanner(System.in);
-        System.out.println("entrer le port :");
+        System.out.println("Entrez le port :");
         String port = sc.nextLine();
+        System.out.println("Entrez le nom d'utilisateur (uid) :");
+        String user = sc.nextLine();
+        System.out.println("Entrez le nom de l'ou :");
+        String ou = sc.nextLine();
 
         Properties env = new Properties();
         env.put(Context.INITIAL_CONTEXT_FACTORY, "com.sun.jndi.ldap.LdapCtxFactory");
         env.put(Context.PROVIDER_URL, "ldap://localhost"+port);
-        env.put(Context.SECURITY_PRINCIPAL, user);
+        env.put(Context.SECURITY_PRINCIPAL, "uid="+user+",ou="+ou);
         env.put(Context.SECURITY_CREDENTIALS,mdp);
         try {
             System.out.println("Création de la connexion");
