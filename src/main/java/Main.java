@@ -23,6 +23,7 @@ public class Main {
             System.out.println("Création de la connexion");
             DirContext connection = new InitialDirContext(env);
             System.out.println("Connexion établie");
+            System.out.println("Connexion " + connection);
         } catch (NamingException e) {
             throw new RuntimeException(e);
         }
