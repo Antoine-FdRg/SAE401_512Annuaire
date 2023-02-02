@@ -20,10 +20,12 @@ public class Main {
         env.put(Context.SECURITY_PRINCIPAL, user);
         env.put(Context.SECURITY_CREDENTIALS,mdp);
         try {
+            System.out.println("Création de la connexion");
             DirContext connection = new InitialDirContext(env);
-            System.out.println("Connection ="+ connection);
+            System.out.println("Connexion établie");
         } catch (NamingException e) {
             throw new RuntimeException(e);
         }
+        System.out.println("Fin du programme");
     }
 }
