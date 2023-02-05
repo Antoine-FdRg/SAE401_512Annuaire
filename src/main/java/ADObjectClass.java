@@ -1,15 +1,17 @@
+import java.util.Objects;
+
 public enum ADObjectClass {
-    USER("user", 1, "name"),
-    ORGANIZATIONAL_UNIT("organizationalUnit",2, "name"),
-    ;
+    USER("user", "u", "name"),
+    ORGANIZATIONAL_UNIT("organizationalUnit","o", "name"),
+    GROUP("group", "g", "name");
 
     private final String text;
-    private final int value;
+    private final String initial;
     private final String namingAttribute;
 
-    ADObjectClass(String text, int value,String namingAttribute) {
+    ADObjectClass(String text, String value,String namingAttribute) {
         this.text = text;
-        this.value = value;
+        this.initial = value;
         this.namingAttribute = namingAttribute;
     }
 
@@ -17,17 +19,17 @@ public enum ADObjectClass {
         return text;
     }
 
-    public int getValue() {
-        return value;
+    public String getInitial() {
+        return initial;
     }
 
     public String getNamingAttribute() {
         return namingAttribute;
     }
 
-    public static ADObjectClass fromValue(int value) {
+    public static ADObjectClass fromValue(String value) {
         for (ADObjectClass b : ADObjectClass.values()) {
-            if (b.value == value) {
+            if (Objects.equals(b.initial, value)) {
                 return b;
             }
         }
