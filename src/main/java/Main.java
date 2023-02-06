@@ -8,7 +8,7 @@ import java.util.Scanner;
 
 public class Main {
 
-    public static  Scanner sc = new Scanner(System.in);
+    public static Scanner sc = new Scanner(System.in);
     private static boolean adminConnected;
     private static String username;
 
@@ -20,7 +20,6 @@ public class Main {
         try {
             connection = connect(user, mdp);
         } catch (NamingException e) {
-//            throw new RuntimeException(e);
             System.out.println("Erreur d'authentification");
             System.exit(1);
         }
@@ -29,7 +28,6 @@ public class Main {
         try {
             connection.close();
         } catch (NamingException e) {
-//            throw new RuntimeException(e);
             System.out.println("Erreur de déconnexion");
         }
         System.out.println("Fin du programme");
@@ -43,25 +41,85 @@ public class Main {
                 break;
             }
             switch (input) {
-                case "s":
-                    search(connection);
-                    break;
-//            case "a":
-//                add(connection);
-//                break;
-//            case "d":
-//                delete(connection);
-//                break;
-//            case "m":
-//                modify(connection);
-//                break;
-                default:
-                    System.out.println("Commande inconnue");
+                case "s" -> search(connection);
+                case "c" -> create(connection);
+                case "d" -> delete(connection);
+                case "a" -> addUserToGroup(connection);
+                default -> System.out.println("Commande inconnue");
             }
         }
     }
 
-    public static void search(DirContext context){
+    private static void addUserToGroup(DirContext connection) {
+        System.out.println("Entrez le nom de l'utilisateur : ");
+        String user = sc.next();
+        System.out.println("Entrez le nom du groupe : ");
+        String group = sc.next();
+        try {
+            Attributes attributes = connection.getAttributes("CN=" + user + ",OU=512BankFR,DC=EQUIPE1B,DC=local");
+            Attribute memberOf = attributes.get("memberOf");
+            if (memberOf == null) {
+                memberOf = new BasicAttribute("memberOf");
+            }
+            memberOf.add("CN=" + group + ",OU=512BankFR,DC=EQUIPE1B,DC=local");
+            //todo : corriger le bug qui empêche l'ajout de l'utilisateur au groupe
+            //todo : vérifier que l'utilisateur n'est pas déjà dans le groupe
+            connection.modifyAttributes("CN=" + user + ",OU=512BankFR,DC=EQUIPE1B,DC=local", DirContext.REPLACE_ATTRIBUTE, attributes);
+            System.out.println("Utilisateur ajouté au groupe");
+        } catch (NamingException e) {
+//            throw new RuntimeException(e);
+            System.out.println("Erreur lors de l'ajout de l'utilisateur au groupe");
+        }
+
+    }
+
+    private static void delete(DirContext connection) {
+        if (!adminConnected) {
+            System.out.println("Entrez le type d'objet à supprimer : ");
+            for (ADObjectClass adObjectClass : ADObjectClass.values()) {
+                System.out.println(adObjectClass.getInitial() + " : " + adObjectClass);
+            }
+//            ADObjectClass deletedObject = Objects.requireNonNull(ADObjectClass.fromValue(sc.next()));
+            System.out.println("Entrez le nom de l'objet : ");
+            String name = sc.next();
+            try {
+                connection.destroySubcontext("CN=" + name + ",OU=512BankFR,DC=EQUIPE1B,DC=local");
+                System.out.println("Objet supprimé avec succès");
+            } catch (NamingException e) {
+                throw new RuntimeException(e);
+            }
+        } else {
+            System.out.println("Vous n'avez pas les droits pour supprimer un objet");
+        }
+    }
+
+    private static void create(DirContext connection) {
+        System.out.println("Entrez le type d'objet à créer : ");
+        for (ADObjectClass adObjectClass : ADObjectClass.values()) {
+            System.out.println(adObjectClass.getInitial() + " : " + adObjectClass);
+        }
+        ADObjectClass createdObject = Objects.requireNonNull(ADObjectClass.fromValue(sc.next()));
+        System.out.println("Entrez le nom de l'objet : ");
+        String name = sc.next();
+        Attributes attributes = new BasicAttributes();
+
+        Attribute objectClass = new BasicAttribute("objectClass");
+        objectClass.add(createdObject.toString());
+        attributes.put(objectClass);
+
+        Attribute namingAttribute = new BasicAttribute(createdObject.getNamingAttribute());
+        namingAttribute.add(name);
+        attributes.put(namingAttribute);
+
+        try {
+            connection.createSubcontext("CN=" + name + ",OU=512BankFR,DC=EQUIPE1B,DC=local", attributes);
+        } catch (NamingException e) {
+            throw new RuntimeException(e);
+        }
+
+    }
+
+    public static void search(DirContext context) {
         System.out.println("Entrez le type d'objet à rechercher : ");
         for (ADObjectClass adObjectClass : ADObjectClass.values()) {
             System.out.println(adObjectClass.getInitial() + " : " + adObjectClass);
@@ -71,10 +129,9 @@ public class Main {
         String search = sc.next();
         SearchControls searchControls = new SearchControls();
         searchControls.setSearchScope(SearchControls.SUBTREE_SCOPE);
-        String filter = "(&(objectClass="+searchedObject+")(name=*"+search+"*))";
+        String filter = "(&(objectClass=" + searchedObject + ")(name=*" + search + "*))";
         try {
-            //todo faire les recherhce de user dans CN=Utilisateurs du domaine,CN=Users,DC=EQUIPE1B,DC=local
-            NamingEnumeration<SearchResult> results = context.search("OU=512BankFR,DC=EQUIPE1B,DC=local", filter, searchControls); //connection.search("ou=512Bank,DC=Equipe1B,DC=local", (objectClass=user), searchControls);
+            NamingEnumeration<SearchResult> results = context.search("OU=512BankFR,DC=EQUIPE1B,DC=local", filter, searchControls); //context.search("ou=512Bank,DC=Equipe1B,DC=local", (objectClass=user), searchControls);
             displayResults(results, searchedObject);
         } catch (NamingException e) {
             throw new RuntimeException(e);
@@ -95,7 +152,7 @@ public class Main {
             }
             Attributes attributes = searchResult.getAttributes();
             System.out.println(attributes.get(searchedObject.getNamingAttribute()));
-            if(adminConnected) {
+            if (adminConnected) {
                 System.out.println(attributes.get("distinguishedName"));
             }
         }
@@ -104,12 +161,12 @@ public class Main {
 
     public static DirContext connect(String user, String mdp) throws NamingException {
         Properties env = new Properties();
-        username = user;
+        username = user + "@EQUIPE1B.local";
         env.put(Context.SECURITY_AUTHENTICATION, "Simple");
-        env.put(Context.SECURITY_PRINCIPAL, username+"@EQUIPE1B.local"); //prenom.nom@EQUIPE1B.local
+        env.put(Context.SECURITY_PRINCIPAL, username); //prenom.nom@EQUIPE1B.local
         env.put(Context.SECURITY_CREDENTIALS, mdp);
         env.put(Context.INITIAL_CONTEXT_FACTORY, "com.sun.jndi.ldap.LdapCtxFactory");
-        env.put(Context.PROVIDER_URL, "ldap://localhost:3268"); //389
+        env.put(Context.PROVIDER_URL, "ldap://10.22.32.2:389"); //389 (search et createSubcontext) ou 3268 (search only)
         //  env.put(Context.REFERRAL, "follow");
         DirContext connection = new InitialDirContext(env);
         adminConnected = isAdmin(connection);
@@ -124,8 +181,7 @@ public class Main {
     private static boolean isAdmin(DirContext context) {
         SearchControls searchControls = new SearchControls();
         searchControls.setSearchScope(SearchControls.SUBTREE_SCOPE);
-        //todo corriger le filtre pour ne mettre la co a true que si l'utilisateur est dans le groupe Administrateurs (genre pas "antoine")
-        String filter = "(&(objectClass=user)(userPrincipalName=*"+username+"*)(memberOf=CN=Administrateurs,CN=Builtin,DC=EQUIPE1B,DC=local))"; //(memberOf=CN=Direction_Secretaire_General,OU=512BankFR,DC=EQUIPE1B,DC=local)
+        String filter = "(&(objectClass=user)(userPrincipalName=" + username + ")(memberOf=CN=Administrateurs,CN=Builtin,DC=EQUIPE1B,DC=local))";
         NamingEnumeration<SearchResult> res;
         try {
             res = context.search("OU=512BankFR,DC=Equipe1B,DC=local", filter, searchControls);
@@ -135,12 +191,12 @@ public class Main {
         }
     }
 
-    public static String getUser(){
+    public static String getUser() {
         System.out.println("Entrez votre nom d'utilisateur (sAMAccountName) : ");
         return sc.next();
     }
 
-    public static String getMdp(){
+    public static String getMdp() {
         return "@Arnaudisthebest83";
     }
 }
