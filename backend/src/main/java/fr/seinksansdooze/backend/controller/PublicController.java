@@ -13,6 +13,22 @@ import java.util.List;
 public class PublicController {
     @GetMapping("/search/person")
     public List<PartialPerson> searchPerson(@RequestParam String name) {
-        return List.of();
+        return List.of(new PartialPerson(
+                "Thomas",
+                "Gorisse",
+                "tgorisse",
+                "thomas.gorisse@ssd.bank",
+                "Directeur général",
+                "TODO ???"
+                ),
+                new PartialPerson(
+                        "Thomas",
+                        "Gorisse",
+                        "tgorisse",
+                        "thomas.gorisse@ssd.bank",
+                        "Directeur général",
+                        "TODO ???"
+                )
+        );
     }
 }
