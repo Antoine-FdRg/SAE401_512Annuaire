@@ -1,5 +1,15 @@
 #sheetsContainer{
     padding: 100px;
+    display: flex;
+    gap: 150px;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: center;
+}
+
+#sheetsContainer *{
+    font-weight: normal;
+    word-wrap: break-word;
 }
 
 
@@ -13,6 +23,7 @@
     justify-content: space-evenly;
     flex-direction: column;
     align-items: center;
+    width: 285px;
 }
 
 .topInfos{
@@ -22,6 +33,87 @@
     gap: 15px;
 }
 
+
+
 .topInfos>*{
     width: 100%;
+}
+
+
+.names{
+    font-size: 1.5em;
+    min-height: 72px;
+}
+
+.name, .surname{
+    font-weight: bolder;
+}
+
+.role{
+    font-style: italic;
+}
+
+
+/* COLORS FOR ROLES */
+
+.finDir{
+    color: rgb(44, 100, 255);
+}
+
+/* ---------------- */
+
+
+.separator{
+    border-radius: 15px;
+    background-color: rgb(140, 140, 140);
+    height: 2px;
+    width: 70%;
+}
+
+.bottomInfos{
+    width: 70%;
+}
+
+.bottomInfos>*{
+    width: 100%;
+}
+
+
+.bottomInfos>div>.entete{
+    background-color: #6C9BE0;
+    color: aliceblue;
+    width: fit-content;
+    padding: 3px;
+    padding-left: 7px;
+    padding-right: 7px;
+    border-radius: 15px;
+    position: relative;
+    font-size: smaller;
+    font-weight: 5;
+    top:10px;
+    left: 5px;
+}
+
+.bottomInfos>div>.infoContent{
+    background-color: #D9E5EE;
+    padding: 10px;
+    border-radius: 15px;
+}
+
+
+
+.infoIcon{
+    position: relative;
+}
+
+.contacts>div{
+    display: flex;
+    gap: 1em;
+    align-items: flex-end;
+}
+
+.contacts{
+    display: flex;
+    flex-direction: column;
+    gap: 0.5em;
 }
