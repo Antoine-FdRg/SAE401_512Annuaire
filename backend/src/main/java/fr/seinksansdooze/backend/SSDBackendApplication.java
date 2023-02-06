@@ -6,8 +6,8 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 @SpringBootApplication
 public class SSDBackendApplication {
 
-	public static void main(String[] args) {
-		SpringApplication.run(SSDBackendApplication.class, args);
-	}
+    public static void main(String[] args) {
+        SpringApplication.run(SSDBackendApplication.class, args);
+    }
 
 }
