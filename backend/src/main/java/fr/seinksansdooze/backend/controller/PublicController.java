@@ -1,10 +1,8 @@
 package fr.seinksansdooze.backend.controller;
 
+import fr.seinksansdooze.backend.model.FullPerson;
 import fr.seinksansdooze.backend.model.PartialPerson;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -30,5 +28,21 @@ public class PublicController {
                         "TODO ???"
                 )
         );
+    }
+
+    @GetMapping("/search/structure")
+    public List<Object> searchStructure(@RequestParam String name) {
+        throw new UnsupportedOperationException("Cette route n'a pas été implémentée");
+    }
+
+    @GetMapping("/info/person/{login}")
+    public FullPerson personInfo(@PathVariable String login) {
+        return new FullPerson();
+    }
+
+    // TODO: 06/02/2023 completer
+    @GetMapping("/info/structure/{}")
+    public Object structureInfo() {
+        throw new UnsupportedOperationException("Cette route n'a pas été implémentée");
     }
 }
