@@ -8,7 +8,16 @@ import { Person } from '../person';
 export class ResultComponent {
   listPerson: Person[] = [];
 
-  constructor() {
+  constructor(){
+    this.listPerson.push({
+      surname:'Maïstre',
+      name:'Antoine',
+      phone:'+33 95 74 24 12',
+      email:'truc@machin.com',
+      role:'Directeur financier',
+      login:'ma102741',
+      tutor:'raph@free.fr'
+    });
   }
 
 }
