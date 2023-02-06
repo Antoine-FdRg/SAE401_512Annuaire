@@ -1,13 +1,13 @@
-package fr.ssdbank.ssdback;
+package fr.seinksansdooze.backend;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 @SpringBootApplication
-public class SsdbackApplication {
+public class SSDBackendApplication {
 
 	public static void main(String[] args) {
-		SpringApplication.run(SsdbackApplication.class, args);
+		SpringApplication.run(SSDBackendApplication.class, args);
 	}
 
 }

@@ -1,10 +1,10 @@
-package fr.ssdbank.ssdback;
+package fr.seinksansdooze.backend;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 
 @SpringBootTest
-class SsdbackApplicationTests {
+class SSDBackendApplicationTests {
 
 	@Test
 	void contextLoads() {
