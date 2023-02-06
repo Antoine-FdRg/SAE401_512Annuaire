@@ -1,1 +1,50 @@
-<p>result works!</p>
+<section id="sheetsContainer">
+    <section class="sheet" *ngFor="let person of listPerson">
+        <div class="topInfos">
+            <div class="names">
+                <div class="name">
+                    {{person.name}}
+                </div>
+                <div class="surname">
+                    {{person.surname}}
+                </div>
+            </div>
+
+            <div class="role">
+                {{person.role}}
+            </div>
+
+            <div class="contacts">
+                <div class="phone">
+                    {{person.phone}}
+                </div>
+
+                <div class="email">
+                    {{person.email}}
+                </div>
+            </div>
+        </div>
+
+        <div class="separator"></div>
+
+        <div class="bottomInfos">
+            <div class="login">
+                <div class="entete">
+                    login
+                </div>
+                <div class="infoContent">
+                    {{person.login}}
+                </div>
+            </div>
+
+            <div class="tutor">
+                <div class="entete">
+                    responsable
+                </div>
+                <div class="infoContent">
+                    {{person.tutor}}
+                </div>
+            </div>
+        </div>
+    </section>
+</section>
