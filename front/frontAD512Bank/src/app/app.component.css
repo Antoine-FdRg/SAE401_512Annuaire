@@ -3,7 +3,8 @@ header {
   flex-direction: row;
   justify-content: space-between;
   align-items: center;
-  padding: 2vw 2vw;
+  padding: 0 2vw;
+  height: 15vh;
 }
 
 .help,
@@ -22,9 +23,6 @@ header {
 .bouton512 {
   padding: 10px 12px;
   gap: 21px;
-
-  width: 15vw;
-  height: 9vh;
 }
 .bouton512 div {
   font-size: 1.8em;
@@ -32,7 +30,7 @@ header {
   color: #ffffff;
 }
 .bouton512 img {
-  width: 3vw;
+  width: 5em;
 }
 
 .help {
@@ -41,4 +39,13 @@ header {
   padding: 0px 37px;
   gap: 10px;
   font-size: 1.4empx;
+}
+
+main {
+  width: 100vw;
+  height: 85vh;
+  background: url("../assets/World_map_blue_dots.svg");
+  background-size: contain;
+  background-repeat: no-repeat;
+  background-position: 50%;
 }
