@@ -7,4 +7,8 @@ import { Person } from '../person';
 })
 export class ResultComponent {
   listPerson: Person[] = [];
+
+  constructor() {
+  }
+
 }

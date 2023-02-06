@@ -1,0 +1,8 @@
+.titles {
+  background: rgba(255, 255, 255, 0.01);
+  border: 3px solid rgba(9, 122, 255, 0.12);
+  backdrop-filter: blur(5px);
+  /* Note: backdrop-filter has minimal browser support */
+
+  border-radius: 29px;
+}

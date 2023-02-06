@@ -1,0 +1,44 @@
+header {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+  padding: 2vw 2vw;
+}
+
+.help,
+.bouton512 {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  background: var(--blue512);
+  box-shadow: 6px 10px 20px rgba(0, 0, 0, 0.25),
+    inset -20px 20px 41px rgba(74, 102, 230, 0.51);
+  color: #ffffff;
+  border-radius: 19px;
+}
+
+.bouton512 {
+  padding: 10px 12px;
+  gap: 21px;
+
+  width: 15vw;
+  height: 9vh;
+}
+.bouton512 div {
+  font-size: 1.8em;
+  width: fit-content;
+  color: #ffffff;
+}
+.bouton512 img {
+  width: 3vw;
+}
+
+.help {
+  width: 7.5vw;
+  height: 5vh;
+  padding: 0px 37px;
+  gap: 10px;
+  font-size: 1.4empx;
+}

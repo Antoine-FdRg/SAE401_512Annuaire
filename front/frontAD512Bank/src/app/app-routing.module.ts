@@ -11,6 +11,11 @@ const routes: Routes = [
     path: 'results',
     component: ResultComponent,
   },
+  {
+    path: '',
+    redirectTo: '/home',
+    pathMatch: 'full',
+  }
 ];
 
 @NgModule({
