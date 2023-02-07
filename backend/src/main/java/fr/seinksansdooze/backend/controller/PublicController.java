@@ -3,7 +3,7 @@ package fr.seinksansdooze.backend.controller;
 import fr.seinksansdooze.backend.model.FullPerson;
 import fr.seinksansdooze.backend.model.PartialPerson;
 import fr.seinksansdooze.backend.model.PartialStructure;
-import fr.seinksansdooze.backend.model.Structure;
+import fr.seinksansdooze.backend.model.FullStructure;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -32,6 +32,6 @@ public class PublicController {
 
     @GetMapping("/info/structure/{ou}")
     public Object structureInfo(@PathVariable String ou) {
-        return new Structure();
+        return new FullStructure();
     }
 }
