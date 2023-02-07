@@ -11,6 +11,9 @@ public class Structure extends PartialStructure {
         this.children = children;
     }
 
+    public Structure() {
+    }
+
     public Structure[] getChildren() {
         return children;
     }

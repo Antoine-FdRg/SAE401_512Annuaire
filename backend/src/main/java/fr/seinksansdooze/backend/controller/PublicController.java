@@ -2,7 +2,13 @@ package fr.seinksansdooze.backend.controller;
 
 import fr.seinksansdooze.backend.model.FullPerson;
 import fr.seinksansdooze.backend.model.PartialPerson;
-import org.springframework.web.bind.annotation.*;
+import fr.seinksansdooze.backend.model.PartialStructure;
+import fr.seinksansdooze.backend.model.Structure;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
 
@@ -11,38 +17,21 @@ import java.util.List;
 public class PublicController {
     @GetMapping("/search/person")
     public List<PartialPerson> searchPerson(@RequestParam String name) {
-        return List.of(new PartialPerson(
-                "Thomas",
-                "Gorisse",
-                "tgorisse",
-                "thomas.gorisse@ssd.bank",
-                "Directeur général",
-                "TODO ???"
-                ),
-                new PartialPerson(
-                        "Thomas",
-                        "Gorisse",
-                        "tgorisse",
-                        "thomas.gorisse@ssd.bank",
-                        "Directeur général",
-                        "TODO ???"
-                )
-        );
+        return List.of();
     }
 
     @GetMapping("/search/structure")
-    public List<Object> searchStructure(@RequestParam String name) {
-        throw new UnsupportedOperationException("Cette route n'a pas été implémentée");
+    public List<PartialStructure> searchStructure(@RequestParam String name) {
+        return List.of();
     }
 
-    @GetMapping("/info/person/{login}")
-    public FullPerson personInfo(@PathVariable String login) {
+    @GetMapping("/info/person/{cn}")
+    public FullPerson personInfo(@PathVariable String cn) {
         return new FullPerson();
     }
 
-    // TODO: 06/02/2023 completer
-    @GetMapping("/info/structure/{}")
-    public Object structureInfo() {
-        throw new UnsupportedOperationException("Cette route n'a pas été implémentée");
+    @GetMapping("/info/structure/{ou}")
+    public Object structureInfo(@PathVariable String ou) {
+        return new Structure();
     }
 }
