@@ -9,18 +9,18 @@ public class FullPerson extends PartialPerson {
     private String professionalPhone;
     private String address;
     private String managerFullName;
-    private String managerLogin;
+    private String managerCN;
 
     public FullPerson() {
     }
 
-    public FullPerson(String firstName, String lastName, String login, String email, String role, String structure, String personalPhone, String professionalPhone, String address, String managerFullName, String managerLogin) {
-        super(firstName, lastName, login, email, role, structure);
+    public FullPerson(String firstName, String lastName, String login, String cn, String email, String structureOU, String personalPhone, String professionalPhone, String address, String managerFullName, String managerCN) {
+        super(firstName, lastName, login, cn, email, structureOU);
         this.personalPhone = personalPhone;
         this.professionalPhone = professionalPhone;
         this.address = address;
         this.managerFullName = managerFullName;
-        this.managerLogin = managerLogin;
+        this.managerCN = managerCN;
     }
 
     public String getPersonalPhone() {
@@ -55,11 +55,11 @@ public class FullPerson extends PartialPerson {
         this.managerFullName = managerFullName;
     }
 
-    public String getManagerLogin() {
-        return managerLogin;
+    public String getManagerCN() {
+        return managerCN;
     }
 
-    public void setManagerLogin(String managerLogin) {
-        this.managerLogin = managerLogin;
+    public void setManagerCN(String managerCN) {
+        this.managerCN = managerCN;
     }
 }

@@ -8,20 +8,20 @@ public class PartialPerson {
     private String firstName;
     private String lastName;
     private String login;
+    private String cn;
     private String email;
-    private String role;
-    private String structure;
+    private String structureOU;
 
     public PartialPerson() {
     }
 
-    public PartialPerson(String firstName, String lastName, String login, String email, String role, String structure) {
+    public PartialPerson(String firstName, String lastName, String login, String cn, String email, String structureOU) {
         this.firstName = firstName;
         this.lastName = lastName;
         this.login = login;
+        this.cn = cn;
         this.email = email;
-        this.role = role;
-        this.structure = structure;
+        this.structureOU = structureOU;
     }
 
     public String getFirstName() {
@@ -56,19 +56,19 @@ public class PartialPerson {
         this.email = email;
     }
 
-    public String getRole() {
-        return role;
+    public String getStructureOU() {
+        return structureOU;
     }
 
-    public void setRole(String role) {
-        this.role = role;
+    public void setStructureOU(String structureOU) {
+        this.structureOU = structureOU;
     }
 
-    public String getStructure() {
-        return structure;
+    public String getCn() {
+        return cn;
     }
 
-    public void setStructure(String structure) {
-        this.structure = structure;
+    public void setCn(String cn) {
+        this.cn = cn;
     }
 }
