@@ -27,12 +27,57 @@
 }
 
 .inputs {
+  position: relative;
   margin-top: 2em;
   display: flex;
   width: 45vw;
   justify-content: space-between;
 }
+.dropdownChoice {
+  position: absolute;
+  left: 2%;
+  display: flex;
+  top: 17%;
+}
+#person {
+}
+#arrow {
+  cursor: pointer;
+  margin-top: 5%;
+}
+.dropdown {
+  visibility: hidden;
+  position: absolute;
+  /* height: 0; */
+  /* background-color: #f9f9f9; */
+  /* box-shadow: 0px 8px 16px 0px rgba(0, 0, 0, 0.2); */
+  z-index: 1;
+  transition: all 0.5s ease;
+  padding-top: 100%;
+}
+.dropdown svg {
+  position: relative;
+  z-index: 999;
+}
+.dropdown.show {
+  opacity: 1;
+  visibility: visible;
+  animation: animationIn 0.5s ease forwards;
+}
+@keyframes animationIn {
+  0% {
+    visibility: visible;
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
 .inputs input {
+  padding-left: 5em;
   width: 32vw;
   height: 7vh;
   background: #f6f6f6;
@@ -57,4 +102,72 @@ input:focus {
   border: none;
   font-size: 24px;
   color: #ffffff;
+  cursor: pointer;
+}
+
+.absoluteImages img,
+.absoluteImages svg {
+  position: absolute;
+}
+
+#semiFlatPerson {
+  width: 35em;
+  right: 10%;
+  top: 10%;
+}
+
+.loupe {
+  /* outline: 3px solid red; */
+  position: relative;
+  width: 25em;
+  height: 30em;
+  border-radius: 50em;
+}
+
+#loupe {
+  width: 100%;
+  /* height: 100%; */
+  right: 0;
+  top: 10%;
+  z-index: 99;
+}
+.absoluteImages svg {
+  position: absolute;
+  top: 13%;
+  left: 8%;
+  width: 65%;
+  height: 60%;
+  backdrop-filter: blur(10px);
+  border-radius: 50em;
+  transition: all 1s ease-out;
+}
+svg circle {
+}
+.loupe:hover svg {
+  backdrop-filter: blur(1px);
+}
+.placementLoupe {
+  position: absolute;
+  top: 20%;
+  right: 10%;
+  animation: slowMovement 8s ease-in-out infinite;
+}
+
+@keyframes slowMovement {
+  /* Make a random movement infinite */
+  0% {
+    transform: translateX(0) translateY(0);
+  }
+  25% {
+    transform: translateX(50px) translateY(100px);
+  }
+  50% {
+    transform: translateX(100px) translateY(0px);
+  }
+  75% {
+    transform: translateX(50px) translateY(-100px);
+  }
+  100% {
+    transform: translateX(0) translateY(0);
+  }
 }

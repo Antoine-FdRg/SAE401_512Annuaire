@@ -18,6 +18,7 @@ header {
     inset -20px 20px 41px rgba(74, 102, 230, 0.51);
   color: #ffffff;
   border-radius: 19px;
+  cursor: pointer;
 }
 
 .bouton512 {
@@ -34,11 +35,11 @@ header {
 }
 
 .help {
-  width: 7.5vw;
+  /* width: 7.5vw; */
   height: 5vh;
   padding: 0px 37px;
   gap: 10px;
-  font-size: 1.4empx;
+  font-size: 1.4em;
 }
 
 main {
