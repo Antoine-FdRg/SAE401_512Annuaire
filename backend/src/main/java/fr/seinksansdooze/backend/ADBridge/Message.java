@@ -1,4 +1,4 @@
-package backback;
+package fr.seinksansdooze.backend.ADBridge;
 
 public class Message {
     private String message;

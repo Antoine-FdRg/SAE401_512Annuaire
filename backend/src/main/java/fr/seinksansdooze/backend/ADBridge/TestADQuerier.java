@@ -1,4 +1,4 @@
-package backback;
+package fr.seinksansdooze.backend.ADBridge;
 
 import javax.naming.NamingEnumeration;
 import javax.naming.NamingException;
