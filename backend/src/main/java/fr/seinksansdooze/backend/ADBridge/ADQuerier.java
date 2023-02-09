@@ -6,7 +6,7 @@ import javax.naming.NamingException;
 import javax.naming.directory.*;
 import java.util.Properties;
 
-public class ADQuerier {
+public class ADQuerier implements IADQuerier{
     private static final String AD_URL = "ldap://10.22.32.2:389";
     private static final String AD_BASE = "OU=512BankFR,DC=EQUIPE1B,DC=local";
 
