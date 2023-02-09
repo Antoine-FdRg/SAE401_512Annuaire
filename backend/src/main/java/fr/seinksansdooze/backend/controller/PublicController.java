@@ -31,7 +31,7 @@ public class PublicController {
     }
 
     @GetMapping("/info/structure/{ou}")
-    public Object structureInfo(@PathVariable String ou) {
+    public FullStructure structureInfo(@PathVariable String ou) {
         return new FullStructure();
     }
 }
