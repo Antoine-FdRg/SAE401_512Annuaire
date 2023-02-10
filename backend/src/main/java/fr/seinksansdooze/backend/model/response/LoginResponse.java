@@ -1,4 +1,4 @@
-package fr.seinksansdooze.backend.model;
+package fr.seinksansdooze.backend.model.response;
 
 /**
  * Cet objet est renvoyé suite à un login effectué avec succès.

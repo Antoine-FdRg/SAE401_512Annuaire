@@ -1,4 +1,4 @@
-package fr.seinksansdooze.backend.model;
+package fr.seinksansdooze.backend.model.response;
 
 /**
  * Un objet qui contient toutes les informations qu'un utilisateur public peut

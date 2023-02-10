@@ -1,4 +1,4 @@
-package fr.seinksansdooze.backend.model;
+package fr.seinksansdooze.backend.model.response;
 
 import java.util.List;
 

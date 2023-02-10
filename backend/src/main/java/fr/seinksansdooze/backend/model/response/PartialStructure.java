@@ -1,4 +1,4 @@
-package fr.seinksansdooze.backend.model;
+package fr.seinksansdooze.backend.model.response;
 
 /**
  * Une structure quand elle apparait dans les résultats de recherches.

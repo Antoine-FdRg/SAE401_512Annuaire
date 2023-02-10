@@ -1,9 +1,9 @@
 package fr.seinksansdooze.backend.controller;
 
-import fr.seinksansdooze.backend.model.FullPerson;
-import fr.seinksansdooze.backend.model.PartialPerson;
-import fr.seinksansdooze.backend.model.PartialStructure;
-import fr.seinksansdooze.backend.model.FullStructure;
+import fr.seinksansdooze.backend.model.response.FullPerson;
+import fr.seinksansdooze.backend.model.response.PartialPerson;
+import fr.seinksansdooze.backend.model.response.PartialStructure;
+import fr.seinksansdooze.backend.model.response.FullStructure;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;

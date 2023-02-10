@@ -1,4 +1,4 @@
-package fr.seinksansdooze.backend.model;
+package fr.seinksansdooze.backend.model.response;
 
 /**
  * Un objet contenant des informations partielles sur une personne, renvoyé

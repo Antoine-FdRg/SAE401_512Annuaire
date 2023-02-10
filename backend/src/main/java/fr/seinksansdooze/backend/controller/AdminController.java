@@ -1,10 +1,10 @@
 
 package fr.seinksansdooze.backend.controller;
 
-import fr.seinksansdooze.backend.model.ChangeGroupsPayload;
-import fr.seinksansdooze.backend.model.LoginPayload;
-import fr.seinksansdooze.backend.model.LoginResponse;
-import fr.seinksansdooze.backend.model.PartialPerson;
+import fr.seinksansdooze.backend.model.payload.ChangeGroupsPayload;
+import fr.seinksansdooze.backend.model.payload.LoginPayload;
+import fr.seinksansdooze.backend.model.response.LoginResponse;
+import fr.seinksansdooze.backend.model.response.PartialPerson;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;

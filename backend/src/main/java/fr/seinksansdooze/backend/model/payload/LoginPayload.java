@@ -1,4 +1,4 @@
-package fr.seinksansdooze.backend.model;
+package fr.seinksansdooze.backend.model.payload;
 
 /**
  * Type qui correspond au JSON qui est envoyé lors d'une connexion (login).
