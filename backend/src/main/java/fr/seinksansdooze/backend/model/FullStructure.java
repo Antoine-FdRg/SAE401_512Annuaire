@@ -1,12 +1,14 @@
 package fr.seinksansdooze.backend.model;
 
+import java.util.List;
+
 /**
  * Contiens toutes les infos publiques sur une structure.
  */
 public class FullStructure extends PartialStructure {
-    private FullStructure[] children;
+    private List<FullStructure> children;
 
-    public FullStructure(String ou, FullStructure[] children) {
+    public FullStructure(String ou, List<FullStructure> children) {
         super(ou);
         this.children = children;
     }
@@ -14,11 +16,11 @@ public class FullStructure extends PartialStructure {
     public FullStructure() {
     }
 
-    public FullStructure[] getChildren() {
+    public List<FullStructure> getChildren() {
         return children;
     }
 
-    public void setChildren(FullStructure[] children) {
+    public void setChildren(List<FullStructure> children) {
         this.children = children;
     }
 }
