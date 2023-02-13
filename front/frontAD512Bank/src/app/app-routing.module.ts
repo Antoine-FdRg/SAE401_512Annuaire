@@ -4,10 +4,6 @@ import { HomePageComponent } from './home-page/home-page.component';
 import { ResultComponent } from './result/result.component';
 const routes: Routes = [
   {
-    path: 'home',
-    component: HomePageComponent,
-  },
-  {
     path: 'results',
     component: ResultComponent,
   },
@@ -22,4 +18,6 @@ const routes: Routes = [
   imports: [RouterModule.forRoot(routes)],
   exports: [RouterModule],
 })
-export class AppRoutingModule {}
+export class AppRoutingModule {
+
+}

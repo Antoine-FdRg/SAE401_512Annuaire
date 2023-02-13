@@ -27,7 +27,6 @@
 }
 
 .inputs {
-  margin-top: 2em;
   display: flex;
   width: 45vw;
   justify-content: space-between;
@@ -57,4 +56,36 @@ input:focus {
   border: none;
   font-size: 24px;
   color: #ffffff;
+}
+
+#searchSection{
+  margin-top: 2em;
+  display: flex;
+  flex-direction: column;
+  width: fit-content;
+  gap: 20px;
+}
+
+#branchSelector{
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  padding: 10px;
+  gap: 10px;
+  background: #ffa21b;
+  box-shadow: 6px 10px 20px rgba(0, 0, 0, 0.25);
+  border-radius: 15px;
+  border: none;
+  font-size: 20px;
+  color: #ffffff;
+}
+
+
+ #branchSelector>*{
+  padding: 10px;
+  background: #ffa21b;
+  font-size: 20px;
+  color: #ffffff;
+  font-family: "Poppins";
 }

@@ -3,7 +3,17 @@
     <div class="mainTitle">Annuaire en ligne</div>
     <div class="searchTitle">Recherchez les employés de l’entreprise !</div>
   </div>
-  <div class="inputs">
-    <input type="text" name="search" id="search" /><button>Rechercher</button>
-  </div>
+
+  <form id="searchSection" action="" (submit)="onSearch($event)">
+    <div class="inputs">
+      <input type="text" name="search" id="search" />
+      <button routerLink="results">Rechercher</button>
+    </div>
+    <div id="filters">
+      <select #selector name="branch" id="branchSelector">
+        <option *ngFor="let branch of branches" value="{{branch}}">{{branch}}</option>
+      </select>
+    </div>
+  </form>
+
 </div>

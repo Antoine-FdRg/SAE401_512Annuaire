@@ -6,5 +6,6 @@
   <div class="help">Aide</div>
 </header>
 <main>
-  <router-outlet></router-outlet>
+  <app-home-page></app-home-page>
+  <router-outlet (activate)="showResults()"></router-outlet>
 </main>

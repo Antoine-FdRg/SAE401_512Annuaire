@@ -59,8 +59,37 @@
 
 /* COLORS FOR ROLES */
 
-.finDir{
-    color: rgb(44, 100, 255);
+.blue{
+  color: #759FCC;
+}
+
+
+.orange{
+  color: #ED7D31;
+}
+
+.green{
+  color: #70AD47;
+}
+
+.lightBlue{
+  color: #00B0F0;
+}
+
+.purple{
+  color: #BC40C6;
+}
+
+.red1{
+  color: #D20000;
+}
+
+.red2{
+  color: #F74F4F;
+}
+
+.red3{
+  color: #EE8282;
 }
 
 /* ---------------- */

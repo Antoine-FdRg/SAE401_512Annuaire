@@ -13,8 +13,61 @@
                 </div>
             </div>
 
-            <div class="role" 
-                [class.finDir] = "person.role=='Directeur financier'"
+            <div class="role"
+                [class.blue] = "
+                person.role=='Directeur financier'
+                ||
+                person.role=='Responsable de paie'
+                ||
+                person.role=='Responsable comptabilité'
+                "
+                [class.orange] = "
+                person.role=='Directeur administratif et juridique'
+                ||
+                person.role=='Responsable juridique'
+                ||
+                person.role=='Responsable administration'
+                ||
+                person.role=='Responsable adjoint administratif'
+                ||
+                person.role=='Responsable adjoint juridique'
+                "
+                [class.green] = "
+                person.role=='Directeur ressources humaines'
+                ||
+                person.role=='Responsable gestion du personnel'
+                ||
+                person.role=='Responsable recrutement'
+                "
+                [class.lightBlue] = "
+                person.role=='Directrice technique'
+                ||
+                person.role=='Responsable recherche et développement'
+                ||
+                person.role=='Responsable logistique'
+                "
+                [class.purple] = "
+                person.role=='Directeur commercial'
+                ||
+                person.role=='Responsable prduit'
+                ||
+                person.role=='Responsable marketing'
+                "
+                [class.red1] = "
+                person.role=='Présidente'
+                "
+                [class.red2] = "
+                person.role=='Directeur général'
+                "
+                [class.red3] = "
+                person.role=='Directeur général adjoint'
+                ||
+                person.role=='Secrétaire général'
+                ||
+                person.role=='Responsable marketing'
+                ||
+                person.role=='Responsable produit'
+                "
             >
                 {{person.role}}
             </div>
@@ -33,7 +86,7 @@
                     <span class="material-symbols-rounded infoIcon">
                         mail
                     </span>
-                        
+
                     <span>
                         {{person.email}}
                     </span>
