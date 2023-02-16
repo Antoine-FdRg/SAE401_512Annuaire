@@ -1,7 +1,7 @@
-package fr.seinksansdooze.backend.connectionManagemen;
+package fr.seinksansdooze.backend.connectionManaging;
 
 
-import fr.seinksansdooze.backend.ADBridge.IADQuerier;
+import fr.seinksansdooze.backend.connectionManaging.ADBridge.IAdminADQuerier;
 import org.junit.jupiter.api.Test;
 
 import javax.naming.NamingException;
@@ -22,7 +22,7 @@ public class ADConexionManagerTest {
         });
         assertThrows(NamingException.class, () -> manager.addConnection("user1", "mdp2"));
         assertDoesNotThrow(() -> {
-            IADQuerier q= manager.getQuerier(token.get());
+            IAdminADQuerier q= manager.getQuerier(token.get());
             assertTrue(q instanceof ADQuerierMoke);
         });
     }

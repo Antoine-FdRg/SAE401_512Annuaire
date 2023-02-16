@@ -1,4 +1,4 @@
-package fr.seinksansdooze.backend.connectionManagemen;
+package fr.seinksansdooze.backend.connectionManaging;
 
 public class TokenSanitizer implements ITokenSanitizer{
 

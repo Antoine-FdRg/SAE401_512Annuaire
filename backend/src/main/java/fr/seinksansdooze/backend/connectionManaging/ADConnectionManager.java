@@ -1,6 +1,6 @@
-package fr.seinksansdooze.backend.connectionManagemen;
+package fr.seinksansdooze.backend.connectionManaging;
 
-import fr.seinksansdooze.backend.ADBridge.IADQuerier;
+import fr.seinksansdooze.backend.connectionManaging.ADBridge.IAdminADQuerier;
 
 import javax.naming.NamingException;
 
@@ -42,9 +42,9 @@ public class ADConnectionManager {
     public String addConnection(String username, String pwd)throws NamingException {
 
         //on crée un nouveau querier pour la connexion avec l'ObjectClass
-        IADQuerier querier;
+        IAdminADQuerier querier;
         try {
-            querier = (IADQuerier)querierClass.newInstance();
+            querier = (IAdminADQuerier)querierClass.newInstance();
         } catch (InstantiationException e) {
             throw new RuntimeException(e);
         } catch (IllegalAccessException e) {
@@ -72,7 +72,7 @@ public class ADConnectionManager {
      * @return le Querier associé au token
      * @throws NamingException si le token n'est pas valide
      */
-    public IADQuerier getQuerier(String token)throws NamingException {
+    public IAdminADQuerier getQuerier(String token)throws NamingException {
         //sanitize token
         if (!this.tokenSanitizer.valideToken(token)){
             throw new NamingException("Token not valid");

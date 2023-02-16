@@ -40,4 +40,14 @@ public class AdminController {
     public List<PartialPerson> searchPersonAsAdmin(@RequestParam String name, @RequestParam String group) {
         return List.of();
     }
+
+    @PutMapping("/add/{cn}")
+    public void addAdmin(@PathVariable String cn) {
+        // Ajouter un utilisateur comme admin ici...
+    }
+
+    @DeleteMapping("/delete/{cn}")
+    public void removeAdmin(@PathVariable String cn) {
+        // Enlever un utilisateur comme admin ici...
+    }
 }

@@ -1,4 +1,4 @@
-package fr.seinksansdooze.backend.ADBridge;
+package fr.seinksansdooze.backend.connectionManaging.ADBridge;
 
 import javax.naming.Context;
 import javax.naming.NamingEnumeration;
@@ -6,7 +6,7 @@ import javax.naming.NamingException;
 import javax.naming.directory.*;
 import java.util.Properties;
 
-public class ADQuerier implements IADQuerier{
+public class ADQuerier implements IAdminADQuerier {
     private static final String AD_URL = "ldap://10.22.32.2:389";
     private static final String AD_BASE = "OU=512BankFR,DC=EQUIPE1B,DC=local";
 
