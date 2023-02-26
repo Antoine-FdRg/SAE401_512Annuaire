@@ -6,6 +6,7 @@ import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
 //todo add doc
+
 /**
  * <strong>/!\ Il est important de close cette classe pour arrêter le nettoyage automatique/!\</strong>
  * Cette classe étend la classe ConcurrentHashMap et permet de créer une map qui nettoie automatiquement les entrées
@@ -46,6 +47,7 @@ public class ConcurrentHashMapAutoCleaning<K, V> implements ConcurrentMap<K, V>,
     private Timer timer;
 
 //todo add param to constructor for HashMap params
+
     /**
      * Constructeur le nettoyage sera lancé a la création de l'objet si le temps entre chaque nettoyage est supérieur à 0
      *
@@ -135,7 +137,7 @@ public class ConcurrentHashMapAutoCleaning<K, V> implements ConcurrentMap<K, V>,
     }
 
     private Timer createNamedTimer() {
-        Timer timer = new Timer(threadName,true);
+        Timer timer = new Timer(threadName, true);
         timer.schedule(new TimerTask() {
             public void run() {
                 Thread.currentThread().setPriority(Thread.MIN_PRIORITY);
@@ -146,6 +148,7 @@ public class ConcurrentHashMapAutoCleaning<K, V> implements ConcurrentMap<K, V>,
 
     /**
      * cette fonction permet de changer le temps entre chaque nettoyage de la map ou de désactiver le nettoyage en mettant la valeur 0
+     *
      * @param cleanPeriodMillis le temps entre chaque nettoyage en millisecondes
      */
     public void setCleanPeriod(long cleanPeriodMillis) {
@@ -180,6 +183,7 @@ public class ConcurrentHashMapAutoCleaning<K, V> implements ConcurrentMap<K, V>,
      * cette fonction permet de désactiver le nettoyage
      * il est important de l'appeler une fois que l'on a plus besoin de l'objet pour fermer le tread
      */
+    @Override
     public void close() {
         setCleanPeriod(0);
     }
@@ -187,6 +191,7 @@ public class ConcurrentHashMapAutoCleaning<K, V> implements ConcurrentMap<K, V>,
     /**
      * Sette fonction peut etre longue si la map est grande
      * Retourne la taille de la map
+     *
      * @return la taille de la map
      */
     @Override
@@ -212,6 +217,7 @@ public class ConcurrentHashMapAutoCleaning<K, V> implements ConcurrentMap<K, V>,
     /**
      * Sette fonction peut etre longue si la map est grande
      * Retourne true si la map est vide
+     *
      * @return true si la map est vide
      */
     @Override
@@ -227,6 +233,7 @@ public class ConcurrentHashMapAutoCleaning<K, V> implements ConcurrentMap<K, V>,
 
     /**
      * Retourne true si la map est vide avec les entrées invalides
+     *
      * @return true si la map est vide avec les entrées invalides
      */
     public boolean isEmptyWithInvalid() {
@@ -361,11 +368,10 @@ public class ConcurrentHashMapAutoCleaning<K, V> implements ConcurrentMap<K, V>,
 
                     @Override
                     public boolean equals(Object obj) {
-                        if (!(obj instanceof Map.Entry))
+                        if (!(obj instanceof Map.Entry<?, ?> e))
                             return false;
-                        Map.Entry<?, ?> e = (Map.Entry<?, ?>) obj;
                         return Objects.equals(getKey(), e.getKey()) &&
-                                Objects.equals(getValue(), e.getValue());
+                               Objects.equals(getValue(), e.getValue());
                     }
                 });
             }
@@ -394,7 +400,7 @@ public class ConcurrentHashMapAutoCleaning<K, V> implements ConcurrentMap<K, V>,
     public boolean replace(K key, V oldValue, V newValue) {
         Object curValue = get(key);
         if (!Objects.equals(curValue, oldValue) ||
-                (curValue == null && !containsKey(key))) {
+            (curValue == null && !containsKey(key))) {
             return false;
         }
         put(key, newValue);
@@ -415,9 +421,8 @@ public class ConcurrentHashMapAutoCleaning<K, V> implements ConcurrentMap<K, V>,
         if (obj == this)
             return true;
 
-        if (!(obj instanceof Map))
+        if (!(obj instanceof Map<?, ?> m))
             return false;
-        Map<?, ?> m = (Map<?, ?>) obj;
         for (Entry<K, ValueWithTime<V>> entry : map.entrySet()) {
             if (entry.getValue().isValid(lifeTimeMillis, lifeTimeSinceLastUseMillis)) {
                 K key = entry.getKey();
@@ -524,6 +529,8 @@ class ValueWithTime<v> {
 
     @Override
     public boolean equals(Object o) {
+        if (!(o instanceof ValueWithTime<?>)) return false;
+
         return Objects.equals(value, o);
     }
 
