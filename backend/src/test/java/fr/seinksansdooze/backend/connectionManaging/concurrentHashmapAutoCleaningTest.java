@@ -1,4 +1,4 @@
-package fr.seinksansdooze.backend.connectionManaging.fr.seinksansdooze.backend.connectionManaging;
+package fr.seinksansdooze.backend.connectionManaging;
 
 import fr.seinksansdooze.backend.connectionManaging.ConcurrentHashMapAutoCleaning;
 
