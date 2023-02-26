@@ -1,9 +1,5 @@
 package fr.seinksansdooze.backend.connectionManaging;
 
-import fr.seinksansdooze.backend.connectionManaging.ConcurrentHashMapAutoCleaning;
-
-import fr.seinksansdooze.backend.connectionManaging.TimeHelper;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.MockedStatic;
 import org.mockito.Mockito;
@@ -12,11 +8,8 @@ import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 
 import static org.junit.jupiter.api.Assertions.*;
-import static org.junit.jupiter.api.Assertions.assertFalse;
-import static org.mockito.Mockito.mockStatic;
-import static org.mockito.Mockito.when;
 
-public class concurrentHashmapAutoCleaningTest {
+public class ConcurrentHashmapAutoCleaningTest {
     @Test
     void testEquals() {
         // On cree 2 maps, une avec la classe a tester et une avec une map de reference
@@ -406,11 +399,13 @@ public class concurrentHashmapAutoCleaningTest {
         long entryCreationTime = mapToTestWiveCall.getCreationTimeMillis("key1");
         long newCurrentTime = entryCreationTime + 24 * 60 * 60 * 1000;
         try (MockedStatic<TimeHelper> theMock = Mockito.mockStatic(TimeHelper.class)) {
-            theMock.when(TimeHelper::currentTimeMillis).thenReturn(newCurrentTime - 1);
+            long lastUseTime = newCurrentTime - 1;
+            theMock.when(TimeHelper::currentTimeMillis).thenReturn(lastUseTime);
+
             assertTrue(mapToTestWiveCall.containsKey("key1"));
             assertTrue(mapToTestWivoutCall.containsKey("key1"));
-            long lastUseTime = newCurrentTime - 1;
-            mapToTestWiveCall.updateTimeSinceLastUse("key1");//On met a jour la derniere utilisation sur une map
+            assertEquals(entryCreationTime, mapToTestWiveCall.updateTimeSinceLastUse("key1"));//On met a jour la derniere utilisation sur une map
+
             theMock.when(TimeHelper::currentTimeMillis).thenReturn(lastUseTime + 1);//On simule le temps pour que la valeur soit supprimée
             assertTrue(mapToTestWiveCall.containsKey("key1"));//La valeur n'est pas supprimée car elle a été utilisée récemment
             assertFalse(mapToTestWivoutCall.containsKey("key1"));//La valeur est supprimée car elle n'a pas été utilisée récemment
