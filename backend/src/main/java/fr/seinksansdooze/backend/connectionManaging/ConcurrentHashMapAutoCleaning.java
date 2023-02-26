@@ -43,7 +43,7 @@ public class ConcurrentHashMapAutoCleaning<K, V> implements ConcurrentMap<K, V>,
     /**
      * Timer pour nettoyer la map
      */
-    private Timer timer = createNamedTimer();
+    private Timer timer;
 
 //todo add param to constructor for HashMap params
     /**
@@ -168,8 +168,11 @@ public class ConcurrentHashMapAutoCleaning<K, V> implements ConcurrentMap<K, V>,
             };
             timer.schedule(timerTask, 0, cleanPeriodMillis);
         } else {
-            timer.cancel();
-            timer = null;
+            if (timer != null) {
+                timer.cancel();
+                timer = null;
+            }
+
         }
     }
 
