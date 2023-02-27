@@ -516,4 +516,54 @@ public class ConcurrentHashmapAutoCleaningTest {
         }
         assertFalse(Thread.getAllStackTraces().keySet().stream().anyMatch(thread -> thread.getName().equals(uuid)));
     }
+
+    @Test
+    void testContainsValue() {
+        // on utilise une duree de vie de 24h
+        ConcurrentHashMapAutoCleaning<String, String> map = new ConcurrentHashMapAutoCleaning<>(24 * 60 * 60 * 1000);
+        HashMap<String, String> hashMap = new HashMap<>();
+        map.put("key1", "value1");
+        hashMap.put("key1", "value1");
+        assertTrue(map.containsValue("value1"));
+        assertTrue(hashMap.containsValue("value1"));
+        assertFalse(map.containsValue("value2"));
+        assertFalse(hashMap.containsValue("value2"));
+    }
+
+    @Test
+    void testValueWithTime(){
+        ValueWithTime<String> valueWithTime = new ValueWithTime<>("value1");
+        assertEquals("value1", valueWithTime.getValue());
+        assertEquals("value1".hashCode(), valueWithTime.hashCode());
+    }
+    @Test
+    void testremoveKeyValue() {
+        // on utilise une duree de vie de 24h
+        ConcurrentHashMapAutoCleaning<String, String> map = new ConcurrentHashMapAutoCleaning<>(24 * 60 * 60 * 1000);
+        HashMap<String, String> hashMap = new HashMap<>();
+        map.put("key1", "value1");
+        hashMap.put("key1", "value1");
+        assertTrue(hashMap.remove("key1", "value1"));
+        assertTrue(map.remove("key1", "value1"));
+        assertFalse(hashMap.remove("key1", "value1"));
+        assertFalse(map.remove("key1", "value1"));
+    }
+
+    @Test
+    void testEntrySetSet() {
+        // on utilise une duree de vie de 24h
+        ConcurrentHashMapAutoCleaning<String, String> map = new ConcurrentHashMapAutoCleaning<>(24 * 60 * 60 * 1000);
+        HashMap<String, String> hashMap = new HashMap<>();
+        map.put("key1", "value1");
+        hashMap.put("key1", "value1");
+        map.entrySet().forEach(entry -> {
+            entry.setValue("value2");
+        });
+        hashMap.entrySet().forEach(entry -> {
+            entry.setValue("value2");
+        });
+        assertEquals("value2", map.get("key1"));
+        assertEquals("value2", hashMap.get("key1"));
+
+    }
 }

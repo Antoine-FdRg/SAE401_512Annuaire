@@ -45,7 +45,6 @@ public class ConcurrentHashMapAutoCleaning<K, V> implements ConcurrentMap<K, V>,
      * Timer pour nettoyer la map
      */
     private Timer timer;
-
 //todo add param to constructor for HashMap params
 
     /**
@@ -115,7 +114,7 @@ public class ConcurrentHashMapAutoCleaning<K, V> implements ConcurrentMap<K, V>,
      * @param key la clef de l'entrée
      * @return l'ancienne date de dernière utilisation de l'entrée en millisecondes ou -1 si l'entrée n'existe pas
      */
-    public long updateTimeSinceLastUse(Object key) {//todo test
+    public long updateTimeSinceLastUse(Object key) {
         ValueWithTime<V> valueWithTime = map.get(key);
         if (valueWithTime != null) {
             return valueWithTime.updateTimeSinceLastUse();
@@ -221,7 +220,7 @@ public class ConcurrentHashMapAutoCleaning<K, V> implements ConcurrentMap<K, V>,
      * @return true si la map est vide
      */
     @Override
-    public boolean isEmpty() {//todo pas bon si on a des entrées invalides faire 2 fonctions
+    public boolean isEmpty() {
         for (ValueWithTime<V> valueWithTime : map.values()) {
             if (valueWithTime.isValid(lifeTimeMillis, lifeTimeSinceLastUseMillis)) {
                 return false;
@@ -241,8 +240,9 @@ public class ConcurrentHashMapAutoCleaning<K, V> implements ConcurrentMap<K, V>,
     }
 
     @Override
-    public boolean containsKey(Object key) {//todo optimiser
-        return map.containsKey(key) && map.get(key).isValid(lifeTimeMillis, lifeTimeSinceLastUseMillis);
+    public boolean containsKey(Object key) {
+        ValueWithTime<V> valueWithTime = map.get(key);
+        return valueWithTime != null && valueWithTime.isValid(lifeTimeMillis, lifeTimeSinceLastUseMillis);
     }
 
     @Override
@@ -371,7 +371,7 @@ public class ConcurrentHashMapAutoCleaning<K, V> implements ConcurrentMap<K, V>,
                         if (!(obj instanceof Map.Entry<?, ?> e))
                             return false;
                         return Objects.equals(getKey(), e.getKey()) &&
-                               Objects.equals(getValue(), e.getValue());
+                                Objects.equals(getValue(), e.getValue());
                     }
                 });
             }
@@ -393,14 +393,19 @@ public class ConcurrentHashMapAutoCleaning<K, V> implements ConcurrentMap<K, V>,
 
     @Override
     public boolean remove(Object key, Object value) {
-        return map.remove(key, value);
+        if (map.containsKey(key) && Objects.equals(map.get(key), value)) {
+            map.remove(key);
+            return true;
+        } else {
+            return false;
+        }
     }
 
     @Override
     public boolean replace(K key, V oldValue, V newValue) {
         Object curValue = get(key);
         if (!Objects.equals(curValue, oldValue) ||
-            (curValue == null && !containsKey(key))) {
+                (curValue == null && !containsKey(key))) {
             return false;
         }
         put(key, newValue);
@@ -420,7 +425,6 @@ public class ConcurrentHashMapAutoCleaning<K, V> implements ConcurrentMap<K, V>,
     public boolean equals(Object obj) {//todo verif
         if (obj == this)
             return true;
-
         if (!(obj instanceof Map<?, ?> m))
             return false;
         for (Entry<K, ValueWithTime<V>> entry : map.entrySet()) {
@@ -529,13 +533,11 @@ class ValueWithTime<v> {
 
     @Override
     public boolean equals(Object o) {
-        if (!(o instanceof ValueWithTime<?>)) return false;
-
         return Objects.equals(value, o);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(value);
+        return value.hashCode();
     }
 }
