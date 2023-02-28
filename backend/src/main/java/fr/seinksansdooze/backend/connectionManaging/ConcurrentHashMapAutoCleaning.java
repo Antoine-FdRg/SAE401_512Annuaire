@@ -235,7 +235,7 @@ public class ConcurrentHashMapAutoCleaning<K, V> implements ConcurrentMap<K, V>,
      *
      * @return true si la map est vide avec les entrées invalides
      */
-    public boolean isEmptyWithInvalid() {
+    public boolean isEmptyWithInvalid() {//todo test
         return map.isEmpty();
     }
 
@@ -422,7 +422,7 @@ public class ConcurrentHashMapAutoCleaning<K, V> implements ConcurrentMap<K, V>,
     }
 
     @Override
-    public boolean equals(Object obj) {//todo verif
+    public boolean equals(Object obj) {//todo verif todo test
         if (obj == this)
             return true;
         if (!(obj instanceof Map<?, ?> m))

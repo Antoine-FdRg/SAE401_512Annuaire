@@ -502,7 +502,7 @@ public class ConcurrentHashmapAutoCleaningTest {
     }
 
     @Test
-    void testTradCleen() {
+    void testThreadCleen() {
         String uuid = UUID.randomUUID().toString();
         ConcurrentHashMapAutoCleaning<String, String> map = new ConcurrentHashMapAutoCleaning<>(0, 0, 100, uuid);
         // asset q'un Thread du nom uuid est lancé
