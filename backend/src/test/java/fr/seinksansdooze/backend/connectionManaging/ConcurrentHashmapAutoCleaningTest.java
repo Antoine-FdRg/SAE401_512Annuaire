@@ -6,6 +6,7 @@ import org.mockito.Mockito;
 
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.atomic.AtomicInteger;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -55,8 +56,7 @@ public class ConcurrentHashmapAutoCleaningTest {
     @Test
     void testGet() {
         // On cree 2 maps, une avec la classe a tester et une avec une map de reference
-        // On ne test pas la supretion donc on utilise MAX_VALUE
-        ConcurrentHashMapAutoCleaning<String, String> mapToTest = new ConcurrentHashMapAutoCleaning<>(Long.MAX_VALUE);
+        ConcurrentHashMapAutoCleaning<String, String> mapToTest = new ConcurrentHashMapAutoCleaning<>(24 * 60 * 60 * 1000);
         Map<String, String> mapRef = new HashMap<>();
         // On ajoute des valeurs dans les 2 maps
         mapToTest.put("key1", "value1");
@@ -68,6 +68,16 @@ public class ConcurrentHashmapAutoCleaningTest {
         // On test le get sur une clef qui n'existe pas
         assertNull(mapToTest.get("key2"));
         assertNull(mapRef.get("key2"));
+
+        long entryCreationTime = mapToTest.getCreationTimeMillis("key1");
+        long newCurrentTime = entryCreationTime + 24 * 60 * 60 * 1000;
+        // On simule le temps
+        try (MockedStatic<TimeHelper> theMock = Mockito.mockStatic(TimeHelper.class)) {
+            theMock.when(TimeHelper::currentTimeMillis).thenReturn(newCurrentTime - 1);
+            assertEquals("value1", mapToTest.get("key1"));
+            theMock.when(TimeHelper::currentTimeMillis).thenReturn(newCurrentTime);
+            assertNull(mapToTest.get("key1"));
+        }
         mapToTest.close();
     }
 
@@ -87,6 +97,8 @@ public class ConcurrentHashmapAutoCleaningTest {
         // On test le containsKey sur une clef qui n'existe pas
         assertFalse(mapToTest.containsKey("key2"));
         assertFalse(mapRef.containsKey("key2"));
+
+
         mapToTest.close();
     }
 
@@ -206,9 +218,30 @@ public class ConcurrentHashmapAutoCleaningTest {
             mapRef.put("key" + i, "value" + i);
         }
         // On test que les 2 maps sont egales
-        assertTrue(mapRef.keySet().containsAll(mapToTest.keySet()));
-        assertTrue(mapToTest.keySet().containsAll(mapRef.keySet()));
+        Set<String> keySetRef = mapRef.keySet();
+        Set<String> keySetToTest = mapToTest.keySet();
+        assertTrue(keySetRef.containsAll(keySetToTest));
+        assertTrue(keySetToTest.containsAll(keySetRef));
+        assertEquals(keySetRef, keySetToTest);
         mapToTest.close();
+
+
+        // on utilise une duree de vie de 24h
+        mapToTest = new ConcurrentHashMapAutoCleaning<>(24 * 60 * 60 * 1000);
+        mapToTest.put("key1", "value1");
+
+        long entryCreationTime = mapToTest.getCreationTimeMillis("key1");
+        long newCurrentTime = entryCreationTime + 24 * 60 * 60 * 1000;
+        // On simule le temps
+        try (MockedStatic<TimeHelper> theMock = Mockito.mockStatic(TimeHelper.class)) {
+            theMock.when(TimeHelper::currentTimeMillis).thenReturn(newCurrentTime - 1);
+            assertTrue(mapToTest.keySet().contains("key1"));
+            theMock.when(TimeHelper::currentTimeMillis).thenReturn(newCurrentTime);
+            assertFalse(mapToTest.keySet().contains("key1"));
+        }
+        mapToTest.close();
+
+
 
     }
 
@@ -533,8 +566,13 @@ public class ConcurrentHashmapAutoCleaningTest {
     @Test
     void testValueWithTime(){
         ValueWithTime<String> valueWithTime = new ValueWithTime<>("value1");
+        ValueWithTime<String> valueWithTime2 = new ValueWithTime<>("value1");
+
+        assertTrue(valueWithTime.equals(valueWithTime2));
         assertEquals("value1", valueWithTime.getValue());
         assertEquals("value1".hashCode(), valueWithTime.hashCode());
+
+
     }
     @Test
     void testremoveKeyValue() {
@@ -564,6 +602,53 @@ public class ConcurrentHashmapAutoCleaningTest {
         });
         assertEquals("value2", map.get("key1"));
         assertEquals("value2", hashMap.get("key1"));
+
+    }
+    @Test
+    void testForEach() {
+        ConcurrentHashMapAutoCleaning<String, String> map = new ConcurrentHashMapAutoCleaning<>(Long.MAX_VALUE);
+        HashMap<String, String> hashMap = new HashMap<>();
+        for (int i = 0; i < 100; i++) {
+            map.put("key" + i, "value" + i);
+            hashMap.put("key" + i, "value" + i);
+        }
+        map.forEach((key, value) -> {
+            map.put(key, "value2");
+        });
+        hashMap.forEach((key, value) -> {
+            hashMap.put(key, "value2");
+        });
+        map.close();
+
+        long newCurrentTime = System.currentTimeMillis();
+        // On simule le temps
+        try (MockedStatic<TimeHelper> theMock = Mockito.mockStatic(TimeHelper.class)) {
+            theMock.when(TimeHelper::currentTimeMillis).thenReturn(newCurrentTime);
+            ConcurrentHashMapAutoCleaning<String, String> map2 = new ConcurrentHashMapAutoCleaning<>(24*60*60*1000);
+            HashMap<String, String> hashMap2 = new HashMap<>();
+            for (int i = 0; i < 100; i++) {
+                map2.put("key" + i, "value" + i);
+                hashMap2.put("key" + i, "value" + i);
+            }
+            assertEquals(map2, hashMap2);
+
+            newCurrentTime =newCurrentTime+ 24 * 60 * 60 * 1000 + 1;
+            theMock.when(TimeHelper::currentTimeMillis).thenReturn(newCurrentTime);
+            AtomicInteger i = new AtomicInteger();
+            map2.forEach((key, value) -> {
+                i.getAndIncrement();
+            });
+            AtomicInteger j = new AtomicInteger();
+            hashMap2.forEach((key, value) -> {
+                j.getAndIncrement();
+            });
+            assertEquals(0, i.get());
+            assertEquals(100, j.get());
+            assertNotEquals(map2, hashMap2);
+
+        }
+
+
 
     }
 }
