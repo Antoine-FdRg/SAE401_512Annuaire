@@ -180,6 +180,20 @@ public class ConcurrentHashMapAutoCleaning<K, V> implements ConcurrentMap<K, V>,
     }
 
     /**
+     * Retourne le temps de la dernière utilisation de l'entrée en millisecondes
+     * @param key la clef de l'entrée
+     * @return le temps de la dernière utilisation de l'entrée en millisecondes ou -1 si l'entrée n'existe pas
+     */
+
+    public long getSinceLastUseMillis(Object key) {
+        ValueWithTime<V> valueWithTime = map.get(key);
+        if (valueWithTime == null) {
+            return -1;
+        }
+        return valueWithTime.getTimeSinceLastUseMillis();
+    }
+
+    /**
      * Update la date de dernière utilisation de l'entrée en millisecondes
      *
      * @param key la clef de l'entrée
@@ -598,10 +612,10 @@ public boolean equals(Object o) {
 }
 
 
+
 /**
  * Cette classe permet de stocker une valeur avec un temps de création et un temps de dernière utilisation
  * Elle est utilisée par la classe ConcurrentHashMapAutoCleaning
- *
  * @param <v>
  */
 class ValueWithTime<v> {

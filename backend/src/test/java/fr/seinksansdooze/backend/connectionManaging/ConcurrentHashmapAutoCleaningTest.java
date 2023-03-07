@@ -28,10 +28,12 @@ public class ConcurrentHashmapAutoCleaningTest {
         mapRef.put("key4", "value4");
         // On test que les 2 maps sont egales
         assertEquals(mapRef, mapToTest);
+        assertEquals(mapToTest, mapRef);
         // On ajoute une valeur en trop dans la map a tester
         mapToTest.put("key5", "value5");
         // On test que les 2 maps ne sont plus egales
         assertNotEquals(mapRef, mapToTest);
+        assertNotEquals(mapToTest, mapRef);
         mapToTest.close();
     }
 
@@ -603,6 +605,26 @@ public class ConcurrentHashmapAutoCleaningTest {
         assertEquals("value2", map.get("key1"));
         assertEquals("value2", hashMap.get("key1"));
 
+    }
+    @Test
+    void testIsEmptyWithInvalid() {
+        ConcurrentHashMapAutoCleaning<String, String> map = new ConcurrentHashMapAutoCleaning<>(24 * 60 * 60 * 1000);
+        HashMap<String, String> hashMap = new HashMap<>();
+        assertTrue(map.isEmptyWithInvalid());
+        assertTrue(hashMap.isEmpty());
+        map.put("key1", "value1");
+        hashMap.put("key1", "value1");
+    }
+    @Test
+    void testGetSinceLastUseMillis() {
+        ConcurrentHashMapAutoCleaning<String, String> map = new ConcurrentHashMapAutoCleaning<>(24 * 60 * 60 * 1000);
+        map.put("key1", "value1");
+        long newCurrentTime = System.currentTimeMillis();
+        try (MockedStatic<TimeHelper> theMock = Mockito.mockStatic(TimeHelper.class)) {
+            theMock.when(TimeHelper::currentTimeMillis).thenReturn(newCurrentTime +100);
+            map.updateTimeSinceLastUse("key1");
+            assertEquals(newCurrentTime +100, map.getSinceLastUseMillis("key1"));
+        }
     }
     @Test
     void testForEach() {
