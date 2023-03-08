@@ -258,7 +258,7 @@ public class ConcurrentHashMapAutoCleaning<K, V> implements ConcurrentMap<K, V>,
         this.cleanPeriodMillis = cleanPeriodMillis;
         reprogrammerNettoyage();
     }
-
+//todo commente
     private void desactiverNettoyage() {
         if (timerTask != null) {
             timerTask.cancel();
@@ -269,6 +269,7 @@ public class ConcurrentHashMapAutoCleaning<K, V> implements ConcurrentMap<K, V>,
             timer = null;
         }
     }
+    //todo comente
     private void reprogrammerNettoyage() {
         if (timerTask != null) {
             timerTask.cancel();
@@ -378,12 +379,7 @@ public class ConcurrentHashMapAutoCleaning<K, V> implements ConcurrentMap<K, V>,
         if (valueWithTime == null) {
             return null;
         }
-        if (valueWithTime.isValid(lifeTimeMillis, lifeTimeSinceLastUseMillis)) {
-            return valueWithTime.getValue();
-        } else {
-            map.remove(key);
-            return null;
-        }
+        return valueWithTime.getValueIfValid(lifeTimeMillis, lifeTimeSinceLastUseMillis);
     }
 
 
@@ -394,11 +390,8 @@ public class ConcurrentHashMapAutoCleaning<K, V> implements ConcurrentMap<K, V>,
         ValueWithTime<V> oldValue = map.put(key, new ValueWithTime<>(value));
         if (oldValue == null) {
             return null;
-        } else if (oldValue.isValid(lifeTimeMillis, lifeTimeSinceLastUseMillis)) {
-            return oldValue.getValue();
-        } else {
-            return null;
         }
+        return oldValue.getValueIfValid(lifeTimeMillis, lifeTimeSinceLastUseMillis);
     }
 
     @Override
@@ -409,11 +402,7 @@ public class ConcurrentHashMapAutoCleaning<K, V> implements ConcurrentMap<K, V>,
         if (valueWithTime == null) {
             return null;
         }
-        if (valueWithTime.isValid(lifeTimeMillis, lifeTimeSinceLastUseMillis)) {
-            return valueWithTime.getValue();
-        } else {
-            return null;
-        }
+        return valueWithTime.getValueIfValid(lifeTimeMillis, lifeTimeSinceLastUseMillis);
     }
 
     @Override
@@ -518,19 +507,15 @@ public class ConcurrentHashMapAutoCleaning<K, V> implements ConcurrentMap<K, V>,
         if (v == null) {
             return null;
         } else {
-            if (v.isValid(lifeTimeMillis, lifeTimeSinceLastUseMillis)) {
-                return v.getValue();
-            } else {
-                map.remove(key);
-                return null;
-            }
+            return v.getValueIfValid(lifeTimeMillis, lifeTimeSinceLastUseMillis);
         }
 
     }
 
     @Override
     public boolean remove(Object key, Object value) {
-        if (map.containsKey(key) && Objects.equals(map.get(key), value)) {
+        // on verifie que la clé existe et aussi quel est tjr valide (dans le containKay)
+        if (containsKey(key) && Objects.equals(map.get(key), value)) {
             map.remove(key);
             return true;
         } else {
@@ -540,75 +525,58 @@ public class ConcurrentHashMapAutoCleaning<K, V> implements ConcurrentMap<K, V>,
 
     @Override
     public boolean replace(K key, V oldValue, V newValue) {
-        Object curValue = get(key);
-        if (!Objects.equals(curValue, oldValue) ||
-                (curValue == null && !containsKey(key))) {
-            return false;
-        }
-        put(key, newValue);
-        return true;
+        return map.replace(key, new ValueWithTime<>(oldValue), new ValueWithTime<>(newValue));
     }
 
     @Override
     public V replace(K key, V value) {
-        V curValue;
-        if (((curValue = get(key)) != null) || containsKey(key)) {
-            curValue = put(key, value);
-        }
-        return curValue;
-    }
-
-//    @Override
-//    public boolean equals(Object obj) {//todo verif todo test
-//        if (obj == this)
-//            return true;
-//        if (!(obj instanceof Map<?, ?> m))
-//            return false;
-//        for (Entry<K, ValueWithTime<V>> entry : map.entrySet()) {
-//            if (entry.getValue().isValid(lifeTimeMillis, lifeTimeSinceLastUseMillis)) {
-//                K key = entry.getKey();
-//                V value = entry.getValue().getValue();
-//                if (value == null) {
-//                    if (!(m.containsKey(key) && m.get(key) == null))
-//                        return false;
-//                } else {
-//                    if (!value.equals(m.get(key)))
-//                        return false;
-//                }
-//            }
-//        }
-//        return true;
-//    }
-    @Override
-public boolean equals(Object o) {
-    if (o == this)
-        return true;
-
-    if (!(o instanceof Map<?, ?> m))
-        return false;
-    if (m.size() != size())
-        return false;
-
-    try {
-        for (Entry<K, V> e : entrySet()) {
-            K key = e.getKey();
-            V value = e.getValue();
-            if (value == null) {
-                if (!(m.get(key) == null && m.containsKey(key)))
-                    return false;
+        ValueWithTime<V> v = map.get(key);
+        if (v == null) {
+            return null;
+        } else {
+            if (v.isValid(lifeTimeMillis, lifeTimeSinceLastUseMillis)) {
+                ValueWithTime<V> oldValue = map.replace(key, new ValueWithTime<>(value));
+                if (oldValue == null) {
+                    return null;
+                } else {
+                    return oldValue.getValueIfValid(lifeTimeMillis, lifeTimeSinceLastUseMillis);
+                }
             } else {
-                if (!value.equals(m.get(key)))
-                    return false;
+                return null;
             }
         }
-    } catch (ClassCastException unused) {
-        return false;
-    } catch (NullPointerException unused) {
-        return false;
     }
 
-    return true;
-}
+    @Override
+    public boolean equals(Object o) {
+        if (o == this)
+            return true;
+
+        if (!(o instanceof Map<?, ?> m))
+            return false;
+        if (m.size() != size())
+            return false;
+
+        try {
+            for (Entry<K, V> e : entrySet()) {
+                K key = e.getKey();
+                V value = e.getValue();
+                if (value == null) {
+                    if (!(m.get(key) == null && m.containsKey(key)))
+                        return false;
+                } else {
+                    if (!value.equals(m.get(key)))
+                        return false;
+                }
+            }
+        } catch (ClassCastException unused) {
+            return false;
+        } catch (NullPointerException unused) {
+            return false;
+        }
+
+        return true;
+    }
 }
 
 
@@ -684,7 +652,7 @@ class ValueWithTime<v> {
      *
      * @return le temps de dernière utilisation
      */
-    public long getTimeSinceLastUseMillis() {//todo
+    public long getTimeSinceLastUseMillis() {
         return timeSinceLastUseMillis;
     }
 
@@ -694,6 +662,18 @@ class ValueWithTime<v> {
     public boolean isValid(long lifeTimeMillis, long lifeTimeSinceLastUseMillis) {
         long currentTimeMillis = TimeHelper.currentTimeMillis();
         return currentTimeMillis - creationTimeMillis < lifeTimeMillis || currentTimeMillis - timeSinceLastUseMillis < lifeTimeSinceLastUseMillis;
+    }
+
+    /**
+     * Cette méthode permet de récupérer la valeur si elle est valide sinon null
+     * @return la valeur si elle est valide sinon null
+     */
+    public v getValueIfValid(long lifeTimeMillis, long lifeTimeSinceLastUseMillis) {
+        if (isValid(lifeTimeMillis, lifeTimeSinceLastUseMillis)) {
+            return value;
+        } else {
+            return null;
+        }
     }
 
     @Override

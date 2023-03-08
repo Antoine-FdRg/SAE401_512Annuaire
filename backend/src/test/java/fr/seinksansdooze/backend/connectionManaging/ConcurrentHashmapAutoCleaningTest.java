@@ -354,6 +354,33 @@ public class ConcurrentHashmapAutoCleaningTest {
         assertEquals(mapRef, mapToTest);
         mapToTest.close();
     }
+    //@Test
+    void testReplaceWhiveExpiredEntry() {
+        //on cree une map avec une duree de vie de 24h
+        ConcurrentHashMapAutoCleaning<String, String> mapToTest = new ConcurrentHashMapAutoCleaning<>(24*60*60*1000);
+        HashMap<String, String> mapRef = new HashMap<>();
+
+        mapToTest.put("key1", "value1");
+        mapRef.put("key1", "value1");
+
+        long entryCreationTime = mapToTest.getCreationTimeMillis("key1");
+        long newCurrentTime = entryCreationTime + 24 * 60 * 60 * 1000;
+        // On simule le temps
+        try (MockedStatic<TimeHelper> theMock = Mockito.mockStatic(TimeHelper.class)) {
+            theMock.when(TimeHelper::currentTimeMillis).thenReturn(newCurrentTime);
+            assertNull(mapToTest.replace("key1", "value2"));
+            assertEquals("value1", mapRef.replace("key1", "value1"));
+            assertEquals(0, mapToTest.size());
+            assertFalse(mapToTest.replace("key1", "value1", "value2"));
+            assertTrue(mapRef.replace("key1", "value1", "value2"));
+            assertEquals(0, mapToTest.size());
+        }
+
+
+
+
+
+    }
 
     @Test
     void testConcurrent() {
@@ -588,6 +615,16 @@ public class ConcurrentHashmapAutoCleaningTest {
         assertFalse(hashMap.remove("key1", "value1"));
         assertFalse(map.remove("key1", "value1"));
     }
+
+    @Test
+    void testRremoveKayValueWhiveExpiredEntry() {
+        // on utilise une duree de vie de 0s
+        ConcurrentHashMapAutoCleaning<String, String> map = new ConcurrentHashMapAutoCleaning<>(0);
+        map.put("key1", "value1");
+        assertFalse(map.remove("key1", "value1"));
+    }
+
+
 
     @Test
     void testEntrySetSet() {
