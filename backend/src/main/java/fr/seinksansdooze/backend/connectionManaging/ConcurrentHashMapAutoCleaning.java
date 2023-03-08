@@ -446,13 +446,10 @@ public class ConcurrentHashMapAutoCleaning<K, V> implements ConcurrentMap<K, V>,
     @Override
     public Collection<V> values() {
         //création d'une collection qui contient les valeurs valides
-        Collection<V> collection = new ArrayList<>();
-        for (Entry<K, ValueWithTime<V>> entry : map.entrySet()) {
-            if (entry.getValue().isValid(lifeTimeMillis, lifeTimeSinceLastUseMillis)) {
-                collection.add(entry.getValue().getValue());
-            }
-        }
-        return collection;
+        return map.values().stream()
+                .filter(valueWithTime -> valueWithTime.isValid(lifeTimeMillis, lifeTimeSinceLastUseMillis))
+                .map(ValueWithTime::getValue)
+                .collect(Collectors.toList());
     }
 
     @Override
@@ -474,7 +471,7 @@ public class ConcurrentHashMapAutoCleaning<K, V> implements ConcurrentMap<K, V>,
 
                     @Override
                     public V setValue(V value) {
-                        return entry.getValue().setValue(value);
+                        return map.replace(getKey(), new ValueWithTime<>(value)).getValue();
                     }
 
                     @Override
@@ -586,7 +583,7 @@ public class ConcurrentHashMapAutoCleaning<K, V> implements ConcurrentMap<K, V>,
  * Elle est utilisée par la classe ConcurrentHashMapAutoCleaning
  * @param <v>
  */
-class ValueWithTime<v> {
+class ValueWithTime<v>{
     private v value;
     private long creationTimeMillis;
     private long timeSinceLastUseMillis;
@@ -623,19 +620,6 @@ class ValueWithTime<v> {
         long oldTimeSinceLastUseMillis = timeSinceLastUseMillis;
         timeSinceLastUseMillis = TimeHelper.currentTimeMillis();
         return oldTimeSinceLastUseMillis;
-    }
-
-    /**
-     * Cette méthode permet de modifier la valeur
-     *
-     * @param value la nouvelle valeur
-     */
-    public v setValue(v value) {
-        creationTimeMillis = TimeHelper.currentTimeMillis();
-        timeSinceLastUseMillis = creationTimeMillis;
-        v oldValue = this.value;
-        this.value = value;
-        return oldValue;
     }
 
     /**

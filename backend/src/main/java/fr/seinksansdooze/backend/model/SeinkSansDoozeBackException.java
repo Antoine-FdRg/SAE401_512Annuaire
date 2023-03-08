@@ -1,5 +1,6 @@
 package fr.seinksansdooze.backend.model;
 
+import fr.seinksansdooze.backend.controller.SeinkSansDoozeExceptionHandler;
 import org.springframework.http.HttpStatus;
 
 /**
@@ -7,7 +8,7 @@ import org.springframework.http.HttpStatus;
  * Cette exception doit obligatoirement être accompagnée d'un code d'erreur HTTP,
  * sinon elle ne pourra pas être instanciée.
  * Toutes ces erreurs lancées pendant le traitement d'une route api serons traitées dans
- * le gestionnaire d'erreur suivant : {@link fr.seinksansdooze.backend.controller.SeinkSansDoozeExceptionHandler}.
+ * le gestionnaire d'erreur suivant : {@link SeinkSansDoozeExceptionHandler}.
  */
 public class SeinkSansDoozeBackException extends RuntimeException {
     private HttpStatus status;

@@ -288,6 +288,12 @@ public class ConcurrentHashmapAutoCleaningTest {
 
         assertTrue(mapRef.entrySet().containsAll(mapToTest.entrySet()));
         assertTrue(mapToTest.entrySet().containsAll(mapRef.entrySet()));
+
+        entry1.setValue("value20");
+        assertEquals("value20", mapToTest.get(entry1.getKey()));
+        entry.setValue("value20");
+        assertEquals("value20", mapRef.get(entry.getKey()));
+
         mapToTest.close();
     }
 
