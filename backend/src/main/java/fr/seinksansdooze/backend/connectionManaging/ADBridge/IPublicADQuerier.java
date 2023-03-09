@@ -8,8 +8,6 @@ import java.util.ArrayList;
 
 public interface IPublicADQuerier {
 
-    NamingEnumeration<SearchResult> search(ObjectType searchType, String searchValue);
-
     ArrayList<PartialPerson> searchPerson(String cn);
 
     NamingEnumeration<SearchResult> searchStructure(String ou);

@@ -1,5 +1,7 @@
 package fr.seinksansdooze.backend.controller;
 
+import fr.seinksansdooze.backend.connectionManaging.ADBridge.ADQuerier;
+import fr.seinksansdooze.backend.connectionManaging.ADBridge.IPublicADQuerier;
 import fr.seinksansdooze.backend.model.response.FullPerson;
 import fr.seinksansdooze.backend.model.response.FullStructure;
 import fr.seinksansdooze.backend.model.response.PartialPerson;
@@ -14,13 +16,20 @@ import java.util.List;
 @RequestMapping("/api/public")
 public class PublicController {
 
+    private final IPublicADQuerier querier;
+
+    public PublicController() {
+        querier = new ADQuerier();
+        // TODO login
+    }
+
     @ApiResponses({
             @ApiResponse(responseCode = "200", description = "Les résultats sont disponibles"),
             @ApiResponse(responseCode = "400", description = "Il manque un ou plusieurs paramètres")
     })
     @GetMapping("/search/person")
     public List<PartialPerson> searchPerson(@RequestParam String name, @RequestParam int page, @RequestParam int perPage) {
-        return List.of();
+        return querier.searchPerson(name);
     }
 
     @ApiResponses({
