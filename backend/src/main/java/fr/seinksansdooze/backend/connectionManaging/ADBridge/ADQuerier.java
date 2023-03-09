@@ -79,7 +79,8 @@ public class ADQuerier implements IAdminADQuerier, IPublicADQuerier {
             }
             return persons;
         }catch (NamingException e) {
-            throw new RuntimeException(e);
+//            throw new RuntimeException(e);
+            return persons;
         }
     }
 
