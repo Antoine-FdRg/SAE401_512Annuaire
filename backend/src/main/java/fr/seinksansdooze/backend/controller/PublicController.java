@@ -19,8 +19,7 @@ public class PublicController {
     private final IPublicADQuerier querier;
 
     public PublicController() {
-        querier = new ADQuerier();
-        // TODO login
+        querier = ADQuerier.getPublicADQuerier();
     }
 
     @ApiResponses({

@@ -17,10 +17,19 @@ public class ADQuerier implements IAdminADQuerier, IPublicADQuerier {
 
     private DirContext context;
 
-    public ADQuerier() {
+    private static IPublicADQuerier publicADQuerier = null;
+
+    public static IPublicADQuerier getPublicADQuerier() {
+        if (publicADQuerier == null) {
+            publicADQuerier = new ADQuerier("antoine.fadda.rodriguez","@Arnaudisthebest83");
+        }
+        return publicADQuerier;
+    }
+
+    private ADQuerier(String username, String pwd) {
         //TODO : comment créer une connexion public  de sort à pouvoir avoir un utilisateur connecté à la bdd pour des requetes publiques et un autre authentifié pour des requetes admin
         //rajouter un systeme de session et d'authentification
-        boolean connected = this.login("antoine.fadda.rodriguez", "@Arnaudisthebest83");
+        boolean connected = this.login(username, pwd);
     }
 
     //  api/admin/login

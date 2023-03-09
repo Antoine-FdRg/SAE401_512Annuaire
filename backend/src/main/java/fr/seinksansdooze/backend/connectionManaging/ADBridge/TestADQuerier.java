@@ -9,7 +9,7 @@ import java.util.ArrayList;
 public class TestADQuerier {
 
     public static void main(String[] args) {
-        ADQuerier adQuerier = new ADQuerier();
+        IPublicADQuerier adQuerier = ADQuerier.getPublicADQuerier();
 //        System.out.println("api/search/person   api/search/structures   api/admin/group/all");
 //        NamingEnumeration<SearchResult> results = adQuerier.search(ObjectType.GROUP, "test");
 //        displayResults(results, ObjectType.PERSON);
