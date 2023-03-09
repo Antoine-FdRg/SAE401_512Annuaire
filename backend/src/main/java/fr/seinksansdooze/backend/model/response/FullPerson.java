@@ -5,6 +5,8 @@ package fr.seinksansdooze.backend.model.response;
  * obtenir sur une personne.
  */
 public class FullPerson extends PartialPerson {
+    private String login;
+    private String email;
     private String personalPhone;
     private String professionalPhone;
     private String address;
@@ -14,13 +16,31 @@ public class FullPerson extends PartialPerson {
     public FullPerson() {
     }
 
-    public FullPerson(String firstName, String lastName, String login, String cn, String email, String structureOU, String personalPhone, String professionalPhone, String address, String managerFullName, String managerCN) {
-        super(firstName, lastName, login, cn, email, structureOU);
+    public FullPerson(String firstName, String lastName, String cn, String structureOU, String login, String email, String personalPhone, String professionalPhone, String address, String managerFullName, String managerCN) {
+        super(firstName, lastName, cn, structureOU);
+        this.login = login;
+        this.email = email;
         this.personalPhone = personalPhone;
         this.professionalPhone = professionalPhone;
         this.address = address;
         this.managerFullName = managerFullName;
         this.managerCN = managerCN;
+    }
+
+    public String getLogin() {
+        return login;
+    }
+
+    public void setLogin(String login) {
+        this.login = login;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
     }
 
     public String getPersonalPhone() {
