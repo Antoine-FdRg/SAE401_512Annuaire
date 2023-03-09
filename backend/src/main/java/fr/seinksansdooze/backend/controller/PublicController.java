@@ -1,27 +1,34 @@
 package fr.seinksansdooze.backend.controller;
 
 import fr.seinksansdooze.backend.model.response.FullPerson;
+import fr.seinksansdooze.backend.model.response.FullStructure;
 import fr.seinksansdooze.backend.model.response.PartialPerson;
 import fr.seinksansdooze.backend.model.response.PartialStructure;
-import fr.seinksansdooze.backend.model.response.FullStructure;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
 @RestController
 @RequestMapping("/api/public")
 public class PublicController {
+
+    @ApiResponses({
+            @ApiResponse(responseCode = "200", description = "Les résultats sont disponibles"),
+            @ApiResponse(responseCode = "400", description = "Il manque un ou plusieurs paramètres")
+    })
     @GetMapping("/search/person")
-    public List<PartialPerson> searchPerson(@RequestParam String name) {
+    public List<PartialPerson> searchPerson(@RequestParam String name, @RequestParam int page, @RequestParam int perPage) {
         return List.of();
     }
 
+    @ApiResponses({
+            @ApiResponse(responseCode = "200", description = "Les résultats sont disponibles"),
+            @ApiResponse(responseCode = "400", description = "Il manque un ou plusieurs paramètres")
+    })
     @GetMapping("/search/structure")
-    public List<PartialStructure> searchStructure(@RequestParam String name) {
+    public List<PartialStructure> searchStructure(@RequestParam String name, @RequestParam int page, @RequestParam int perPage) {
         return List.of();
     }
 
