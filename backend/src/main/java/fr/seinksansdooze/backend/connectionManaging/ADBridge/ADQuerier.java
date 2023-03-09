@@ -1,9 +1,14 @@
 package fr.seinksansdooze.backend.connectionManaging.ADBridge;
 
+import fr.seinksansdooze.backend.model.response.PartialPerson;
+
 import javax.naming.Context;
 import javax.naming.NamingEnumeration;
 import javax.naming.NamingException;
 import javax.naming.directory.*;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
 import java.util.Properties;
 
 public class ADQuerier implements IAdminADQuerier {
@@ -26,7 +31,7 @@ public class ADQuerier implements IAdminADQuerier {
         env.put(Context.SECURITY_PRINCIPAL, username);
         env.put(Context.SECURITY_CREDENTIALS, pwd);
         env.put(Context.INITIAL_CONTEXT_FACTORY, "com.sun.jndi.ldap.LdapCtxFactory");
-        env.put(Context.PROVIDER_URL, "ldap://10.22.32.2:389"); //389 (search et createSubcontext) ou 3268 (search only)
+        env.put(Context.PROVIDER_URL, AD_URL); //389 (search et createSubcontext) ou 3268 (search only)
         try {
             this.context = new InitialDirContext(env);
             return true;
@@ -58,8 +63,38 @@ public class ADQuerier implements IAdminADQuerier {
         }
     }
 
+    public ArrayList<PartialPerson> searchPerson(String searchedName){
+        NamingEnumeration<SearchResult> res = this.search(ObjectType.PERSON, searchedName);
+        ArrayList<PartialPerson> persons = new ArrayList<>();
+        try {
+            while (res.hasMore()) {
+                SearchResult currentPerson = res.next();
+                Attributes attrs = currentPerson.getAttributes();
+                PartialPerson person = new PartialPerson();
+                person.setCn(attrs.get("cn").get().toString());
+                person.setFirstName(attrs.get("givenName").get().toString());
+                person.setLastName(attrs.get("sn").get().toString());
+                person.setStructureOU(attrs.get("distinguishedName").get().toString().split(",")[1].split("=")[1]);
+                persons.add(person);
+            }
+            return persons;
+        }catch (NamingException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+
+
+
+
+
+
     //  api/search/person   api/search/structures   api/admin/group/all
-    public NamingEnumeration<SearchResult> search(ObjectType searchType, String searchValue) {
+    // recherche une personne ou une structure
+    // consulter la liste des groupes
+    // TODO séparer en plusieurs méthodes pour limiter l'accès grace aux interfaces
+    // TODO rajouter un paramètre filtrer pour permettre les requetes incluant des filtres
+    private NamingEnumeration<SearchResult> search(ObjectType searchType, String searchValue) {
         String filter = "(&(objectClass=" + searchType + ")(" + searchType.getNamingAttribute() + "=*" + searchValue + "*))";
         SearchControls searchControls = new SearchControls();
         searchControls.setSearchScope(SearchControls.SUBTREE_SCOPE);
@@ -73,8 +108,9 @@ public class ADQuerier implements IAdminADQuerier {
         }
     }
 
+
     //  api/info/person/{cn}
-    public NamingEnumeration<SearchResult> searchPerson(String cn) {
+    public NamingEnumeration<SearchResult> getPersonInfo(String cn) {
         String filter = "(&(objectClass=user)(CN=" + cn + "))";
         SearchControls searchControls = new SearchControls();
         searchControls.setSearchScope(SearchControls.SUBTREE_SCOPE);
@@ -86,6 +122,7 @@ public class ADQuerier implements IAdminADQuerier {
             return null;
         }
     }
+
 
     //  api/info/structure/{ou}
     public NamingEnumeration<SearchResult> searchStructure(String ou) {
@@ -134,7 +171,7 @@ public class ADQuerier implements IAdminADQuerier {
                 attributes.put("CN", groupName);
                 attributes.put("sAMAccountName", groupName);
                 attributes.put("description", "Groupe créé par l'API");
-                this.context.createSubcontext("CN=" + groupName + ",OU=512BankFR,DC=EQUIPE1B,DC=local", attributes);
+                this.context.createSubcontext("CN=" + groupName + ","+ADQuerier.AD_BASE, attributes);
                 return true;
             }
         } catch (NamingException e) {
@@ -151,7 +188,7 @@ public class ADQuerier implements IAdminADQuerier {
         try {
             res = this.context.search(AD_BASE, filter, searchControls);
             if (res.hasMore()) {
-                this.context.destroySubcontext("CN=" + groupName + ",OU=512BankFR,DC=EQUIPE1B,DC=local");
+                this.context.destroySubcontext("CN=" + groupName + ","+ADQuerier.AD_BASE);
                 return true;
             } else {
                 return false;
@@ -162,7 +199,6 @@ public class ADQuerier implements IAdminADQuerier {
     }
 
     //  api/admin/group/add/{groupName}/{username}
-    //TODO : a tester
     public boolean addUserToGroup(String groupName, String username) {
         String filter = "(&(objectClass=group)(CN=" + groupName + "))";
         SearchControls searchControls = new SearchControls();
@@ -172,9 +208,9 @@ public class ADQuerier implements IAdminADQuerier {
             res = this.context.search(AD_BASE, filter, searchControls);
             if (res.hasMore()) {
                 ModificationItem[] modificationItems = new ModificationItem[1];
-                String dn = searchPerson(username).next().getNameInNamespace();
+                String dn = search(ObjectType.PERSON,username).next().getNameInNamespace();
                 modificationItems[0] = new ModificationItem(DirContext.ADD_ATTRIBUTE, new BasicAttribute("member", dn));
-                this.context.modifyAttributes("CN=" + groupName + ",OU=512BankFR,DC=EQUIPE1B,DC=local", modificationItems);
+                this.context.modifyAttributes("CN=" + groupName + ","+ADQuerier.AD_BASE, modificationItems);
                 return true;
             } else {
                 return false;
@@ -185,7 +221,6 @@ public class ADQuerier implements IAdminADQuerier {
     }
 
     //  api/admin/group/remove/{groupName}/{username}
-    //TODO : A tester
     public boolean removeUserFromGroup(String groupName, String username) {
         String filter = "(&(objectClass=group)(CN=" + groupName + "))";
         SearchControls searchControls = new SearchControls();
@@ -195,9 +230,9 @@ public class ADQuerier implements IAdminADQuerier {
             res = this.context.search(AD_BASE, filter, searchControls);
             if (res.hasMore()) {
                 ModificationItem[] modificationItems = new ModificationItem[1];
-                String dn = searchPerson(username).next().getNameInNamespace();
+                String dn = search(ObjectType.PERSON,username).next().getNameInNamespace();
                 modificationItems[0] = new ModificationItem(DirContext.REMOVE_ATTRIBUTE, new BasicAttribute("member", dn));
-                this.context.modifyAttributes("CN=" + groupName + ",OU=512BankFR,DC=EQUIPE1B,DC=local", modificationItems);
+                this.context.modifyAttributes("CN=" + groupName + ","+ADQuerier.AD_BASE, modificationItems);
                 return true;
             } else {
                 return false;
@@ -208,33 +243,39 @@ public class ADQuerier implements IAdminADQuerier {
     }
 
     //  api/admin/group/members/{groupName}
-    //TODO : A tester
-    private NamingEnumeration<SearchResult> searchGroupMembers(String groupName) {
+    public ArrayList<SearchResult> searchGroupMembers(String groupName) {
         String filter = "(&(objectClass=group)(CN=" + groupName + "))";
         SearchControls searchControls = new SearchControls();
         searchControls.setSearchScope(SearchControls.SUBTREE_SCOPE);
         NamingEnumeration<SearchResult> res;
         try {
-            res = this.context.search(AD_BASE, filter, searchControls);
+            try {
+                res = this.context.search(AD_BASE, filter, searchControls);
+            } catch (NamingException ex) {
+                throw new RuntimeException(ex);
+            }
+//            System.out.println("nom du group trouvé : ");
+//            TestADQuerier.displayResults(res,ObjectType.GROUP);
+            //le group test est bien trouvé
             if (res.hasMore()) {
-                Attributes attributes = res.next().getAttributes();
-                Attribute members = attributes.get("member");
-                NamingEnumeration<?> membersList = members.getAll();
-                String filter2 = "(&(objectClass=user)(CN=" + membersList.next().toString() + "))";
-                SearchControls searchControls2 = new SearchControls();
-                searchControls2.setSearchScope(SearchControls.SUBTREE_SCOPE);
-                NamingEnumeration<SearchResult> res2;
-                try {
-                    res2 = this.context.search(AD_BASE, filter2, searchControls2);
-                    return res2;
-                } catch (NamingException e) {
-                    return null;
+                Attributes groupAttributs = res.next().getAttributes();
+                Attribute groupMembersName = groupAttributs.get("member");
+                ArrayList<SearchResult> groupMembers = new ArrayList<>();
+                NamingEnumeration<?> membersList = groupMembersName.getAll();
+                while (membersList.hasMore()) {
+                    String currentMemberCN = membersList.next().toString();
+                    NamingEnumeration<SearchResult> currentMemberEnum = search(ObjectType.PERSON,currentMemberCN.split(",")[0].split("=")[1]);
+                    if(currentMemberEnum.hasMore()){
+                        SearchResult currentMember = currentMemberEnum.next();
+                        groupMembers.add(currentMember);
+                    }
                 }
-            } else {
+                return groupMembers;
+            }else {
                 return null;
             }
-        } catch (NamingException e) {
-            return null;
+        } catch (NamingException ex) {
+            throw new RuntimeException(ex);
         }
     }
 

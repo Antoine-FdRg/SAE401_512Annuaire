@@ -52,4 +52,14 @@ public class PartialPerson {
     public void setCn(String cn) {
         this.cn = cn;
     }
+
+    @Override
+    public String toString() {
+        return "PartialPerson{" +
+                "firstName='" + firstName + '\'' +
+                ", lastName='" + lastName + '\'' +
+                ", cn='" + cn + '\'' +
+                ", structureOU='" + structureOU + '\'' +
+                '}';
+    }
 }
