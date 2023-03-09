@@ -23,8 +23,12 @@ public class PublicController {
         return List.of();
     }
 
+    @ApiResponses({
+            @ApiResponse(responseCode = "200", description = "Les résultats sont disponibles"),
+            @ApiResponse(responseCode = "400", description = "Il manque un ou plusieurs paramètres")
+    })
     @GetMapping("/search/structure")
-    public List<PartialStructure> searchStructure(@RequestParam String name) {
+    public List<PartialStructure> searchStructure(@RequestParam String name, @RequestParam int page, @RequestParam int perPage) {
         return List.of();
     }
 
