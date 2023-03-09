@@ -31,11 +31,6 @@ public class ADQuerierMoke implements IAdminADQuerier, IPublicADQuerier {
     }
 
     @Override
-    public NamingEnumeration<SearchResult> search(ObjectType searchType, String searchValue) {
-        return null;
-    }
-
-    @Override
     public ArrayList<PartialPerson> searchPerson(String cn) {
         return null;
     }
