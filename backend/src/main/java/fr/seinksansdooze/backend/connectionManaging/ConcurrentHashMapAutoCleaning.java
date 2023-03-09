@@ -355,6 +355,8 @@ public class ConcurrentHashMapAutoCleaning<K, V> implements ConcurrentMap<K, V>,
 
     @Override
     public boolean containsKey(Object key) {
+        if (key == null)
+            throw new NullPointerException();
         ValueWithTime<V> valueWithTime = map.get(key);
         return valueWithTime != null && valueWithTime.isValid(lifeTimeMillis, lifeTimeSinceLastUseMillis);
     }
@@ -500,11 +502,13 @@ public class ConcurrentHashMapAutoCleaning<K, V> implements ConcurrentMap<K, V>,
 
     @Override
     public V putIfAbsent(K key, V value) {
-        ValueWithTime<V> v = map.putIfAbsent(key, new ValueWithTime<>(value));
-        if (v == null) {
-            return null;
+        if (key == null || value == null)
+            throw new NullPointerException();
+        if (containsKey(key)) {
+            return get(key);
         } else {
-            return v.getValueIfValid(lifeTimeMillis, lifeTimeSinceLastUseMillis);
+            map.put(key, new ValueWithTime<>(value));
+            return null;
         }
 
     }
@@ -522,7 +526,17 @@ public class ConcurrentHashMapAutoCleaning<K, V> implements ConcurrentMap<K, V>,
 
     @Override
     public boolean replace(K key, V oldValue, V newValue) {
-        return map.replace(key, new ValueWithTime<>(oldValue), new ValueWithTime<>(newValue));
+        ValueWithTime<V> v = map.get(key);
+        if (v == null) {
+            return false;
+        } else {
+            if (v.isValid(lifeTimeMillis, lifeTimeSinceLastUseMillis) && Objects.equals(v.getValue(), oldValue)) {
+                map.replace(key, new ValueWithTime<>(newValue));
+                return true;
+            } else {
+                return false;
+            }
+        }
     }
 
     @Override
