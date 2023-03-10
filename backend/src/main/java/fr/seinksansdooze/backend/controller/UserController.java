@@ -1,7 +1,6 @@
 package fr.seinksansdooze.backend.controller;
 
 import fr.seinksansdooze.backend.model.payload.LoginPayload;
-import fr.seinksansdooze.backend.model.response.LoginResponse;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseCookie;
 import org.springframework.http.ResponseEntity;
@@ -17,7 +16,7 @@ public class UserController {
 
 
     @PostMapping("/login")
-    public ResponseEntity login(@RequestBody LoginPayload payload) {
+    public ResponseEntity<Object> login(@RequestBody LoginPayload payload) {
 
 
 
@@ -34,7 +33,10 @@ public class UserController {
     }
 
     @PostMapping("/logout")
-    public void logout() {
+    public ResponseEntity<Object> logout() {
+        ResponseCookie resCookie = ResponseCookie.from("token", null)
+                .build();
 
+        return ResponseEntity.ok().header(HttpHeaders.SET_COOKIE, resCookie.toString()).build();
     }
 }
