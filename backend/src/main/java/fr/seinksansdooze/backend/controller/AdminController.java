@@ -2,8 +2,6 @@
 package fr.seinksansdooze.backend.controller;
 
 import fr.seinksansdooze.backend.model.payload.ChangeGroupsPayload;
-import fr.seinksansdooze.backend.model.payload.LoginPayload;
-import fr.seinksansdooze.backend.model.response.LoginResponse;
 import fr.seinksansdooze.backend.model.response.PartialPerson;
 import org.springframework.web.bind.annotation.*;
 
@@ -12,8 +10,6 @@ import java.util.List;
 @RestController
 @RequestMapping("/api/admin")
 public class AdminController {
-
-
     // TODO: 2/10/2023 GET /api/admin/group/all
 
     // TODO: 2/10/2023 POST /api/admin/group/create
