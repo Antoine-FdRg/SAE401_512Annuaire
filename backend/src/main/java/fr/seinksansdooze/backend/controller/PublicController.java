@@ -29,7 +29,7 @@ public class PublicController {
     @GetMapping("/search/person")
     public List<PartialPerson> searchPerson(@RequestParam String name,
                                             @RequestParam(defaultValue = "0") int page,
-                                            @RequestParam(defaultValue = "0") int perPage) {
+                                            @RequestParam(defaultValue = "25") int perPage) {
         return querier.searchPerson(name);
     }
 
@@ -40,7 +40,7 @@ public class PublicController {
     @GetMapping("/search/structure")
     public List<PartialStructure> searchStructure(@RequestParam String name,
                                                   @RequestParam(defaultValue = "0") int page,
-                                                  @RequestParam(defaultValue = "0") int perPage) {
+                                                  @RequestParam(defaultValue = "25") int perPage) {
         return querier.searchStructure(name);
     }
 
