@@ -42,6 +42,16 @@ public class ADQuerierMoke implements IAdminADQuerier, IPublicADQuerier {
     }
 
     @Override
+    public PartialPerson getPersonInfo(String cn) {
+        return null;
+    }
+
+    @Override
+    public PartialStructure getStructureInfo(String ou) {
+        return null;
+    }
+
+    @Override
     public NamingEnumeration<SearchResult> searchAllGroups() {
         return null;
     }

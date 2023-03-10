@@ -34,10 +34,14 @@ public class PartialPerson {
      * @param person le résultat de recherche LDAP
      */
     public PartialPerson(SearchResult person) {
-        this.firstName = person.getAttributes().get("givenName").toString();
-        this.lastName = person.getAttributes().get("sn").toString();
-        this.cn = person.getAttributes().get("cn").toString();
-        this.structureOU = person.getAttributes().get("distinguishedName").toString().split(",")[1].split("=")[1];
+        try{
+            this.firstName = person.getAttributes().get("givenName").get().toString();
+            this.lastName = person.getAttributes().get("sn").get().toString();
+            this.cn = person.getAttributes().get("cn").get().toString();
+            this.structureOU = person.getAttributes().get("distinguishedName").toString().split(",")[1].split("=")[1];
+        }catch (Exception e){
+            e.printStackTrace();
+        }
     }
 
     public String getFirstName() {

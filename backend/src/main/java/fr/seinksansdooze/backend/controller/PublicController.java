@@ -45,12 +45,12 @@ public class PublicController {
     }
 
     @GetMapping("/info/person/{cn}")
-    public FullPerson personInfo(@PathVariable String cn) {
-        return new FullPerson();
+    public PartialPerson personInfo(@PathVariable String cn) {
+        return querier.getPersonInfo(cn);
     }
 
     @GetMapping("/info/structure/{ou}")
-    public FullStructure structureInfo(@PathVariable String ou) {
-        return new FullStructure();
+    public PartialStructure structureInfo(@PathVariable String ou) {
+        return querier.getStructureInfo(ou);
     }
 }
