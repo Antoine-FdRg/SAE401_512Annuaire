@@ -6,6 +6,7 @@ package fr.seinksansdooze.backend.model.payload;
 public class LoginPayload {
     private String username;
     private String password;
+    private boolean rememberMe = false;
 
     public LoginPayload() {
     }
@@ -24,5 +25,13 @@ public class LoginPayload {
 
     public void setPassword(String password) {
         this.password = password;
+    }
+
+    public boolean isRememberMe() {
+        return rememberMe;
+    }
+
+    public void setRememberMe(boolean rememberMe) {
+        this.rememberMe = rememberMe;
     }
 }
