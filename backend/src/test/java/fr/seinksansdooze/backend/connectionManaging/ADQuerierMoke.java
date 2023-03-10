@@ -3,9 +3,12 @@ package fr.seinksansdooze.backend.connectionManaging;
 import fr.seinksansdooze.backend.connectionManaging.ADBridge.IAdminADQuerier;
 import fr.seinksansdooze.backend.connectionManaging.ADBridge.IPublicADQuerier;
 import fr.seinksansdooze.backend.connectionManaging.ADBridge.ObjectType;
+import fr.seinksansdooze.backend.model.response.PartialPerson;
+import fr.seinksansdooze.backend.model.response.PartialStructure;
 
 import javax.naming.NamingEnumeration;
 import javax.naming.directory.SearchResult;
+import java.util.ArrayList;
 import java.util.HashMap;
 
 public class ADQuerierMoke implements IAdminADQuerier, IPublicADQuerier {
@@ -29,17 +32,22 @@ public class ADQuerierMoke implements IAdminADQuerier, IPublicADQuerier {
     }
 
     @Override
-    public NamingEnumeration<SearchResult> search(ObjectType searchType, String searchValue) {
+    public ArrayList<PartialPerson> searchPerson(String cn) {
         return null;
     }
 
     @Override
-    public NamingEnumeration<SearchResult> searchPerson(String cn) {
+    public ArrayList<PartialStructure> searchStructure(String ou) {
         return null;
     }
 
     @Override
-    public NamingEnumeration<SearchResult> searchStructure(String ou) {
+    public PartialPerson getPersonInfo(String cn) {
+        return null;
+    }
+
+    @Override
+    public PartialStructure getStructureInfo(String ou) {
         return null;
     }
 

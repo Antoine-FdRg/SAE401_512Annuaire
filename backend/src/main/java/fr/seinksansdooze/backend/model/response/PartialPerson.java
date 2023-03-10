@@ -1,27 +1,47 @@
 package fr.seinksansdooze.backend.model.response;
 
+import javax.naming.directory.SearchResult;
+
 /**
  * Un objet contenant des informations partielles sur une personne, renvoyé
- * dans les résultats de recherches d'une personne.
+ * dans les résultats de recherches d'une personne ou quand ce n'est pas pertinent
+ * de récupérer la totalité des informations sur une personne.
  */
 public class PartialPerson {
     private String firstName;
     private String lastName;
-    private String login;
     private String cn;
-    private String email;
     private String structureOU;
 
     public PartialPerson() {
     }
 
-    public PartialPerson(String firstName, String lastName, String login, String cn, String email, String structureOU) {
+    /**
+     * Constructeur d'une personne à partir de ses informations
+     * @param firstName le prénom
+     * @param lastName le nom
+     * @param cn le cn
+     * @param structureOU l'unité d'organisation / la structure
+     */
+    public PartialPerson(String firstName, String lastName, String cn, String structureOU) {
         this.firstName = firstName;
         this.lastName = lastName;
-        this.login = login;
         this.cn = cn;
-        this.email = email;
         this.structureOU = structureOU;
+    }
+    /**
+     * Constructeur à partir d'un résultat de recherche LDAP
+     * @param person le résultat de recherche LDAP
+     */
+    public PartialPerson(SearchResult person) {
+        try{
+            this.firstName = person.getAttributes().get("givenName").get().toString();
+            this.lastName = person.getAttributes().get("sn").get().toString();
+            this.cn = person.getAttributes().get("cn").get().toString();
+            this.structureOU = person.getAttributes().get("distinguishedName").toString().split(",")[1].split("=")[1];
+        }catch (Exception e){
+            e.printStackTrace();
+        }
     }
 
     public String getFirstName() {
@@ -40,22 +60,6 @@ public class PartialPerson {
         this.lastName = lastName;
     }
 
-    public String getLogin() {
-        return login;
-    }
-
-    public void setLogin(String login) {
-        this.login = login;
-    }
-
-    public String getEmail() {
-        return email;
-    }
-
-    public void setEmail(String email) {
-        this.email = email;
-    }
-
     public String getStructureOU() {
         return structureOU;
     }
@@ -70,5 +74,15 @@ public class PartialPerson {
 
     public void setCn(String cn) {
         this.cn = cn;
+    }
+
+    @Override
+    public String toString() {
+        return "PartialPerson{" +
+                "firstName='" + firstName + '\'' +
+                ", lastName='" + lastName + '\'' +
+                ", cn='" + cn + '\'' +
+                ", structureOU='" + structureOU + '\'' +
+                '}';
     }
 }

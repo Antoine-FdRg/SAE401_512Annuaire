@@ -1,37 +1,56 @@
 package fr.seinksansdooze.backend.controller;
 
+import fr.seinksansdooze.backend.connectionManaging.ADBridge.ADQuerier;
+import fr.seinksansdooze.backend.connectionManaging.ADBridge.IPublicADQuerier;
 import fr.seinksansdooze.backend.model.response.FullPerson;
+import fr.seinksansdooze.backend.model.response.FullStructure;
 import fr.seinksansdooze.backend.model.response.PartialPerson;
 import fr.seinksansdooze.backend.model.response.PartialStructure;
-import fr.seinksansdooze.backend.model.response.FullStructure;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
 @RestController
 @RequestMapping("/api/public")
 public class PublicController {
-    @GetMapping("/search/person")
-    public List<PartialPerson> searchPerson(@RequestParam String name) {
-        return List.of();
+
+    private final IPublicADQuerier querier;
+
+    public PublicController() {
+        querier = ADQuerier.getPublicADQuerier();
     }
 
+    @ApiResponses({
+            @ApiResponse(responseCode = "200", description = "Les résultats sont disponibles"),
+            @ApiResponse(responseCode = "400", description = "Il manque un ou plusieurs paramètres")
+    })
+    @GetMapping("/search/person")
+    public List<PartialPerson> searchPerson(@RequestParam String name,
+                                            @RequestParam(defaultValue = "0") int page,
+                                            @RequestParam(defaultValue = "25") int perPage) {
+        return querier.searchPerson(name);
+    }
+
+    @ApiResponses({
+            @ApiResponse(responseCode = "200", description = "Les résultats sont disponibles"),
+            @ApiResponse(responseCode = "400", description = "Il manque un ou plusieurs paramètres")
+    })
     @GetMapping("/search/structure")
-    public List<PartialStructure> searchStructure(@RequestParam String name) {
-        return List.of();
+    public List<PartialStructure> searchStructure(@RequestParam String name,
+                                                  @RequestParam(defaultValue = "0") int page,
+                                                  @RequestParam(defaultValue = "25") int perPage) {
+        return querier.searchStructure(name);
     }
 
     @GetMapping("/info/person/{cn}")
-    public FullPerson personInfo(@PathVariable String cn) {
-        return new FullPerson();
+    public PartialPerson personInfo(@PathVariable String cn) {
+        return querier.getPersonInfo(cn);
     }
 
     @GetMapping("/info/structure/{ou}")
-    public FullStructure structureInfo(@PathVariable String ou) {
-        return new FullStructure();
+    public PartialStructure structureInfo(@PathVariable String ou) {
+        return querier.getStructureInfo(ou);
     }
 }
