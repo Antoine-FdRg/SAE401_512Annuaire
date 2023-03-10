@@ -1,6 +1,7 @@
 package fr.seinksansdooze.backend.connectionManaging.ADBridge;
 
 import fr.seinksansdooze.backend.model.response.PartialPerson;
+import fr.seinksansdooze.backend.model.response.PartialStructure;
 
 import javax.naming.Context;
 import javax.naming.NamingEnumeration;
@@ -27,7 +28,6 @@ public class ADQuerier implements IAdminADQuerier, IPublicADQuerier {
     }
 
     private ADQuerier(String username, String pwd) {
-        //TODO : comment créer une connexion public  de sort à pouvoir avoir un utilisateur connecté à la bdd pour des requetes publiques et un autre authentifié pour des requetes admin
         //rajouter un systeme de session et d'authentification
         boolean connected = this.login(username, pwd);
     }
@@ -72,24 +72,43 @@ public class ADQuerier implements IAdminADQuerier, IPublicADQuerier {
         }
     }
 
+    /**
+     * Méthode répondant à la route GET /api/search/person
+     * @param searchedName le nom de la personne recherchée
+     * @return une liste de personnes correspondant à la recherche
+     */
     public ArrayList<PartialPerson> searchPerson(String searchedName){
         NamingEnumeration<SearchResult> res = this.search(ObjectType.PERSON, searchedName);
         ArrayList<PartialPerson> persons = new ArrayList<>();
         try {
             while (res.hasMore()) {
                 SearchResult currentPerson = res.next();
-                Attributes attrs = currentPerson.getAttributes();
-                PartialPerson person = new PartialPerson();
-                person.setCn(attrs.get("cn").get().toString());
-                person.setFirstName(attrs.get("givenName").get().toString());
-                person.setLastName(attrs.get("sn").get().toString());
-                person.setStructureOU(attrs.get("distinguishedName").get().toString().split(",")[1].split("=")[1]);
+                PartialPerson person = new PartialPerson(currentPerson);
                 persons.add(person);
             }
             return persons;
         }catch (NamingException e) {
-//            throw new RuntimeException(e);
             return persons;
+        }
+    }
+
+    /**
+     * Méthode répondant à la route GET /api/search/structure
+     * @param searchedName le nom de la structure recherchée
+     * @return une liste de structures correspondant à la recherche
+     */
+    public ArrayList<PartialStructure> searchStructure(String searchedName){
+        NamingEnumeration<SearchResult> res = this.search(ObjectType.STRUCTURE, searchedName);
+        ArrayList<PartialStructure> structures = new ArrayList<>();
+        try {
+            while (res.hasMore()) {
+                SearchResult currentStructure = res.next();
+                PartialStructure structure = new PartialStructure(currentStructure);
+                structures.add(structure);
+            }
+            return structures;
+        }catch (NamingException e) {
+            return structures;
         }
     }
 
@@ -135,18 +154,18 @@ public class ADQuerier implements IAdminADQuerier, IPublicADQuerier {
 
 
     //  api/info/structure/{ou}
-    public NamingEnumeration<SearchResult> searchStructure(String ou) {
-        String filter = "(&(objectClass=organizationalUnit)(distinguishedName=" + ou + "))";
-        SearchControls searchControls = new SearchControls();
-        searchControls.setSearchScope(SearchControls.SUBTREE_SCOPE);
-        NamingEnumeration<SearchResult> res;
-        try {
-            res = this.context.search(AD_BASE, filter, searchControls);
-            return res;
-        } catch (NamingException e) {
-            return null;
-        }
-    }
+//    public NamingEnumeration<SearchResult> searchStructure(String ou) {
+//        String filter = "(&(objectClass=organizationalUnit)(distinguishedName=" + ou + "))";
+//        SearchControls searchControls = new SearchControls();
+//        searchControls.setSearchScope(SearchControls.SUBTREE_SCOPE);
+//        NamingEnumeration<SearchResult> res;
+//        try {
+//            res = this.context.search(AD_BASE, filter, searchControls);
+//            return res;
+//        } catch (NamingException e) {
+//            return null;
+//        }
+//    }
 
     // api/admin/group/all
     public NamingEnumeration<SearchResult> searchAllGroups() {

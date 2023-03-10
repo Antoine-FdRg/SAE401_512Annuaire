@@ -1,5 +1,7 @@
 package fr.seinksansdooze.backend.model.response;
 
+import javax.naming.directory.SearchResult;
+
 /**
  * Un objet contenant des informations partielles sur une personne, renvoyé
  * dans les résultats de recherches d'une personne ou quand ce n'est pas pertinent
@@ -14,11 +16,28 @@ public class PartialPerson {
     public PartialPerson() {
     }
 
+    /**
+     * Constructeur d'une personne à partir de ses informations
+     * @param firstName le prénom
+     * @param lastName le nom
+     * @param cn le cn
+     * @param structureOU l'unité d'organisation / la structure
+     */
     public PartialPerson(String firstName, String lastName, String cn, String structureOU) {
         this.firstName = firstName;
         this.lastName = lastName;
         this.cn = cn;
         this.structureOU = structureOU;
+    }
+    /**
+     * Constructeur à partir d'un résultat de recherche LDAP
+     * @param person le résultat de recherche LDAP
+     */
+    public PartialPerson(SearchResult person) {
+        this.firstName = person.getAttributes().get("givenName").toString();
+        this.lastName = person.getAttributes().get("sn").toString();
+        this.cn = person.getAttributes().get("cn").toString();
+        this.structureOU = person.getAttributes().get("distinguishedName").toString().split(",")[1].split("=")[1];
     }
 
     public String getFirstName() {
