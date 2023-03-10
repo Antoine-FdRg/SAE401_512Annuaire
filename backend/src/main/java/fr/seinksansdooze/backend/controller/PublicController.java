@@ -27,7 +27,9 @@ public class PublicController {
             @ApiResponse(responseCode = "400", description = "Il manque un ou plusieurs paramètres")
     })
     @GetMapping("/search/person")
-    public List<PartialPerson> searchPerson(@RequestParam String name, @RequestParam int page, @RequestParam int perPage) {
+    public List<PartialPerson> searchPerson(@RequestParam String name,
+                                            @RequestParam(defaultValue = "0") int page,
+                                            @RequestParam(defaultValue = "0") int perPage) {
         return querier.searchPerson(name);
     }
 
@@ -36,7 +38,9 @@ public class PublicController {
             @ApiResponse(responseCode = "400", description = "Il manque un ou plusieurs paramètres")
     })
     @GetMapping("/search/structure")
-    public List<PartialStructure> searchStructure(@RequestParam String name, @RequestParam int page, @RequestParam int perPage) {
+    public List<PartialStructure> searchStructure(@RequestParam String name,
+                                                  @RequestParam(defaultValue = "0") int page,
+                                                  @RequestParam(defaultValue = "0") int perPage) {
         return List.of();
     }
 
