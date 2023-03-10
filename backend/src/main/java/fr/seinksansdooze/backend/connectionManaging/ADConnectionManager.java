@@ -4,7 +4,7 @@ import fr.seinksansdooze.backend.connectionManaging.ADBridge.IAdminADQuerier;
 
 import javax.naming.NamingException;
 
-import java.util.HashMap;
+import java.io.Closeable;
 
 /**
  * Cette classe permet de gérer toutes les connexions à Active Directory
@@ -26,6 +26,7 @@ public class ADConnectionManager {
         this.tokenGenerator = tokenGenerator;
         this.tokenSanitizer = tokenSanitizer;
         this.querierClass = querierClass;
+        connections.setCleanPeriod(5*60*1000);
     }
 
     /**
@@ -91,6 +92,11 @@ public class ADConnectionManager {
         //return querier
         return connection.getQuerier();
 
+    }
+
+    @Override
+    public void close(){
+        this.connections.close();
     }
 
 }

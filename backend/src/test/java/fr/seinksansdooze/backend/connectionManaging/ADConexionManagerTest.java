@@ -25,5 +25,6 @@ public class ADConexionManagerTest {
             IAdminADQuerier q= manager.getQuerier(token.get());
             assertTrue(q instanceof ADQuerierMoke);
         });
+        manager.close();
     }
 }
