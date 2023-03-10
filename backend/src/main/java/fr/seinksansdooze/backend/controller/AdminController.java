@@ -12,15 +12,7 @@ import java.util.List;
 @RestController
 @RequestMapping("/api/admin")
 public class AdminController {
-    @PostMapping("/login")
-    public LoginResponse login(@RequestBody LoginPayload payload) {
-        return new LoginResponse("Test token");
-    }
 
-    @PostMapping("/logout")
-    public void logout() {
-        // Faire la déconnexion ici...
-    }
 
     // TODO: 2/10/2023 GET /api/admin/group/all
 
