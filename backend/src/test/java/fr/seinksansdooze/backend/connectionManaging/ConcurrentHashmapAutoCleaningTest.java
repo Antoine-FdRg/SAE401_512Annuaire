@@ -870,4 +870,27 @@ public class ConcurrentHashmapAutoCleaningTest {
 
         }
     }
+    @Test
+    void OnEntryRemovedListener() {
+        ConcurrentHashMapAutoCleaning<String, String> map = new ConcurrentHashMapAutoCleaning<>(0);
+        map.setCleanPeriod(1);
+        AtomicInteger i = new AtomicInteger();
+        map.addListener((key, value) -> {
+            i.getAndIncrement();
+        });
+        for (int j = 0; j < 100; j++) {
+            map.put("key" + j, "value" + j);
+        }
+        int j = 0;
+        while (i.get() < 100 && j < 1000) {
+            try {
+                Thread.sleep(1);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+            j++;
+        }
+        map.close();
+        assertEquals(100, i.get());
+    }
 }

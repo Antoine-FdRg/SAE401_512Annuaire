@@ -46,7 +46,14 @@ public class ConcurrentHashMapAutoCleaning<K, V> implements ConcurrentMap<K, V>,
      * Timer pour nettoyer la map
      */
     private Timer timer;
-//todo add param to constructor for HashMap params
+    /**
+     * liste de listener pour les entrées supprimées
+     */
+    private final List<OnEntryRemovedListener<K, V>> listeners = new ArrayList<>();
+
+
+
+
 
     /**
      * Constructeur le nettoyage sera lancé a la création de l'objet si le temps entre chaque nettoyage est supérieur à 0
@@ -165,6 +172,15 @@ public class ConcurrentHashMapAutoCleaning<K, V> implements ConcurrentMap<K, V>,
 
 
     /**
+     * ajoute un listener sur le nettoyage d'une entrée
+     * @param listener le listener
+     */
+    public void addListener(OnEntryRemovedListener<K,V> listener) {
+        listeners.add(listener);
+    }
+
+
+    /**
      * Retourne la date de création de l'entrée en millisecondes
      *
      * @param key la clef de l'entrée
@@ -220,6 +236,22 @@ public class ConcurrentHashMapAutoCleaning<K, V> implements ConcurrentMap<K, V>,
             K key = iterator.next();
             ValueWithTime<V> valueWithTime = map.get(key);
             if (!valueWithTime.isValid(lifeTimeMillis, lifeTimeSinceLastUseMillis)) {
+                iterator.remove(); // Supprimer l'entrée avec l'itérateur.
+            }
+        }
+    }
+    /**
+     * cette méthode permet de nettoyer la map des entrées qui ont dépassé le temps de vie
+     * sette methode est utiliser pare le Timer pour nettoyer la map
+     */
+    private void cleanTimer() {
+        Iterator<K> iterator = map.keySet().iterator();
+        // Parcourir toutes les clés de la vue et supprimer les entrées invalides.
+        while (iterator.hasNext()) {
+            K key = iterator.next();
+            ValueWithTime<V> valueWithTime = map.get(key);
+            if (!valueWithTime.isValid(lifeTimeMillis, lifeTimeSinceLastUseMillis)) {
+                listeners.forEach(listener -> listener.onEntryRemoved(key, valueWithTime.getValue()));
                 iterator.remove(); // Supprimer l'entrée avec l'itérateur.
             }
         }
@@ -280,7 +312,7 @@ public class ConcurrentHashMapAutoCleaning<K, V> implements ConcurrentMap<K, V>,
         timerTask = new TimerTask() {
             @Override
             public void run() {
-                cleanBlocking();
+                cleanTimer();
             }
         };
         timer.schedule(timerTask, 0, cleanPeriodMillis);
@@ -454,6 +486,14 @@ public class ConcurrentHashMapAutoCleaning<K, V> implements ConcurrentMap<K, V>,
                 .collect(Collectors.toList());
     }
 
+    /**
+     * Retourne un entrySet contenant toutes les valeurs valides de la map.
+     * Cette méthode parcourt manuellement les entrées de la map pour s'assurer que seules les clés valides sont retournées.
+     * Cette fonction parcourt chaque entrée de la map et ajoute la clé de l'entrée à un nouvel ensemble si l'entrée est
+     * valide. Un nouvel HashSet est créé pour stocker ces clés valides, <strong> ce qui signifie que les modifications apportées
+     * à l'ensemble retourné n'affecteront pas la map elle-même.</strong>
+     * @return un entrySet contenant toutes les valeurs valides de la map
+     */
     @Override
     public Set<Entry<K, V>> entrySet() {
         //création d'un set qui contient les entrées valides
@@ -637,6 +677,17 @@ class ValueWithTime<v>{
     }
 
     /**
+     * Cette méthode permet de set la creation time
+     * @param creationTimeMillis le temps de création
+     * @return l'ancien temps de création
+     */
+    public long setCreationTimeMillis(long creationTimeMillis) {
+        long oldCreationTimeMillis = this.creationTimeMillis;
+        this.creationTimeMillis = creationTimeMillis;
+        return oldCreationTimeMillis;
+    }
+
+    /**
      * Cette méthode permet de récupérer le temps de création
      *
      * @return le temps de création
@@ -656,6 +707,9 @@ class ValueWithTime<v>{
 
     /**
      * Cette méthode permet de savoir si l'entrée est encore valide
+     * @param lifeTimeMillis le temps de vie de l'entrée
+     * @param lifeTimeSinceLastUseMillis le temps de vie depuis la dernière utilisation
+     * @return true si l'entrée est valide sinon false
      */
     public boolean isValid(long lifeTimeMillis, long lifeTimeSinceLastUseMillis) {
         long currentTimeMillis = TimeHelper.currentTimeMillis();
@@ -664,6 +718,8 @@ class ValueWithTime<v>{
 
     /**
      * Cette méthode permet de récupérer la valeur si elle est valide sinon null
+     * @param lifeTimeMillis le temps de vie de l'entrée
+     * @param lifeTimeSinceLastUseMillis le temps de vie depuis la dernière utilisation
      * @return la valeur si elle est valide sinon null
      */
     public v getValueIfValid(long lifeTimeMillis, long lifeTimeSinceLastUseMillis) {
@@ -691,4 +747,12 @@ class ValueWithTime<v>{
     public int hashCode() {
         return value.hashCode();
     }
+}
+interface OnEntryRemovedListener<K, V> {
+    /**
+     * Cette méthode est appelée quand une entrée est supprimée pare le thread de nettoyage de la ConcurrentHashMapAutoCleaning
+     * @param key la clé de l'entrée supprimée
+     * @param value la valeur de l'entrée supprimée
+     */
+    void onEntryRemoved(K key, V value);
 }

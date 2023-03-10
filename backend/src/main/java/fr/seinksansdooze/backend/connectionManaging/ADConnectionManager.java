@@ -4,7 +4,7 @@ import fr.seinksansdooze.backend.connectionManaging.ADBridge.IAdminADQuerier;
 
 import javax.naming.NamingException;
 
-import java.util.HashMap;
+import java.io.Closeable;
 
 /**
  * Cette classe permet de gérer toutes les connexions à Active Directory
@@ -12,8 +12,8 @@ import java.util.HashMap;
  * Le but premier est de pouvoir garder des connexions actives tant qu'un token est valide
  * Et de pouvoir les fermer une fois le token expiré, est libéré la mémoire
  */
-public class ADConnectionManager {
-    private final HashMap<String, ADConnection> connections = new HashMap<>();
+public class ADConnectionManager implements Closeable {
+    private final ConcurrentHashMapAutoCleaning<String, ADConnection> connections = new ConcurrentHashMapAutoCleaning<>(5*60*1000);
     private final ITokenGenerator tokenGenerator;
     private final ITokenSanitizer tokenSanitizer;
     /**
@@ -26,6 +26,7 @@ public class ADConnectionManager {
         this.tokenGenerator = tokenGenerator;
         this.tokenSanitizer = tokenSanitizer;
         this.querierClass = querierClass;
+        connections.setCleanPeriod(5*60*1000);
     }
 
     /**
@@ -91,6 +92,11 @@ public class ADConnectionManager {
         //return querier
         return connection.getQuerier();
 
+    }
+
+    @Override
+    public void close(){
+        this.connections.close();
     }
 
 }
