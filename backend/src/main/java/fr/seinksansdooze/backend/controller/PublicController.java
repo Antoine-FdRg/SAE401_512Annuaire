@@ -41,7 +41,7 @@ public class PublicController {
     public List<PartialStructure> searchStructure(@RequestParam String name,
                                                   @RequestParam(defaultValue = "0") int page,
                                                   @RequestParam(defaultValue = "0") int perPage) {
-        return List.of();
+        return querier.searchStructure(name);
     }
 
     @GetMapping("/info/person/{cn}")

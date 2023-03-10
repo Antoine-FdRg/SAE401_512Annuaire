@@ -4,6 +4,7 @@ import fr.seinksansdooze.backend.connectionManaging.ADBridge.IAdminADQuerier;
 import fr.seinksansdooze.backend.connectionManaging.ADBridge.IPublicADQuerier;
 import fr.seinksansdooze.backend.connectionManaging.ADBridge.ObjectType;
 import fr.seinksansdooze.backend.model.response.PartialPerson;
+import fr.seinksansdooze.backend.model.response.PartialStructure;
 
 import javax.naming.NamingEnumeration;
 import javax.naming.directory.SearchResult;
@@ -36,7 +37,7 @@ public class ADQuerierMoke implements IAdminADQuerier, IPublicADQuerier {
     }
 
     @Override
-    public NamingEnumeration<SearchResult> searchStructure(String ou) {
+    public ArrayList<PartialStructure> searchStructure(String ou) {
         return null;
     }
 

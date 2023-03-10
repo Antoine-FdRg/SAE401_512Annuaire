@@ -65,7 +65,8 @@ public class TestADQuerier {
 
 //        System.out.println("CN=Clément CL. Lefèvre,OU=Direction Général Adj,OU=512Direction,OU=512Batiment,OU=512BankFR,DC=EQUIPE1B,DC=local".split(",")[0].split("=")[1]);
 
-          adQuerier.searchPerson("clément").forEach(System.out::println);
+//          adQuerier.searchPerson("clément").forEach(System.out::println);
+          adQuerier.searchStructure("Direction").forEach(System.out::println);
     }
 
     public static void displayResults(NamingEnumeration<SearchResult> results, ObjectType searchedObject) {

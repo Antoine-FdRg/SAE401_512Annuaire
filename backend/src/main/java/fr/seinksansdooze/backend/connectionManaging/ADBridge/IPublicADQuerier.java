@@ -1,6 +1,7 @@
 package fr.seinksansdooze.backend.connectionManaging.ADBridge;
 
 import fr.seinksansdooze.backend.model.response.PartialPerson;
+import fr.seinksansdooze.backend.model.response.PartialStructure;
 
 import javax.naming.NamingEnumeration;
 import javax.naming.directory.SearchResult;
@@ -10,5 +11,5 @@ public interface IPublicADQuerier {
 
     ArrayList<PartialPerson> searchPerson(String cn);
 
-    NamingEnumeration<SearchResult> searchStructure(String ou);
+    ArrayList<PartialStructure> searchStructure(String ou);
 }
