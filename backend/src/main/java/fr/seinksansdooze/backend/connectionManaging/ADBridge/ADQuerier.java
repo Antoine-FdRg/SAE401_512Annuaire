@@ -119,7 +119,7 @@ public class ADQuerier implements IAdminADQuerier, IPublicADQuerier {
      * @param cn le cn de la personne recherchée
      * @return une personne correspondant à la recherche
      */
-    public PartialPerson getPersonInfo(String cn) {
+    public PartialPerson getPartialPersonInfo(String cn) {
         String filter = "(&(objectClass=user)(CN=" + cn + "))";
         SearchControls searchControls = new SearchControls();
         searchControls.setSearchScope(SearchControls.SUBTREE_SCOPE);
@@ -143,7 +143,7 @@ public class ADQuerier implements IAdminADQuerier, IPublicADQuerier {
      * @return une structure correspondant à la recherche
      */
     @Override
-    public PartialStructure getStructureInfo(String ou) {
+    public PartialStructure getPartialStructureInfo(String ou) {
         String filter = "(&(objectClass=organizationalUnit)(distinguishedName=" + ou + "))";
         SearchControls searchControls = new SearchControls();
         searchControls.setSearchScope(SearchControls.SUBTREE_SCOPE);
@@ -354,5 +354,10 @@ public class ADQuerier implements IAdminADQuerier, IPublicADQuerier {
         } catch (NamingException e) {
             return null;
         }
+    }
+
+    @Override
+    public PartialPerson getFullPersonInfo(String cn) {
+        return null;
     }
 }

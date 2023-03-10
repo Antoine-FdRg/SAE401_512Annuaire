@@ -2,8 +2,6 @@ package fr.seinksansdooze.backend.controller;
 
 import fr.seinksansdooze.backend.connectionManaging.ADBridge.ADQuerier;
 import fr.seinksansdooze.backend.connectionManaging.ADBridge.IPublicADQuerier;
-import fr.seinksansdooze.backend.model.response.FullPerson;
-import fr.seinksansdooze.backend.model.response.FullStructure;
 import fr.seinksansdooze.backend.model.response.PartialPerson;
 import fr.seinksansdooze.backend.model.response.PartialStructure;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
@@ -46,11 +44,11 @@ public class PublicController {
 
     @GetMapping("/info/person/{cn}")
     public PartialPerson personInfo(@PathVariable String cn) {
-        return querier.getPersonInfo(cn);
+        return querier.getPartialPersonInfo(cn);
     }
 
     @GetMapping("/info/structure/{ou}")
     public PartialStructure structureInfo(@PathVariable String ou) {
-        return querier.getStructureInfo(ou);
+        return querier.getPartialStructureInfo(ou);
     }
 }

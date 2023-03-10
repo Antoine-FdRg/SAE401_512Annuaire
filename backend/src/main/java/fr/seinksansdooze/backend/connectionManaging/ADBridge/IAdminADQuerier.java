@@ -1,5 +1,7 @@
 package fr.seinksansdooze.backend.connectionManaging.ADBridge;
 
+import fr.seinksansdooze.backend.model.response.PartialPerson;
+
 import javax.naming.NamingEnumeration;
 import javax.naming.directory.SearchResult;
 
@@ -19,4 +21,8 @@ public interface IAdminADQuerier {
     boolean removeUserFromGroup(String groupName, String username);
 
     NamingEnumeration<SearchResult> searchPerson(String person, String groupName);
+
+    PartialPerson getFullPersonInfo(String cn);
+
+
 }

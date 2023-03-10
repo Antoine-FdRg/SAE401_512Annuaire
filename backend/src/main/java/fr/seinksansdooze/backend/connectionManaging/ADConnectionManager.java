@@ -10,10 +10,10 @@ import java.util.HashMap;
  * Cette classe permet de gérer toutes les connexions à Active Directory
  * Elle fera le lien entre les différentes Token et les différentes connexions
  * Le but premier est de pouvoir garder des connexions actives tant qu'un token est valide
- * Et de pouvoir les fermer une fois le token expiré, est libéré la mémoire
+ * Et de pouvoir les fermer une fois le token expiré et ainsi libérer la mémoire
  */
 public class ADConnectionManager {
-    private final HashMap<String, ADConnection> connections = new HashMap<>();
+    private final ConcurrentHashMapAutoCleaning<String, ADConnection> connections = new ConcurrentHashMapAutoCleaning<String, ADConnection>(3600000);
     private final ITokenGenerator tokenGenerator;
     private final ITokenSanitizer tokenSanitizer;
     /**

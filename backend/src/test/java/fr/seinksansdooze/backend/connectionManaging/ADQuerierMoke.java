@@ -42,12 +42,12 @@ public class ADQuerierMoke implements IAdminADQuerier, IPublicADQuerier {
     }
 
     @Override
-    public PartialPerson getPersonInfo(String cn) {
+    public PartialPerson getPartialPersonInfo(String cn) {
         return null;
     }
 
     @Override
-    public PartialStructure getStructureInfo(String ou) {
+    public PartialStructure getPartialStructureInfo(String ou) {
         return null;
     }
 
@@ -78,6 +78,11 @@ public class ADQuerierMoke implements IAdminADQuerier, IPublicADQuerier {
 
     @Override
     public NamingEnumeration<SearchResult> searchPerson(String person, String groupName) {
+        return null;
+    }
+
+    @Override
+    public PartialPerson getFullPersonInfo(String cn) {
         return null;
     }
 }
