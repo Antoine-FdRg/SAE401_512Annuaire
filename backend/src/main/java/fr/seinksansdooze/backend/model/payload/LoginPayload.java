@@ -11,6 +11,12 @@ public class LoginPayload {
     public LoginPayload() {
     }
 
+    public LoginPayload(String username, String password, boolean rememberMe) {
+        this.username = username;
+        this.password = password;
+        this.rememberMe = rememberMe;
+    }
+
     public String getUsername() {
         return username;
     }

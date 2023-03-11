@@ -11,6 +11,7 @@ import fr.seinksansdooze.backend.model.response.LoginResponse;
 import fr.seinksansdooze.backend.model.response.PartialPerson;
 import org.springframework.web.bind.annotation.*;
 
+import javax.naming.NamingException;
 import java.util.List;
 import java.util.concurrent.ConcurrentHashMap;
 
@@ -28,7 +29,11 @@ public class AdminController {
 
     @PostMapping("/login")
     public LoginResponse login(@RequestBody LoginPayload payload) {
-        return new LoginResponse("Test token");
+        try {
+            return new LoginResponse(this.connectionManager.addConnection(payload));
+        } catch (NamingException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     @PostMapping("/logout")

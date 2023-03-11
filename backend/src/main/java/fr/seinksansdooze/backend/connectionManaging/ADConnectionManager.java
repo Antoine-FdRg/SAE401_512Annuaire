@@ -1,6 +1,7 @@
 package fr.seinksansdooze.backend.connectionManaging;
 
 import fr.seinksansdooze.backend.connectionManaging.ADBridge.IAdminADQuerier;
+import fr.seinksansdooze.backend.model.payload.LoginPayload;
 
 import javax.naming.NamingException;
 
@@ -34,13 +35,12 @@ public class ADConnectionManager {
      * Elle prend en paramètre le nom d'utilisateur et le mot de passe
      * Elle retourne un token de connexion si la connexion est réussie
      * Elle retourne une exception si la connexion échoue
-     * @param username le nom d'utilisateur
-     * @param pwd le mot de passe
+     * @param loginPayload un objet stockant le nom d'utilisateur et le mot de passe
      * @return le token de connexion
      * @throws NamingException si la connexion échoue
      */
 
-    public String addConnection(String username, String pwd)throws NamingException {
+    public String addConnection(LoginPayload loginPayload)throws NamingException {
 
         //on crée un nouveau querier pour la connexion avec l'ObjectClass
         IAdminADQuerier querier;
@@ -53,7 +53,7 @@ public class ADConnectionManager {
         }
         //TODO esayer de trouver une solution plus simple est non dépréciée
 
-        boolean connectionSuccess= querier.login(username, pwd);
+        boolean connectionSuccess= querier.login(loginPayload.getUsername(), loginPayload.getPassword());
         if(connectionSuccess){
             String token = this.tokenGenerator.generateNewToken();
             ADConnection connection = new ADConnection();
@@ -94,7 +94,6 @@ public class ADConnectionManager {
 
     }
 
-    @Override
     public void close(){
         this.connections.close();
     }
