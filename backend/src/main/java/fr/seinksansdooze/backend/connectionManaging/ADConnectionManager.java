@@ -1,11 +1,10 @@
 package fr.seinksansdooze.backend.connectionManaging;
 
+import fr.seinksansdooze.backend.connectionManaging.ADBridge.ADQuerier;
 import fr.seinksansdooze.backend.connectionManaging.ADBridge.IAdminADQuerier;
 import fr.seinksansdooze.backend.model.payload.LoginPayload;
 
 import javax.naming.NamingException;
-
-import java.io.Closeable;
 
 /**
  * Cette classe permet de gérer toutes les connexions à Active Directory
@@ -44,14 +43,16 @@ public class ADConnectionManager {
 
         //on crée un nouveau querier pour la connexion avec l'ObjectClass
         IAdminADQuerier querier;
-        try {
-            querier = (IAdminADQuerier)querierClass.newInstance();
-        } catch (InstantiationException e) {
-            throw new RuntimeException(e);
-        } catch (IllegalAccessException e) {
-            throw new RuntimeException(e);
-        }
-        //TODO esayer de trouver une solution plus simple est non dépréciée
+        //TODO demander a corentin pourquoi l'utilisation du newInstance plutot que du constructeur
+//        try {
+////            querier = (IAdminADQuerier)querierClass.newInstance();
+//        } catch (InstantiationException e) {
+//            throw new RuntimeException(e);
+//        } catch (IllegalAccessException e) {
+//            throw new RuntimeException(e);
+//        }
+        querier = new ADQuerier();
+        //TODO essayer de trouver une solution plus simple est non dépréciée
 
         boolean connectionSuccess= querier.login(loginPayload.getUsername(), loginPayload.getPassword());
         if(connectionSuccess){

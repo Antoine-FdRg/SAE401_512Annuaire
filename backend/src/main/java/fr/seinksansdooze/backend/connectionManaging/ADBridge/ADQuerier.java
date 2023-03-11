@@ -1,6 +1,6 @@
 package fr.seinksansdooze.backend.connectionManaging.ADBridge;
 
-import fr.seinksansdooze.backend.model.response.FullPerson;
+import fr.seinksansdooze.backend.model.response.PartialGroup;
 import fr.seinksansdooze.backend.model.response.PartialPerson;
 import fr.seinksansdooze.backend.model.response.PartialStructure;
 
@@ -9,8 +9,6 @@ import javax.naming.NamingEnumeration;
 import javax.naming.NamingException;
 import javax.naming.directory.*;
 import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Collections;
 import java.util.Properties;
 
 public class ADQuerier implements IAdminADQuerier, IPublicADQuerier {
@@ -28,9 +26,12 @@ public class ADQuerier implements IAdminADQuerier, IPublicADQuerier {
         return publicADQuerier;
     }
 
-    private ADQuerier(String username, String pwd) {
+    protected ADQuerier(String username, String pwd) {
         //rajouter un systeme de session et d'authentification
         boolean connected = this.login(username, pwd);
+    }
+
+    public ADQuerier() {
     }
 
     //  api/admin/login
@@ -152,8 +153,7 @@ public class ADQuerier implements IAdminADQuerier, IPublicADQuerier {
             res = this.context.search(AD_BASE, filter, searchControls);
             if (res.hasMore()) {
                 SearchResult currentStructure = res.next();
-                PartialStructure structure = new PartialStructure(currentStructure);
-                return structure;
+                return new PartialStructure(currentStructure);
             }
             return null;
         } catch (NamingException e) {
@@ -181,8 +181,6 @@ public class ADQuerier implements IAdminADQuerier, IPublicADQuerier {
     }
 
 
-
-
     //  api/info/structure/{ou}
 //    public NamingEnumeration<SearchResult> searchStructure(String ou) {
 //        String filter = "(&(objectClass=organizationalUnit)(distinguishedName=" + ou + "))";
@@ -196,6 +194,26 @@ public class ADQuerier implements IAdminADQuerier, IPublicADQuerier {
 //            return null;
 //        }
 //    }
+
+
+    /**
+     * Méthode répondant à la route GET /api/admin/group/all
+     * @return la liste de tous les groupes
+     */
+    public ArrayList<PartialGroup> getAllGroups() {
+        NamingEnumeration<SearchResult> res = this.searchAllGroups();
+        ArrayList<PartialGroup> groups = new ArrayList<>();
+        try {
+            while (res.hasMore()) {
+                SearchResult currentGroup = res.next();
+                PartialGroup group = new PartialGroup(currentGroup);
+                groups.add(group);
+            }
+            return groups;
+        }catch (NamingException e) {
+            return groups;
+        }
+    }
 
     // api/admin/group/all
     public NamingEnumeration<SearchResult> searchAllGroups() {

@@ -2,7 +2,7 @@ package fr.seinksansdooze.backend.connectionManaging;
 
 import fr.seinksansdooze.backend.connectionManaging.ADBridge.IAdminADQuerier;
 import fr.seinksansdooze.backend.connectionManaging.ADBridge.IPublicADQuerier;
-import fr.seinksansdooze.backend.connectionManaging.ADBridge.ObjectType;
+import fr.seinksansdooze.backend.model.response.PartialGroup;
 import fr.seinksansdooze.backend.model.response.PartialPerson;
 import fr.seinksansdooze.backend.model.response.PartialStructure;
 
@@ -32,6 +32,11 @@ public class ADQuerierMoke implements IAdminADQuerier, IPublicADQuerier {
     }
 
     @Override
+    public ArrayList<PartialGroup> getAllGroups() {
+        return null;
+    }
+
+    @Override
     public ArrayList<PartialPerson> searchPerson(String cn) {
         return null;
     }
@@ -51,10 +56,6 @@ public class ADQuerierMoke implements IAdminADQuerier, IPublicADQuerier {
         return null;
     }
 
-    @Override
-    public NamingEnumeration<SearchResult> searchAllGroups() {
-        return null;
-    }
 
     @Override
     public boolean createGroup(String groupName) {

@@ -9,7 +9,8 @@ import java.util.ArrayList;
 public class TestADQuerier {
 
     public static void main(String[] args) {
-        IPublicADQuerier adQuerier = ADQuerier.getPublicADQuerier();
+//        IPublicADQuerier adQuerier = ADQuerier.getPublicADQuerier();
+        IAdminADQuerier adQuerier = new ADQuerier("antoine.fadda.rodriguez","@Arnaudisthebest83");
 //        System.out.println("api/search/person   api/search/structures   api/admin/group/all");
 //        NamingEnumeration<SearchResult> results = adQuerier.search(ObjectType.GROUP, "test");
 //        displayResults(results, ObjectType.PERSON);
@@ -66,6 +67,8 @@ public class TestADQuerier {
 
 //          adQuerier.searchPerson("clément").forEach(System.out::println);
 //          adQuerier.searchStructure("Direction").forEach(System.out::println);
+
+            adQuerier.getAllGroups().forEach(System.out::println);
     }
 
     public static void displayResults(NamingEnumeration<SearchResult> results, ObjectType searchedObject) {

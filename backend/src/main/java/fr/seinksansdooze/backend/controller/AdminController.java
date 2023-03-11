@@ -8,12 +8,12 @@ import fr.seinksansdooze.backend.connectionManaging.TokenSanitizer;
 import fr.seinksansdooze.backend.model.payload.ChangeGroupsPayload;
 import fr.seinksansdooze.backend.model.payload.LoginPayload;
 import fr.seinksansdooze.backend.model.response.LoginResponse;
+import fr.seinksansdooze.backend.model.response.PartialGroup;
 import fr.seinksansdooze.backend.model.response.PartialPerson;
 import org.springframework.web.bind.annotation.*;
 
 import javax.naming.NamingException;
 import java.util.List;
-import java.util.concurrent.ConcurrentHashMap;
 
 @RestController
 @RequestMapping("/api/admin")
@@ -31,6 +31,27 @@ public class AdminController {
     public LoginResponse login(@RequestBody LoginPayload payload) {
         try {
             return new LoginResponse(this.connectionManager.addConnection(payload));
+        } catch (NamingException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+//    @GetMapping("/ping/{token}")
+//    public String ping(@PathVariable String token) {
+//        try {
+//            if (connectionManager.getQuerier(token).getClass()!= null) {
+//                return "ping réussi";
+//            }
+//            throw new RuntimeException("Token invalide");
+//        } catch (NamingException e) {
+//            throw new RuntimeException(e);
+//        }
+//    }
+
+    @GetMapping("/group/all")
+    public List<PartialGroup> getAllGroups(@RequestBody LoginResponse loginResponse) {
+        try {
+            return connectionManager.getQuerier(loginResponse.getToken()).getAllGroups();
         } catch (NamingException e) {
             throw new RuntimeException(e);
         }
