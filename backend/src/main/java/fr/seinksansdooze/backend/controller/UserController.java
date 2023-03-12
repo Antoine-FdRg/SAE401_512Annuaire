@@ -31,7 +31,7 @@ public class UserController {
         String token;
 
         try {
-            token = connectionManager.addConnection(payload);
+            token = connectionManager.addConnection(payload.getUsername(), payload.getPassword());
         } catch (NamingException e) {
             throw new SeinkSansDoozeBackException(
                     HttpStatus.UNAUTHORIZED,
