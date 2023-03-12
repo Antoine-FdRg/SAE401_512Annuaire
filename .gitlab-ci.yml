@@ -23,7 +23,7 @@ stages:
 .java-base: &java-base
   image: maven:3.8-openjdk-17
   before_script:
-    - cd backend or exit 1
+    - cd backend || exit 1
 
 java-build:
   <<: *java-base
