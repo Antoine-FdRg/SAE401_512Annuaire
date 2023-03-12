@@ -13,7 +13,6 @@ import java.util.stream.Collectors;
  * Cette classe implement la classe ConcurrentMap et permet de créer une map qui nettoie automatiquement les entrées
  * qui ont dépassé un certain temps de vie.
  * Le temps de vie des entrées doit être défini dans le constructeur.
- * Il est possible de définir le temps de vie depuis la dernière utilisation.
  * pour nettoyer la map des entrées qui ont dépassé le temps de vie, il faut setCleanPeriodMillis avec un temps supérieur à 0 dans le constructeur ou avec la méthode setCleanPeriod(long cleanPeriodMillis)
  * en faisant cela, un thread sera lancé pour nettoyer la map toutes les cleanPeriodMillis millisecondes. en re maintenant la cleanPeriodMillis à 0, le thread sera arrêté.
  * si voue voulez nettoyer la map manuellement sans thread, il faut appeler la méthode cleanBlocking()
@@ -282,7 +281,10 @@ public class ConcurrentHashMapAutoCleaning<K, V> implements ConcurrentMap<K, V>,
         this.cleanPeriodMillis = cleanPeriodMillis;
         reprogrammerNettoyage();
     }
-//todo commente
+
+    /**
+     * cette procedure permet de désactiver le nettoyage
+     */
     private void desactiverNettoyage() {
         if (timerTask != null) {
             timerTask.cancel();
@@ -293,7 +295,10 @@ public class ConcurrentHashMapAutoCleaning<K, V> implements ConcurrentMap<K, V>,
             timer = null;
         }
     }
-    //todo comente
+
+    /**
+     * cette procedure permet de reprogrammer le nettoyage pour une nouvelle période
+     */
     private void reprogrammerNettoyage() {
         if (timerTask != null) {
             timerTask.cancel();
@@ -561,7 +566,6 @@ public class ConcurrentHashMapAutoCleaning<K, V> implements ConcurrentMap<K, V>,
             map.put(key, new ValueWithTime<>(value));
             return null;
         }
-
     }
 
     @Override
