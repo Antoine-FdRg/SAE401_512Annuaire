@@ -44,15 +44,13 @@ public class ADConnectionManager {
 
         //on crée un nouveau querier pour la connexion avec l'ObjectClass
         IAdminADQuerier querier;
-        //TODO demander a corentin pourquoi l'utilisation du newInstance plutot que du constructeur
-//        try {
-////            querier = (IAdminADQuerier)querierClass.newInstance();
-//        } catch (InstantiationException e) {
-//            throw new RuntimeException(e);
-//        } catch (IllegalAccessException e) {
-//            throw new RuntimeException(e);
-//        }
-        querier = new ADQuerier();
+        try {
+            querier = (IAdminADQuerier)querierClass.newInstance();
+        } catch (InstantiationException e) {
+            throw new RuntimeException(e);
+        } catch (IllegalAccessException e) {
+            throw new RuntimeException(e);
+        }
         //TODO essayer de trouver une solution plus simple est non dépréciée
 
         // TODO: 3/12/2023 Découplage et meilleur gestion des erreurs
