@@ -33,7 +33,6 @@ java-build:
 
 java-test:
   <<: *java-base
-  when: manual # TODO : Ce job est désactivé jusqu'a ce que la partie connexion a AD soit mockée
   stage: test
   script:
     - mvn $MAVEN_CLI_OPTS verify
