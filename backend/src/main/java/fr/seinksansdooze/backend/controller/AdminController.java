@@ -1,41 +1,22 @@
 
 package fr.seinksansdooze.backend.controller;
 
-import fr.seinksansdooze.backend.connectionManaging.ADBridge.IAdminADQuerier;
-import fr.seinksansdooze.backend.connectionManaging.ADConnectionManager;
-import fr.seinksansdooze.backend.connectionManaging.TokenGenerator;
-import fr.seinksansdooze.backend.connectionManaging.TokenSanitizer;
 import fr.seinksansdooze.backend.model.payload.ChangeGroupsPayload;
-import fr.seinksansdooze.backend.model.payload.LoginPayload;
-import fr.seinksansdooze.backend.model.response.LoginResponse;
-import fr.seinksansdooze.backend.model.response.PartialGroup;
 import fr.seinksansdooze.backend.model.response.PartialPerson;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
 
-import javax.naming.NamingException;
 import java.util.List;
 
 @RestController
 @RequestMapping("/api/admin")
 public class AdminController {
-
-    ADConnectionManager connectionManager;
-
-    AdminController() {
-        TokenGenerator tg = new TokenGenerator();
-        TokenSanitizer ts = new TokenSanitizer();
-        this.connectionManager = new ADConnectionManager(tg,ts,IAdminADQuerier.class);
-    }
-
-    @PostMapping("/login")
-    public LoginResponse login(@RequestBody LoginPayload payload) {
-        try {
-            return new LoginResponse(this.connectionManager.addConnection(payload));
-        } catch (NamingException e) {
-            throw new RuntimeException(e);
-        }
-    }
-
 //    @GetMapping("/ping/{token}")
 //    public String ping(@PathVariable String token) {
 //        try {
@@ -48,30 +29,28 @@ public class AdminController {
 //        }
 //    }
 
-    @GetMapping("/group/all")
-    public List<PartialGroup> getAllGroups(@RequestBody LoginResponse loginResponse) {
-        try {
-            return connectionManager.getQuerier(loginResponse.getToken()).getAllGroups();
-        } catch (NamingException e) {
-            throw new RuntimeException(e);
-        }
-    }
+    // TODO : implémenter la verifification correctement
+//    @GetMapping("/group/all")
+//    public List<PartialGroup> getAllGroups(@RequestBody LoginResponse loginResponse) {
+//        try {
+//            return connectionManager.getQuerier(loginResponse.getToken()).getAllGroups();
+//        } catch (NamingException e) {
+//            throw new RuntimeException(e);
+//        }
+//    }
+    
 
-    @PostMapping("/logout")
-    public void logout() {
-        // Faire la déconnexion ici...
-    }
-
-    @GetMapping("/info/person/{cn}")
-    public PartialPerson personInfo(@PathVariable String cn) {
-//       return connectionManager.getQuerier("Test token").getFullPersonInfo(cn);
-        try{
-            return connectionManager.getQuerier("Test token").getFullPersonInfo(cn);
-        } catch (Exception e) {
-            e.printStackTrace();
-            return null;
-        }
-    }
+//    @GetMapping("/info/person/{cn}")
+//    public PartialPerson personInfo(@PathVariable String cn) {
+//        // TODO: 3/12/2023 vrai verification (voir todo d'au dessus)
+////       return connectionManager.getQuerier("Test token").getFullPersonInfo(cn);
+//        try{
+//            return connectionManager.getQuerier("Test token").getFullPersonInfo(cn);
+//        } catch (Exception e) {
+//            e.printStackTrace();
+//            return null;
+//        }
+//    }
 
     // TODO: 2/10/2023 GET /api/admin/group/all
 

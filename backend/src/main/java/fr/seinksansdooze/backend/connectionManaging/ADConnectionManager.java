@@ -22,11 +22,11 @@ public class ADConnectionManager {
     private final Class<?> querierClass;
 
 
-    public ADConnectionManager(ITokenGenerator tokenGenerator,ITokenSanitizer tokenSanitizer,Class<?> querierClass) {
+    public ADConnectionManager(ITokenGenerator tokenGenerator, ITokenSanitizer tokenSanitizer, Class<?> querierClass) {
         this.tokenGenerator = tokenGenerator;
         this.tokenSanitizer = tokenSanitizer;
         this.querierClass = querierClass;
-        connections.setCleanPeriod(5*60*1000);
+        connections.setCleanPeriod(5 * 60 * 1000);
     }
 
     /**
@@ -34,12 +34,13 @@ public class ADConnectionManager {
      * Elle prend en paramètre le nom d'utilisateur et le mot de passe
      * Elle retourne un token de connexion si la connexion est réussie
      * Elle retourne une exception si la connexion échoue
+     *
      * @param loginPayload un objet stockant le nom d'utilisateur et le mot de passe
      * @return le token de connexion
      * @throws NamingException si la connexion échoue
      */
 
-    public String addConnection(LoginPayload loginPayload)throws NamingException {
+    public String addConnection(String username, String password) throws NamingException {
 
         //on crée un nouveau querier pour la connexion avec l'ObjectClass
         IAdminADQuerier querier;
@@ -54,15 +55,15 @@ public class ADConnectionManager {
         querier = new ADQuerier();
         //TODO essayer de trouver une solution plus simple est non dépréciée
 
-        boolean connectionSuccess= querier.login(loginPayload.getUsername(), loginPayload.getPassword());
-        if(connectionSuccess){
+        // TODO: 3/12/2023 Découplage et meilleur gestion des erreurs
+        boolean connectionSuccess = querier.login(username, password);
+        if (connectionSuccess) {
             String token = this.tokenGenerator.generateNewToken();
             ADConnection connection = new ADConnection();
             connection.setQuerier(querier);
             this.connections.put(token, connection);
             return token;
-        }
-        else{
+        } else {
             throw new NamingException("Connection failed");
         }
     }
@@ -70,22 +71,23 @@ public class ADConnectionManager {
     /**
      * Cette méthode permet de vérifier si un token est valide
      * Elle retourne le Querier associé au token si le token est valide
+     *
      * @param token le token à vérifier
      * @return le Querier associé au token
      * @throws NamingException si le token n'est pas valide
      */
-    public IAdminADQuerier getQuerier(String token)throws NamingException {
+    public IAdminADQuerier getQuerier(String token) throws NamingException {
         //sanitize token
-        if (!this.tokenSanitizer.valideToken(token)){
+        if (!this.tokenSanitizer.valideToken(token)) {
             throw new NamingException("Token not valid");
         }
         //check if token exists
-        if(!connections.containsKey(token)){
+        if (!connections.containsKey(token)) {
             throw new NamingException("Token not found");
         }
         ADConnection connection = connections.get(token);
         //check if token is expired
-        if(connection.isExpired()){
+        if (connection.isExpired()) {
             throw new NamingException("Token expired");
         }
         //update last use date
@@ -95,7 +97,7 @@ public class ADConnectionManager {
 
     }
 
-    public void close(){
+    public void close() {
         this.connections.close();
     }
 
