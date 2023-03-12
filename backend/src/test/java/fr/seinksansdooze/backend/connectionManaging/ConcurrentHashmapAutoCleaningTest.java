@@ -534,8 +534,8 @@ public class ConcurrentHashmapAutoCleaningTest {
 
     @Test
     void testConcurrent() {
-        int nbThreads = 10;
-        int nbIterations = 10;
+        int nbThreads = 1000;
+        int nbIterations = 1000;
         // On cree 2 maps, une avec la classe a tester et une avec une map de reference
         // On ne test pas la supretion donc on utilise MAX_VALUE
         ConcurrentHashMapAutoCleaning<String, String> mapToTest = new ConcurrentHashMapAutoCleaning<>(Long.MAX_VALUE);
@@ -610,24 +610,36 @@ public class ConcurrentHashmapAutoCleaningTest {
         mapToTestWiveCall.put("key1", "value1");
         mapToTestWivoutCall.put("key1", "value1");
         // On mok System.currentTimeMillis() pour simuler le temps
-        long entryCreationTime = mapToTestWiveCall.getCreationTimeMillis("key1");
-        long newCurrentTime = entryCreationTime + 24 * 60 * 60 * 1000;
+        long entryCreationTimeWiveCall = mapToTestWiveCall.getCreationTimeMillis("key1");
+        long newCurrentTimeWiveCall = entryCreationTimeWiveCall + 24 * 60 * 60 * 1000;
+
+        long entryCreationTimeWivoutCall = mapToTestWivoutCall.getCreationTimeMillis("key1");
+        long newCurrentTimeWivoutCall = entryCreationTimeWivoutCall + 24 * 60 * 60 * 1000;
+
+
         try (MockedStatic<TimeHelper> theMock = Mockito.mockStatic(TimeHelper.class)) {
-            long lastUseTime = newCurrentTime - 1;
-            theMock.when(TimeHelper::currentTimeMillis).thenReturn(lastUseTime);
 
+            long lastUseTimeWiveCall = newCurrentTimeWiveCall - 1;
+            theMock.when(TimeHelper::currentTimeMillis).thenReturn(lastUseTimeWiveCall);
             assertTrue(mapToTestWiveCall.containsKey("key1"));
-            assertTrue(mapToTestWivoutCall.containsKey("key1"));
-            assertEquals(entryCreationTime, mapToTestWiveCall.updateTimeSinceLastUse("key1"));//On met a jour la derniere utilisation sur une map
 
-            theMock.when(TimeHelper::currentTimeMillis).thenReturn(lastUseTime + 1);//On simule le temps pour que la valeur soit supprimée
+            long lastUseTimeWivoutCall = newCurrentTimeWivoutCall - 1;
+            theMock.when(TimeHelper::currentTimeMillis).thenReturn(lastUseTimeWivoutCall);
+            assertTrue(mapToTestWivoutCall.containsKey("key1"));
+
+            assertEquals("value1", mapToTestWiveCall.getAndUpdateTimeSinceLastUse("key1"));//On met a jour la derniere utilisation sur une map
+
+            theMock.when(TimeHelper::currentTimeMillis).thenReturn(lastUseTimeWiveCall + 1);//On simule le temps pour que la valeur soit supprimée
             assertTrue(mapToTestWiveCall.containsKey("key1"));//La valeur n'est pas supprimée car elle a été utilisée récemment
+
+
+            theMock.when(TimeHelper::currentTimeMillis).thenReturn(lastUseTimeWivoutCall + 1);//On simule le temps pour que la valeur soit supprimée
             assertFalse(mapToTestWivoutCall.containsKey("key1"));//La valeur est supprimée car elle n'a pas été utilisée récemment
 
             //On verifie que la valeur est supprimée apres 1h
-            theMock.when(TimeHelper::currentTimeMillis).thenReturn(lastUseTime + 60 * 60 * 1000 - 1);
+            theMock.when(TimeHelper::currentTimeMillis).thenReturn(lastUseTimeWiveCall + 60 * 60 * 1000 - 1);
             assertTrue(mapToTestWiveCall.containsKey("key1"));
-            theMock.when(TimeHelper::currentTimeMillis).thenReturn(lastUseTime + 60 * 60 * 1000);
+            theMock.when(TimeHelper::currentTimeMillis).thenReturn(lastUseTimeWiveCall + 60 * 60 * 1000);
             assertFalse(mapToTestWiveCall.containsKey("key1"));
         }
         mapToTestWivoutCall.close();
@@ -822,7 +834,7 @@ public class ConcurrentHashmapAutoCleaningTest {
         long newCurrentTime = System.currentTimeMillis();
         try (MockedStatic<TimeHelper> theMock = Mockito.mockStatic(TimeHelper.class)) {
             theMock.when(TimeHelper::currentTimeMillis).thenReturn(newCurrentTime +100);
-            map.updateTimeSinceLastUse("key1");
+            map.getAndUpdateTimeSinceLastUse("key1");
             assertEquals(newCurrentTime +100, map.getSinceLastUseMillis("key1"));
         }
     }

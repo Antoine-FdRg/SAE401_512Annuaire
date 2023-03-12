@@ -10,10 +10,17 @@ import java.util.stream.Collectors;
 
 /**
  * <strong>/!\ Il est important de close cette classe pour arrêter le nettoyage automatique/!\</strong>
- * Cette classe étend la classe ConcurrentHashMap et permet de créer une map qui nettoie automatiquement les entrées
+ * Cette classe implement la classe ConcurrentMap et permet de créer une map qui nettoie automatiquement les entrées
  * qui ont dépassé un certain temps de vie.
  * Le temps de vie des entrées doit être défini dans le constructeur.
  * Il est possible de définir le temps de vie depuis la dernière utilisation.
+ * pour nettoyer la map des entrées qui ont dépassé le temps de vie, il faut setCleanPeriodMillis avec un temps supérieur à 0 dans le constructeur ou avec la méthode setCleanPeriod(long cleanPeriodMillis)
+ * en faisant cela, un thread sera lancé pour nettoyer la map toutes les cleanPeriodMillis millisecondes. en re maintenant la cleanPeriodMillis à 0, le thread sera arrêté.
+ * si voue voulez nettoyer la map manuellement sans thread, il faut appeler la méthode cleanBlocking()
+ * lifeTimeSinceLastUseMillis est le temps de vie depuis la dernière utilisation en millisecondes.
+ * si la clef a été utilisée depuis moins de lifeTimeSinceLastUseMillis millisecondes, elle ne sera pas supprimée. même si elle a dépassé le temps de vie.
+ * la dernière utilisation est mise à jour quand la clef est utilisée avec la méthode getSinceLastUseMillis(K key)
+ * la méthode get ne met pas à jour la dernière utilisation
  */
 public class ConcurrentHashMapAutoCleaning<K, V> implements ConcurrentMap<K, V>, Closeable {
 
@@ -210,21 +217,6 @@ public class ConcurrentHashMapAutoCleaning<K, V> implements ConcurrentMap<K, V>,
     }
 
     /**
-     * Update la date de dernière utilisation de l'entrée en millisecondes
-     *
-     * @param key la clef de l'entrée
-     * @return l'ancienne date de dernière utilisation de l'entrée en millisecondes ou -1 si l'entrée n'existe pas
-     * @throws ClassCastException if the key is of an inappropriate type for this map
-     */
-    public long updateTimeSinceLastUse(Object key) {
-        ValueWithTime<V> valueWithTime = map.get(key);
-        if (valueWithTime != null) {
-            return valueWithTime.updateTimeSinceLastUse();
-        }
-        return -1;
-    }
-
-    /**
      * cette méthode permet de nettoyer la map des entrées qui ont dépassé le temps de vie
      * sette méthode est <strong>bloquante</strong> preferer la méthode setCleanPeriod(long cleanPeriodMillis) pour
      * nettoyer la map automatiquement si un cleanPeriodMillis n'as pas été défini dans le constructeur
@@ -381,7 +373,7 @@ public class ConcurrentHashMapAutoCleaning<K, V> implements ConcurrentMap<K, V>,
      *
      * @return true si la map est vide avec les entrées invalides
      */
-    public boolean isEmptyWithInvalid() {//todo test
+    public boolean isEmptyWithInvalid() {
         return map.isEmpty();
     }
 
@@ -412,6 +404,25 @@ public class ConcurrentHashMapAutoCleaning<K, V> implements ConcurrentMap<K, V>,
         ValueWithTime<V> valueWithTime = map.get(key);
         if (valueWithTime == null) {
             return null;
+        }
+        return valueWithTime.getValueIfValid(lifeTimeMillis, lifeTimeSinceLastUseMillis);
+    }
+
+    /**
+     * Returns the value to which the specified key is mapped, or null if this map contains no mapping for the key.
+     * and update the time since last use
+     * @param key the key whose associated value is to be returned
+     * @return the value to which the specified key is mapped, or null if this map contains no mapping for the key
+     */
+    public V getAndUpdateTimeSinceLastUse(Object key) {
+        if (key == null)
+            throw new NullPointerException();
+        ValueWithTime<V> valueWithTime = map.get(key);
+        if (valueWithTime == null) {
+            return null;
+        }
+        if (valueWithTime.isValid(lifeTimeMillis, lifeTimeSinceLastUseMillis)) {
+            valueWithTime.updateTimeSinceLastUse();
         }
         return valueWithTime.getValueIfValid(lifeTimeMillis, lifeTimeSinceLastUseMillis);
     }
