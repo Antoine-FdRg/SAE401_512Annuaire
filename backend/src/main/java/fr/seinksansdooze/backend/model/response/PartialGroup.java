@@ -6,6 +6,9 @@ import javax.naming.directory.SearchResult;
 public class PartialGroup {
     private String cn;
 
+    public PartialGroup() {
+    }
+
     public PartialGroup(String cn) {
         this.cn = cn;
     }
