@@ -11,10 +11,17 @@
 :root {
   --blue512: #5271ff;
   --background512: #afd9fa;
-  --person-blur-512: #005699;
+  --very-dark-blue-512: #005699;
   --orange512: #FFA21B;
   --white-text:white;
+  --white-gradient: white;
   --dark_blue_512:#1169D1;
+
+  /*
+    TODO à modifier :
+    (à obtenir avec 1ere lettre du prénom et premiere lettre du nom de l'utilisateur)
+  */
+  --initials:"JP";
 }
 
 body {
@@ -51,4 +58,23 @@ body {
 .clickable:hover{
   filter: grayscale(40%);
   transition: 0.1s;
+}
+
+
+.profile-picture::after {
+  content: var(--initials);
+  background-color: var(--blue512);
+  font-size: 28px;
+  padding: 0px;
+  border-radius: 100%;
+  color: var(--white-gradient);
+  width: 60px;
+  height: 60px;
+  border-style: solid;
+  border-color: var(--very-dark-blue-512);
+  border-width: 7px;
+
+  display: table-cell !important;
+  vertical-align: middle;
+  text-align: center;
 }

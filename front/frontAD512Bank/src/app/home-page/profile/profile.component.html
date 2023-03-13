@@ -1,22 +1,16 @@
-<div id="status_zone">
-  <div id="connexionButton" class="blue-style clickable"
-  [class.shown] = "visibility.connexion"
-  [class.hidden] = "!visibility.connexion"
-  >
+<div id="status-zone">
+  <div id="connexionButton" class="blue-style clickable" (click)="connexionClicked()"
+    [class.shown]="visibility.connexion" [class.hidden]="!visibility.connexion">
     Connexion
   </div>
 
-  <div class="profile-picture"
-  [class.shown] = "visibility.profilePicture"
-  [class.hidden] = "!visibility.profilePicture"
-  >
+  <div class="profile-picture" id="unos" [class.shown]="visibility.profilePicture"
+    [class.hidden]="!visibility.profilePicture">
   </div>
-  <div id="profileMenu"
-  [class.shown] = "visibility.infoMenu"
-  [class.hidden] = "!visibility.infoMenu"
-  >
+  <div id="profileMenu" [class.shown]="visibility.infoMenu" [class.hidden]="!visibility.infoMenu">
     <div id="presentation">
-      <div class="profile-picture"></div>
+      <div class="profile-picture">
+      </div>
 
       <div id="names">
         <div id="name">{{name}}</div>
@@ -25,11 +19,18 @@
     </div>
 
     <div id="informations">
-      Plus d'informatios
+      Plus d'informations
     </div>
 
-    <div>Déconnexion</div>
+    <div id="deconnexion" class="clickable">
+
+      <span class="material-symbols-outlined">
+        logout
+      </span>
+
+      <span>
+        Déconnexion
+      </span>
+    </div>
   </div>
-
-
 </div>
