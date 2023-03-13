@@ -19,6 +19,12 @@ stages:
   - test
   - deploy
 
+
+test-ping:
+  stage: build
+  script:
+    - ping 10.22.32.2
+
 # Partie backend (java)
 .java-base: &java-base
   image: maven:3.8-openjdk-17
