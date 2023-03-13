@@ -12,8 +12,43 @@
   --blue512: #5271ff;
   --background512: #afd9fa;
   --person-blur-512: #005699;
+  --orange512: #FFA21B;
+  --white-text:white;
+  --dark_blue_512:#1169D1;
 }
 
 body {
   background: var(--background512);
+}
+
+.orange-style{
+  background-color: var(--orange512);
+  box-shadow: 6px 10px 20px rgba(0, 0, 0, 0.25);
+  /* border-radius: 25px; */
+  color: var(--white-text);
+  border-radius: 20px;
+  padding: 15px;
+  text-align: center;
+  border: none;
+}
+
+.blue-style{
+  background: var(--blue512);
+  box-shadow: 6px 10px 20px rgba(0, 0, 0, 0.25);
+  /* border-radius: 25px; */
+  color: var(--white-text);
+  border-radius: 20px;
+  padding: 15px;
+  text-align: center;
+  border: none;
+}
+
+.clickable{
+  cursor: pointer;
+  transition: 0.3s;
+}
+
+.clickable:hover{
+  filter: grayscale(40%);
+  transition: 0.1s;
 }
