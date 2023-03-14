@@ -1,17 +1,17 @@
 package fr.seinksansdooze.backend.model.response;
 
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+
 import javax.naming.NamingException;
 import javax.naming.directory.SearchResult;
 
+@Data
+@AllArgsConstructor
+@NoArgsConstructor
 public class PartialGroup {
     private String cn;
-
-    public PartialGroup() {
-    }
-
-    public PartialGroup(String cn) {
-        this.cn = cn;
-    }
 
     public PartialGroup(SearchResult sr) {
         try {
@@ -19,20 +19,5 @@ public class PartialGroup {
         } catch (NamingException e) {
             throw new RuntimeException(e);
         }
-    }
-
-    public String getCn() {
-        return cn;
-    }
-
-    public void setCn(String cn) {
-        this.cn = cn;
-    }
-
-    @Override
-    public String toString() {
-        return "PartialGroup{" +
-                "cn='" + cn + '\'' +
-                '}';
     }
 }
