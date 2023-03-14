@@ -7,7 +7,10 @@ import { elementAt } from 'rxjs';
   styleUrls: ['./home-page.component.css']
 })
 export class HomePageComponent {
-
+onSearch($event: SubmitEvent) {
+throw new Error('Method not implemented.');
+}
+  branches=["Bordeaux","Lyon","Marseille","Paris","Toulouse"];
   constructor() {
 
    }
@@ -29,4 +32,4 @@ export class HomePageComponent {
   }
 
   }
-}
+

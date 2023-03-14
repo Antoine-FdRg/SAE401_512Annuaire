@@ -13,23 +13,23 @@
   --blue512: #5271ff;
   --background512: #afd9fa;
   --very-dark-blue-512: #005699;
-  --orange512: #FFA21B;
-  --white-text:white;
+  --orange512: #ffa21b;
+  --white-text: white;
   --white-gradient: white;
-  --dark_blue_512:#1169D1;
+  --dark_blue_512: #1169d1;
 
   /*
     TODO à modifier :
     (à obtenir avec 1ere lettre du prénom et premiere lettre du nom de l'utilisateur)
   */
-  --initials:"JP";
+  --initials: "JP";
 }
 
 body {
   background: var(--background512);
 }
 
-.orange-style{
+.orange-style {
   background-color: var(--orange512);
   box-shadow: 6px 10px 20px rgba(0, 0, 0, 0.25);
   /* border-radius: 25px; */
@@ -40,7 +40,7 @@ body {
   border: none;
 }
 
-.blue-style{
+.blue-style {
   background: var(--blue512);
   box-shadow: 6px 10px 20px rgba(0, 0, 0, 0.25);
   /* border-radius: 25px; */
@@ -51,40 +51,30 @@ body {
   border: none;
 }
 
-.clickable{
+.clickable {
   cursor: pointer;
   transition: 0.3s;
 }
 
-.clickable:hover{
+.clickable:hover {
   filter: grayscale(40%);
   transition: 0.1s;
 }
 
-
+/*
 .profile-picture::after {
-  content: var(--initials);
-  background-color: var(--blue512);
-  font-size: 28px;
-  padding: 0px;
-  border-radius: 100%;
-  color: var(--white-gradient);
-  width: 60px;
-  height: 60px;
-  border-style: solid;
-  border-color: var(--very-dark-blue-512);
-  border-width: 7px;
+
 
   display: table-cell !important;
   vertical-align: middle;
   text-align: center;
-}
+}*/
 
 .noselect {
   -webkit-touch-callout: none;
-    -webkit-user-select: none;
-     -khtml-user-select: none;
-       -moz-user-select: none;
-        -ms-user-select: none;
-            user-select: none;
+  -webkit-user-select: none;
+  -khtml-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
 }

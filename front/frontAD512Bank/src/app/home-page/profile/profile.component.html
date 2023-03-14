@@ -1,38 +1,42 @@
 <div id="status-zone">
-  <div id="connexionButton" class="blue-style clickable noselect" (click)="connexionClicked()"
-    [class.shown]="visibility.connexion" [class.hidden]="!visibility.connexion">
+  <div
+    id="connexionButton"
+    class="blue-style clickable noselect"
+    (click)="connexionClicked()"
+    [class.shown]="visibility.connexion"
+    [class.hidden]="!visibility.connexion"
+  >
     Connexion
   </div>
 
-  <div class="profile-picture" id="unos" [class.shown]="visibility.profilePicture"
-    [class.hidden]="!visibility.profilePicture">
-  </div>
-  <div id="profileMenu" [class.shown]="visibility.infoMenu" [class.hidden]="!visibility.infoMenu">
-
-
+  <div
+    class="profile-picture"
+    id="unos"
+    [class.shown]="visibility.profilePicture"
+    [class.hidden]="!visibility.profilePicture"
+  ></div>
+  <div
+    id="profileMenu"
+    [class.shown]="visibility.infoMenu"
+    [class.hidden]="!visibility.infoMenu"
+  >
     <div id="presentation">
       <div class="profile-picture">
+        <div>{{ name.charAt(0) }}{{ surname.charAt(0) }}</div>
       </div>
 
       <div id="names">
-        <div id="name">{{name}}</div>
-        <div id="surname">{{surname}}</div>
+        <div id="name">{{ name }}</div>
+        <div id="surname">{{ surname }}</div>
       </div>
     </div>
 
-    <div id="informations">
-      Plus d'informations
-    </div>
+    <div id="informations">Plus d'informations</div>
 
     <div id="deconnexion" class="clickable">
+      <span class="material-symbols-outlined"> logout </span>
 
-      <span class="material-symbols-outlined">
-        logout
-      </span>
-
-      <span>
-        Déconnexion
-      </span>
+      <span> Déconnexion </span>
     </div>
   </div>
 </div>
