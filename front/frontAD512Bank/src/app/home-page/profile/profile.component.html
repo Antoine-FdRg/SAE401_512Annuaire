@@ -11,10 +11,9 @@
 
   <div
     class="profile-picture"
-    id="unos"
     [class.shown]="visibility.profilePicture"
     [class.hidden]="!visibility.profilePicture"
-  ></div>
+  >{{initials}}</div>
   <div
     id="profileMenu"
     [class.shown]="visibility.infoMenu"
@@ -22,7 +21,7 @@
   >
     <div id="presentation">
       <div class="profile-picture">
-        <div>{{ name.charAt(0) }}{{ surname.charAt(0) }}</div>
+        <div>{{initials}}</div>
       </div>
 
       <div id="names">

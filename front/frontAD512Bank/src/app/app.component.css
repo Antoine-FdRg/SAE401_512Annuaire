@@ -53,3 +53,7 @@ main {
   display: flex;
   gap: 15px;
 }
+
+#right-part-header>*{
+  font-size: 1.4em;
+}

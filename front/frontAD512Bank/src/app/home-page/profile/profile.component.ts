@@ -1,3 +1,4 @@
+import { LoginService } from './../../service/login.service';
 import { AfterViewInit, Component, OnInit, ViewChild, ElementRef, HostListener, ApplicationRef, Injector } from '@angular/core';
 
 enum Status {
@@ -14,10 +15,16 @@ export class ProfileComponent {
   status = Status.diconnected
   menuShown = false;
 
-  imageLink = "";
   name = "Jean";
   surname = "Paul";
-  letters : string = this.name.charAt(0) + this.surname.charAt(0);
+  initials : string = "";
+
+  constructor(user : LoginService){
+    this.name = user.userBase.name;
+    this.surname = user.userBase.surname;
+    this.initials = this.name.charAt(0) + this.surname.charAt(0);
+  }
+
 
   visibility = {
     "profilePicture": false,

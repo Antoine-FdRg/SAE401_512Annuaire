@@ -61,6 +61,27 @@ body {
   transition: 0.1s;
 }
 
+.profile-picture {
+  background-color: var(--blue512);
+  font-size: 28px;
+  padding: 0px;
+  border-radius: 100%;
+  color: var(--white-gradient);
+  width: 80px;
+  height: 80px;
+  border-style: solid;
+  border-color: var(--very-dark-blue-512);
+  border-width: 7px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.profile-picture > div {
+  font-size: 1.2em;
+}
+
+
 /*
 .profile-picture::after {
 

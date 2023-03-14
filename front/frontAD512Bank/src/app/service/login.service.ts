@@ -4,11 +4,11 @@ import { Injectable } from '@angular/core';
   providedIn: 'root'
 })
 export class LoginService {
+
   userBase: any = {
     login:"ma102741",
-    nom:"Maïstre",
-    prenom:"Antoine",
-
+    surname:"Maïstre",
+    name:"Antoine",
   }
   constructor() { }
 }
