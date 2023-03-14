@@ -3,7 +3,9 @@ package fr.seinksansdooze.backend.model.response;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import lombok.SneakyThrows;
 
+import javax.naming.NamingException;
 import javax.naming.directory.SearchResult;
 
 /**
@@ -26,16 +28,13 @@ public class PartialPerson {
      *
      * @param person le résultat de recherche LDAP
      */
+    @SneakyThrows(NamingException.class)
     public PartialPerson(SearchResult person) {
-        try {
-            this.firstName = person.getAttributes().get("givenName").get().toString();
-            this.lastName = person.getAttributes().get("sn").get().toString();
-            this.cn = person.getAttributes().get("cn").get().toString();
-            this.structureOU = person.getAttributes().get("distinguishedName").toString().split(": ")[1];
-            this.position = this.buildPosition();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+        this.firstName = person.getAttributes().get("givenName").get().toString();
+        this.lastName = person.getAttributes().get("sn").get().toString();
+        this.cn = person.getAttributes().get("cn").get().toString();
+        this.structureOU = person.getAttributes().get("distinguishedName").toString().split(": ")[1];
+        this.position = this.buildPosition();
     }
 
     private String buildPosition() {
