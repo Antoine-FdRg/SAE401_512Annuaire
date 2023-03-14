@@ -1,4 +1,5 @@
-import { Component } from '@angular/core';
+import { ApplicationRef, Component, ElementRef, Injector, ViewChild } from '@angular/core';
+import { elementAt } from 'rxjs';
 
 @Component({
   selector: 'app-home-page',
@@ -27,4 +28,5 @@ export class HomePageComponent {
     document.getElementById("house1")!.style.display="block";
   }
 
+  }
 }

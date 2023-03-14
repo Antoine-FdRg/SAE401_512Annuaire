@@ -5,6 +5,7 @@
     flex-wrap: wrap;
     align-items: center;
     justify-content: center;
+    transition: 1s;
 }
 
 #sheetsContainer *{
@@ -18,12 +19,14 @@
     border-radius: 30px;
     box-shadow: 12px 13px 2px 2px #3D83FF;
     max-width: 300px;
-    height: 400px;
+    height: 515px;
     display: flex;
     justify-content: space-evenly;
     flex-direction: column;
     align-items: center;
     width: 285px;
+    padding-top: 20px;
+    padding-bottom: 20px;
 }
 
 .topInfos{
@@ -56,8 +59,37 @@
 
 /* COLORS FOR ROLES */
 
-.finDir{
-    color: rgb(44, 100, 255);
+.blue{
+  color: #759FCC;
+}
+
+
+.orange{
+  color: #ED7D31;
+}
+
+.green{
+  color: #70AD47;
+}
+
+.lightBlue{
+  color: #00B0F0;
+}
+
+.purple{
+  color: #BC40C6;
+}
+
+.red1{
+  color: #D20000;
+}
+
+.red2{
+  color: #F74F4F;
+}
+
+.red3{
+  color: #EE8282;
 }
 
 /* ---------------- */
@@ -109,11 +141,28 @@
 .contacts>div{
     display: flex;
     gap: 1em;
-    align-items: flex-end;
+    align-items: center;
 }
 
 .contacts{
     display: flex;
     flex-direction: column;
     gap: 0.5em;
+}
+
+.contacts>.email>span{
+    width: 76%;
+}
+
+
+/* QUERIES */
+
+@media only screen and (max-width:1000px) {
+    #sheetsContainer{
+        margin-top: 50px;
+        margin-bottom: 50px;
+        padding: 0%;
+        gap: 30px;
+        flex-direction: column;
+    }
 }
