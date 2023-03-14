@@ -12,7 +12,7 @@
   ); /* ! TODO faire attention au support des navigateurs*/
   border-radius: 29px;
   padding: 2em;
-  width: 45vw;
+  width: 790px;
 }
 
 .mainTitle {
@@ -28,12 +28,11 @@
 
 .inputs {
   display: flex;
-  width: 45vw;
+  width: 790px;
   justify-content: space-between;
 }
 .inputs input {
-  width: 32vw;
-  height: 7vh;
+  width: 60%;
   background: #f6f6f6;
   box-shadow: 6px 10px 20px rgba(0, 0, 0, 0.25);
   border-radius: 25px;
@@ -41,6 +40,12 @@
 }
 input:focus {
   outline: none;
+}
+
+#search{
+  width: 71%;
+  padding-left: 20px;
+  height: 48px;
 }
 
 .inputs button {

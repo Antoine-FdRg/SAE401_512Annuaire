@@ -34,8 +34,6 @@ header {
 }
 
 .help {
-  width: 7.5vw;
-  height: 5vh;
   padding: 0px 37px;
   gap: 10px;
   font-size: 1.4empx;
@@ -50,3 +48,7 @@ main {
   background-position: 50%;
 }
 
+#right-part-header{
+  display: flex;
+  gap: 15px;
+}

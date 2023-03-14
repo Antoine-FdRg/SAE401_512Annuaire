@@ -30,6 +30,7 @@ export class ProfileComponent {
     let target : HTMLElement = event.target as HTMLElement;
     if(target.id !== "connexionButton"){
       this.visibility["infoMenu"] = false;
+      this.menuShown = false;
     }
   }
 
@@ -41,7 +42,6 @@ export class ProfileComponent {
     }
     this.menuShown = true;
     this.visibility["infoMenu"] = true;
-
   }
 }
 
