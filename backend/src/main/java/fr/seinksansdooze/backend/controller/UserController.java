@@ -6,6 +6,8 @@ import fr.seinksansdooze.backend.connectionManaging.TokenGenerator;
 import fr.seinksansdooze.backend.connectionManaging.TokenSanitizer;
 import fr.seinksansdooze.backend.model.SeinkSansDoozeBackException;
 import fr.seinksansdooze.backend.model.payload.LoginPayload;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseCookie;
@@ -23,6 +25,10 @@ public class UserController {
             ADQuerier.class
     );
 
+    @ApiResponses({
+            @ApiResponse(responseCode = "200", description = "Connexion avec succès"),
+            @ApiResponse(responseCode = "401", description = "Identifiant ou mot de passe incorrect")
+    }) // TODO: 14/03/2023 validation des données
     @PostMapping("/login")
     public ResponseEntity<String> login(@RequestBody LoginPayload payload) {
         String token;
@@ -56,6 +62,7 @@ public class UserController {
                 .body("Connexion avec succès");
     }
 
+    @ApiResponse(responseCode = "200", description = "Déconnexion faite avec succès")
     @PostMapping("/logout")
     public ResponseEntity<String> logout(@CookieValue("token") String token) {
         connectionManager.removeConnection(token);
