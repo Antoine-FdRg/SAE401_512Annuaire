@@ -1,6 +1,6 @@
 package fr.seinksansdooze.backend.controller;
 
-import fr.seinksansdooze.backend.connectionManaging.ADBridge.IAdminADQuerier;
+import fr.seinksansdooze.backend.connectionManaging.ADBridge.ADQuerier;
 import fr.seinksansdooze.backend.connectionManaging.ADConnectionManager;
 import fr.seinksansdooze.backend.connectionManaging.TokenGenerator;
 import fr.seinksansdooze.backend.connectionManaging.TokenSanitizer;
@@ -10,10 +10,7 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseCookie;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import javax.naming.NamingException;
 
@@ -23,7 +20,7 @@ public class UserController {
     ADConnectionManager connectionManager = new ADConnectionManager(
             new TokenGenerator(),
             new TokenSanitizer(),
-            IAdminADQuerier.class
+            ADQuerier.class
     );
 
     @PostMapping("/login")
@@ -60,8 +57,8 @@ public class UserController {
     }
 
     @PostMapping("/logout")
-    public ResponseEntity<String> logout() {
-//        TODO connectionManager.logout...
+    public ResponseEntity<String> logout(@CookieValue("token") String token) {
+        connectionManager.removeConnection(token);
 
         ResponseCookie resCookie = ResponseCookie.from("token", "")
                 .httpOnly(true)

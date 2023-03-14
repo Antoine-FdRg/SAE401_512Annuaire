@@ -1,20 +1,18 @@
 package fr.seinksansdooze.backend.connectionManaging;
 
-import fr.seinksansdooze.backend.connectionManaging.ADBridge.ADQuerier;
 import fr.seinksansdooze.backend.connectionManaging.ADBridge.IAdminADQuerier;
-import fr.seinksansdooze.backend.model.payload.LoginPayload;
 
 import javax.naming.NamingException;
 import java.lang.reflect.InvocationTargetException;
 
 /**
- * Cette classe permet de gérer toutes les connexions à Active Directory
+ * Cette classe permet de gérer toutes les connexions à Active Directory.
  * Elle fera le lien entre les différentes Token et les différentes connexions
  * Le but premier est de pouvoir garder des connexions actives tant qu'un token est valide
  * Et de pouvoir les fermer une fois le token expiré et ainsi libérer la mémoire
  */
 public class ADConnectionManager {
-    private final ConcurrentHashMapAutoCleaning<String, ADConnection> connections = new ConcurrentHashMapAutoCleaning<String, ADConnection>(3600000);
+    private final ConcurrentHashMapAutoCleaning<String, ADConnection> connections = new ConcurrentHashMapAutoCleaning<>(3600000);
     private final ITokenGenerator tokenGenerator;
     private final ITokenSanitizer tokenSanitizer;
     /**
@@ -36,7 +34,6 @@ public class ADConnectionManager {
      * Elle retourne un token de connexion si la connexion est réussie
      * Elle retourne une exception si la connexion échoue
      *
-     * @param loginPayload un objet stockant le nom d'utilisateur et le mot de passe
      * @return le token de connexion
      * @throws NamingException si la connexion échoue
      */
@@ -47,12 +44,12 @@ public class ADConnectionManager {
         IAdminADQuerier querier;
 
         try {
-            querier = (IAdminADQuerier)querierClass.getDeclaredConstructor().newInstance();
-        } catch (InstantiationException | IllegalAccessException | InvocationTargetException | NoSuchMethodException e) {
+            querier = (IAdminADQuerier) querierClass.getDeclaredConstructor().newInstance();
+        } catch (InstantiationException | IllegalAccessException | InvocationTargetException |
+                 NoSuchMethodException e) {
             throw new RuntimeException(e);
         }
 
-        // TODO: 3/12/2023 Découplage et meilleur gestion des erreurs
         boolean connectionSuccess = querier.login(username, password);
         if (connectionSuccess) {
             String token = this.tokenGenerator.generateNewToken();
@@ -63,6 +60,15 @@ public class ADConnectionManager {
         } else {
             throw new NamingException("Connection failed");
         }
+    }
+
+    /**
+     * Supprime une connexion de force.
+     *
+     * @param token Le token de la connexion à supprimer.
+     */
+    public void removeConnection(String token) {
+        connections.remove(token); // TODO: 13/03/2023 Est-ce que on ferme la connexion ou ça se fait tout seul
     }
 
     /**
