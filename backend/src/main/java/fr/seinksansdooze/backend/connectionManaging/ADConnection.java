@@ -1,6 +1,6 @@
 package fr.seinksansdooze.backend.connectionManaging;
 
-import fr.seinksansdooze.backend.connectionManaging.ADBridge.IAdminADQuerier;
+import fr.seinksansdooze.backend.connectionManaging.ADBridge.IMemberADQuerier;
 
 import java.util.Date;
 
@@ -11,7 +11,7 @@ import java.util.Date;
 public class ADConnection {
     private Date tokenEmissionDate;
     private Date lastUseDate; //TODO ne pas couper la connexion si elle a été utilisée il a peu de temps
-    private IAdminADQuerier querier;
+    private IMemberADQuerier querier;
     /**
      * Temps d'expiration d'une connexion en millisecondes
      */
@@ -30,7 +30,7 @@ public class ADConnection {
         return lastUseDate;
     }
 
-    public IAdminADQuerier getQuerier() {
+    public IMemberADQuerier getQuerier() {
         return querier;
     }
 
@@ -38,7 +38,7 @@ public class ADConnection {
         this.tokenEmissionDate = tokenEmissionDate;
     }
 
-    public void setQuerier(IAdminADQuerier querier) {
+    public void setQuerier(IMemberADQuerier querier) {
         this.querier = querier;
     }
 

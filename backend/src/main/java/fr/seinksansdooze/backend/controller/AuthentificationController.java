@@ -2,6 +2,7 @@ package fr.seinksansdooze.backend.controller;
 
 import fr.seinksansdooze.backend.connectionManaging.ADBridge.ADQuerier;
 import fr.seinksansdooze.backend.connectionManaging.ADConnectionManager;
+import fr.seinksansdooze.backend.connectionManaging.ADConnectionManagerSingleton;
 import fr.seinksansdooze.backend.connectionManaging.TokenGenerator;
 import fr.seinksansdooze.backend.connectionManaging.TokenSanitizer;
 import fr.seinksansdooze.backend.model.SeinkSansDoozeBackException;
@@ -23,11 +24,7 @@ import javax.naming.NamingException;
 @RestController
 @RequestMapping("/api/auth")
 public class AuthentificationController {
-    ADConnectionManager connectionManager = new ADConnectionManager(
-            new TokenGenerator(),
-            new TokenSanitizer(),
-            ADQuerier.class
-    );
+    ADConnectionManager connectionManager = ADConnectionManagerSingleton.INSTANCE.get();
 
     @ApiResponses({
             @ApiResponse(responseCode = "200", description = "Connexion avec succès"),

@@ -1,6 +1,6 @@
 package fr.seinksansdooze.backend.connectionManaging;
 
-import fr.seinksansdooze.backend.connectionManaging.ADBridge.IAdminADQuerier;
+import fr.seinksansdooze.backend.connectionManaging.ADBridge.IMemberADQuerier;
 import fr.seinksansdooze.backend.connectionManaging.ADBridge.IPublicADQuerier;
 import fr.seinksansdooze.backend.model.response.PartialGroup;
 import fr.seinksansdooze.backend.model.response.PartialPerson;
@@ -11,7 +11,7 @@ import javax.naming.directory.SearchResult;
 import java.util.ArrayList;
 import java.util.HashMap;
 
-public class ADQuerierMoke implements IAdminADQuerier, IPublicADQuerier {
+public class ADQuerierMoke implements IMemberADQuerier, IPublicADQuerier {
 
     private static final HashMap<String, String> user = new HashMap<>(){{
         put("user1", "mdp1");

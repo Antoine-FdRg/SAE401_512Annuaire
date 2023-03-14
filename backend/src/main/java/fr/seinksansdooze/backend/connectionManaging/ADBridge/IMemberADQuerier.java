@@ -7,7 +7,7 @@ import javax.naming.NamingEnumeration;
 import javax.naming.directory.SearchResult;
 import java.util.ArrayList;
 
-public interface IAdminADQuerier  extends IPublicADQuerier{
+public interface IMemberADQuerier extends IPublicADQuerier{
     boolean login(String username, String pwd);
 
     boolean logout();
