@@ -8,6 +8,7 @@ import fr.seinksansdooze.backend.model.SeinkSansDoozeBackException;
 import fr.seinksansdooze.backend.model.payload.LoginPayload;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
+import jakarta.validation.Valid;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseCookie;
@@ -27,10 +28,11 @@ public class UserController {
 
     @ApiResponses({
             @ApiResponse(responseCode = "200", description = "Connexion avec succès"),
+            @ApiResponse(responseCode = "400", description = "Requête malformée, vérifiez que le payload contient bien les champs demandé"),
             @ApiResponse(responseCode = "401", description = "Identifiant ou mot de passe incorrect")
-    }) // TODO: 14/03/2023 validation des données
+    })
     @PostMapping("/login")
-    public ResponseEntity<String> login(@RequestBody LoginPayload payload) {
+    public ResponseEntity<String> login(@Valid @RequestBody LoginPayload payload) {
         String token;
 
         try {

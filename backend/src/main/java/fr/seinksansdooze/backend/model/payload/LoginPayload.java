@@ -1,10 +1,17 @@
 package fr.seinksansdooze.backend.model.payload;
 
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
+
 /**
  * Type qui correspond au JSON qui est envoyé lors d'une connexion (login).
  */
 public class LoginPayload {
+    @NotBlank
+    @NotNull
     private String username;
+    @NotBlank
+    @NotNull
     private String password;
     private boolean rememberMe = false;
 
