@@ -17,9 +17,12 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.naming.NamingException;
 
+/**
+ * Controller permettant de gérer les requêtes d'authentification et de déconnexion
+ */
 @RestController
-@RequestMapping("/api/users")
-public class UserController {
+@RequestMapping("/api/auth")
+public class AuthentificationController {
     ADConnectionManager connectionManager = new ADConnectionManager(
             new TokenGenerator(),
             new TokenSanitizer(),

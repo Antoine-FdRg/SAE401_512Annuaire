@@ -14,6 +14,9 @@ import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
 
+/**
+ * Controller permettant de gérer les requêtes des administrateurs connectés
+ */
 @RestController
 @RequestMapping("/api/admin")
 public class AdminController {

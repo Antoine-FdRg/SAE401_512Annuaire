@@ -10,6 +10,9 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
+/**
+ * Controller permettant de gérer les requêtes publiques (faites par les utilisateurs non connectés)
+ */
 @RestController
 @RequestMapping("/api/public")
 public class PublicController {
