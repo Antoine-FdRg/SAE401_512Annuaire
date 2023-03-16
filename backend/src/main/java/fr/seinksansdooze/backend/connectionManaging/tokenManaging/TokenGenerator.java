@@ -1,4 +1,4 @@
-package fr.seinksansdooze.backend.connectionManaging;
+package fr.seinksansdooze.backend.connectionManaging.tokenManaging;
 
 import java.security.SecureRandom;
 import java.util.Base64;

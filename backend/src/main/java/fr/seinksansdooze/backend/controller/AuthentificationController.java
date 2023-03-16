@@ -1,10 +1,7 @@
 package fr.seinksansdooze.backend.controller;
 
-import fr.seinksansdooze.backend.connectionManaging.ADBridge.ADQuerier;
 import fr.seinksansdooze.backend.connectionManaging.ADConnectionManager;
 import fr.seinksansdooze.backend.connectionManaging.ADConnectionManagerSingleton;
-import fr.seinksansdooze.backend.connectionManaging.TokenGenerator;
-import fr.seinksansdooze.backend.connectionManaging.TokenSanitizer;
 import fr.seinksansdooze.backend.model.SeinkSansDoozeBackException;
 import fr.seinksansdooze.backend.model.payload.LoginPayload;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;

@@ -2,6 +2,8 @@ package fr.seinksansdooze.backend.connectionManaging;
 
 
 import fr.seinksansdooze.backend.connectionManaging.ADBridge.IMemberADQuerier;
+import fr.seinksansdooze.backend.connectionManaging.tokenManaging.TokenGenerator;
+import fr.seinksansdooze.backend.connectionManaging.tokenManaging.TokenSanitizer;
 import org.junit.jupiter.api.Test;
 
 import javax.naming.NamingException;

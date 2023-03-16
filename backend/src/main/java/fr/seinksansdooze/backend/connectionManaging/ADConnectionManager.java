@@ -1,6 +1,8 @@
 package fr.seinksansdooze.backend.connectionManaging;
 
 import fr.seinksansdooze.backend.connectionManaging.ADBridge.IMemberADQuerier;
+import fr.seinksansdooze.backend.connectionManaging.tokenManaging.ITokenGenerator;
+import fr.seinksansdooze.backend.connectionManaging.tokenManaging.ITokenSanitizer;
 
 import javax.naming.NamingException;
 import java.lang.reflect.InvocationTargetException;

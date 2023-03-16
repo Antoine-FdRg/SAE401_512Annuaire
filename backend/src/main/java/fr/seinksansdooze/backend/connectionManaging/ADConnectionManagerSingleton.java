@@ -1,6 +1,8 @@
 package fr.seinksansdooze.backend.connectionManaging;
 
 import fr.seinksansdooze.backend.connectionManaging.ADBridge.ADQuerier;
+import fr.seinksansdooze.backend.connectionManaging.tokenManaging.TokenGenerator;
+import fr.seinksansdooze.backend.connectionManaging.tokenManaging.TokenSanitizer;
 
 public enum ADConnectionManagerSingleton {
     INSTANCE;
