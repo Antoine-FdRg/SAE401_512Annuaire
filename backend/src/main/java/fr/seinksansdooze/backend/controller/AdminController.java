@@ -1,17 +1,17 @@
 
 package fr.seinksansdooze.backend.controller;
 
+import fr.seinksansdooze.backend.connectionManaging.ADConnectionManager;
+import fr.seinksansdooze.backend.connectionManaging.ADConnectionManagerSingleton;
+import fr.seinksansdooze.backend.model.SeinkSansDoozeBackException;
 import fr.seinksansdooze.backend.model.payload.ChangeGroupsPayload;
 import fr.seinksansdooze.backend.model.response.PartialPerson;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
+import org.springframework.http.HttpStatus;
+import org.springframework.web.bind.annotation.*;
 
+import javax.naming.NamingException;
 import java.util.List;
 
 /**
@@ -20,17 +20,44 @@ import java.util.List;
 @RestController
 @RequestMapping("/api/admin")
 public class AdminController {
-//    @GetMapping("/ping/{token}")
-//    public String ping(@PathVariable String token) {
-//        try {
-//            if (connectionManager.getQuerier(token).getClass()!= null) {
-//                return "ping réussi";
-//            }
-//            throw new RuntimeException("Token invalide");
-//        } catch (NamingException e) {
-//            throw new RuntimeException(e);
-//        }
-//    }
+
+    ADConnectionManager connectionManager = ADConnectionManagerSingleton.INSTANCE.get();
+
+    @ApiResponses({
+            @ApiResponse(responseCode = "200", description = "Ping réussi"),
+            @ApiResponse(responseCode = "401", description = "Token invalide")
+    })
+    @GetMapping("/ping/{token}")
+    public String ping(@CookieValue("token") String token) {
+        try {
+            if (connectionManager.getQuerier(token).getClass()!= null) {
+                return "ping réussi";
+            }
+            throw new RuntimeException("Token invalide");
+        } catch (NamingException e) {
+            throw new SeinkSansDoozeBackException(
+                    HttpStatus.UNAUTHORIZED,
+                    "Erreur de connexion, la session a peut être expirée, veuillez vous reconnecter."
+            );
+        }
+    }
+
+
+    @ApiResponses({
+            @ApiResponse(responseCode = "200", description = "Recherche réussie"),
+            @ApiResponse(responseCode = "401", description = "Token invalide")
+    })
+    @GetMapping("/info/person")
+    public PartialPerson personInfo(@CookieValue("token") String token, @RequestParam String cn) {
+        try {
+            return connectionManager.getQuerier(token).getFullPersonInfo(cn);
+        } catch (NamingException e) {
+            throw new SeinkSansDoozeBackException(
+                    HttpStatus.UNAUTHORIZED,
+                    "Erreur de connexion, la session a peut être expirée, veuillez vous reconnecter."
+            );
+        }
+    }
 
     // TODO : implémenter la verifification correctement
 //    @GetMapping("/group/all")

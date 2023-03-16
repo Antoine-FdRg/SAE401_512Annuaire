@@ -23,6 +23,8 @@ import javax.naming.NamingException;
 public class AuthentificationController {
     ADConnectionManager connectionManager = ADConnectionManagerSingleton.INSTANCE.get();
 
+    //TODO comprendre pq les requete public ne fontyionne plus apres une connexion
+
     @ApiResponses({
             @ApiResponse(responseCode = "200", description = "Connexion avec succès"),
             @ApiResponse(responseCode = "400", description = "Requête malformée, vérifiez que le payload contient bien les champs demandé"),
@@ -40,6 +42,7 @@ public class AuthentificationController {
                     "La connexion à échouée. Veuillez verifier votre identifiant ainsi que votre mot de passe."
             );
         }
+
 
         // Durée de vie de la session
         int sessionAge;

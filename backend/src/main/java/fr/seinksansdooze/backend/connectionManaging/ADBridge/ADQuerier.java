@@ -1,5 +1,6 @@
 package fr.seinksansdooze.backend.connectionManaging.ADBridge;
 
+import fr.seinksansdooze.backend.model.response.FullPerson;
 import fr.seinksansdooze.backend.model.response.PartialGroup;
 import fr.seinksansdooze.backend.model.response.PartialPerson;
 import fr.seinksansdooze.backend.model.response.PartialStructure;
@@ -21,6 +22,7 @@ public class ADQuerier implements IMemberADQuerier, IPublicADQuerier {
 
     public static IPublicADQuerier getPublicADQuerier() {
         if (publicADQuerier == null) {
+            //TODO créer un utilisateur public dans l'AD
             publicADQuerier = new ADQuerier("antoine.fadda.rodriguez","@Arnaudisthebest83");
         }
         return publicADQuerier;
@@ -34,7 +36,14 @@ public class ADQuerier implements IMemberADQuerier, IPublicADQuerier {
     public ADQuerier() {
     }
 
-    //  api/admin/login
+    /////////////////////////// Méthode de connexion et de déconnexion ///////////////////////////
+
+    /**
+     * Méthode répondant à la route /api/auth/login en connectant l'utilisateur à l'annuaire Active Directory
+     * @param username le nom d'utilisateur
+     * @param pwd le mot de passe
+     * @return true si la connexion a réussi, false sinon
+     */
     public boolean login(String username, String pwd) {
         Properties env = new Properties();
         username = username + "@EQUIPE1B.local";
@@ -64,7 +73,10 @@ public class ADQuerier implements IMemberADQuerier, IPublicADQuerier {
         }
     }
 
-    //  api/admin/logout
+    /**
+     * Méthode répondant à la route /api/auth/logout en déconnectant l'utilisateur de l'annuaire Active Directory
+     * @return true si la déconnexion a réussi, false sinon
+     */
     public boolean logout() {
         try {
             this.context.close();
@@ -74,8 +86,10 @@ public class ADQuerier implements IMemberADQuerier, IPublicADQuerier {
         }
     }
 
+    /////////////////////////// Méthodes pour le PublicController ///////////////////////////
+
     /**
-     * Méthode répondant à la route GET /api/search/person
+     * Méthode répondant à la route GET /api/public/search/person
      * @param searchedName le nom de la personne recherchée
      * @return une liste de personnes correspondant à la recherche
      */
@@ -95,7 +109,7 @@ public class ADQuerier implements IMemberADQuerier, IPublicADQuerier {
     }
 
     /**
-     * Méthode répondant à la route GET /api/search/structure
+     * Méthode répondant à la route GET /api/public/search/structure
      * @param searchedName le nom de la structure recherchée
      * @return une liste de structures correspondant à la recherche
      */
@@ -116,7 +130,7 @@ public class ADQuerier implements IMemberADQuerier, IPublicADQuerier {
 
 
     /**
-     * Méthode répondant à la route GET /api/info/person/{cn}
+     * Méthode répondant à la route GET /api/public/info/person/{cn}
      * @param cn le cn de la personne recherchée
      * @return une personne correspondant à la recherche
      */
@@ -139,7 +153,7 @@ public class ADQuerier implements IMemberADQuerier, IPublicADQuerier {
     }
 
     /**
-     * Méthode répondant à la route GET /api/info/structure/{ou}
+     * Méthode répondant à la route GET /api/public/info/structure/{ou}
      * @param ou le ou de la structure recherchée
      * @return une structure correspondant à la recherche
      */
@@ -161,6 +175,32 @@ public class ADQuerier implements IMemberADQuerier, IPublicADQuerier {
         }
     }
 
+    /////////////////////////// Méthodes pour le AdminController ///////////////////////////
+
+    /**
+     * Méthode répondant à la route GET /api/admin/search/person
+     * @return la liste de tous les groupes de l'annuaire
+     */
+    @Override
+    public FullPerson getFullPersonInfo(String cn) {
+        String filter = "(&(objectClass=user)(CN=" + cn + "))";
+        SearchControls searchControls = new SearchControls();
+        searchControls.setSearchScope(SearchControls.SUBTREE_SCOPE);
+        NamingEnumeration<SearchResult> res;
+        try {
+            res = this.context.search(AD_BASE, filter, searchControls);
+            if (res.hasMore()) {
+                SearchResult currentPerson = res.next();
+                FullPerson person = new FullPerson(currentPerson);
+                return person;
+            }
+            return null;
+        } catch (NamingException e) {
+            return null;
+        }
+    }
+
+    /////////////////////////// Méthodes de requete AD ///////////////////////////
 
     //  api/search/person   api/search/structures   api/admin/group/all
     // recherche une personne ou une structure
@@ -374,8 +414,4 @@ public class ADQuerier implements IMemberADQuerier, IPublicADQuerier {
         }
     }
 
-    @Override
-    public PartialPerson getFullPersonInfo(String cn) {
-        return null;
-    }
 }

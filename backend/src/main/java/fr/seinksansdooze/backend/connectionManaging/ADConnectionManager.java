@@ -71,6 +71,9 @@ public class ADConnectionManager {
      */
     public void removeConnection(String token) {
         connections.remove(token); // TODO: 13/03/2023 Est-ce que on ferme la connexion ou ça se fait tout seul
+        connections.get(token).getQuerier().logout();
+
+
     }
 
     /**
