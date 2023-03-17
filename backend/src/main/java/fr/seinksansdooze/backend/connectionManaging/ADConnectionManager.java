@@ -3,6 +3,7 @@ package fr.seinksansdooze.backend.connectionManaging;
 import fr.seinksansdooze.backend.connectionManaging.ADBridge.IMemberADQuerier;
 import fr.seinksansdooze.backend.connectionManaging.tokenManaging.ITokenGenerator;
 import fr.seinksansdooze.backend.connectionManaging.tokenManaging.ITokenSanitizer;
+import fr.seinksansdooze.backend.model.SeinkSansDoozeBackException;
 
 import javax.naming.NamingException;
 import java.lang.reflect.InvocationTargetException;
@@ -70,9 +71,12 @@ public class ADConnectionManager {
      * @param token Le token de la connexion à supprimer.
      */
     public void removeConnection(String token) {
-        connections.remove(token); // TODO: 13/03/2023 Est-ce que on ferme la connexion ou ça se fait tout seul
+        //TODO throw new SeinkSansDoozeBackException("Not implemented yet");
+        if (connections.get(token) == null) {
+            return;
+        }
         connections.get(token).getQuerier().logout();
-
+        connections.remove(token); // TODO: 13/03/2023 Est-ce que on ferme la connexion ou ça se fait tout seul
 
     }
 

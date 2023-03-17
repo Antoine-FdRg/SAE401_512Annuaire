@@ -64,6 +64,11 @@ public class AuthentificationController {
                 .body("Connexion avec succès");
     }
 
+    /*
+    POST http://localhost:8080/api/auth/logout
+Content-Type: application/json
+Cookie: token=9OxN39RiB9Ikfda9u78ePlNrZ43IRE5i
+     */
     @ApiResponse(responseCode = "200", description = "Déconnexion faite avec succès")
     @PostMapping("/logout")
     public ResponseEntity<String> logout(@CookieValue("token") String token) {
