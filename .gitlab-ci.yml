@@ -1,47 +1,51 @@
 variables:
-  MAVEN_OPTS: >-
-    -Dhttps.protocols=TLSv1.2
-    -Dmaven.repo.local=$CI_PROJECT_DIR/.m2/repository
+    MAVEN_OPTS: >-
+        -Dhttps.protocols=TLSv1.2
+        -Dmaven.repo.local=$CI_PROJECT_DIR/.m2/repository
 
-  MAVEN_CLI_OPTS: >-
-    --batch-mode
-    --errors
-    --fail-at-end
-    --show-version
-    --no-transfer-progress
+    MAVEN_CLI_OPTS: >-
+        --batch-mode
+        --errors
+        --fail-at-end
+        --show-version
+        --no-transfer-progress
 
 cache:
-  paths:
-    - .m2/repository
+    paths:
+        - .m2/repository
 
 stages:
-  - build
-  - test
-  - deploy
+    - build
+    - test
+    - deploy
 
 # Partie backend (java)
 .java-base: &java-base
-  image: maven:3.8-openjdk-17
-  before_script:
-    - cd backend || exit 1
+    image: maven:3.8-openjdk-17
+    before_script:
+        - cd backend || exit 1
 
 java-build:
-  <<: *java-base
-  stage: build
-  script:
-    - mvn $MAVEN_CLI_OPTS compile
+    <<: *java-base
+    stage: build
+    script:
+        - mvn $MAVEN_CLI_OPTS compile
 
 java-test:
-  <<: *java-base
-  stage: test
-  script:
-    - mvn $MAVEN_CLI_OPTS test
+    <<: *java-base
+    stage: test
+    script:
+        - mvn $MAVEN_CLI_OPTS test
 
-java-deploy: # TODO : only on dev or main branch + shh deploy and service restart
-  <<: *java-base
-  stage: deploy
-  script:
-    - mvn $MAVEN_CLI_OPTS package -DskipTests
+java-deploy:
+    <<: *java-base
+    stage: deploy
+    script:
+        - mvn $MAVEN_CLI_OPTS package -DskipTests
+    artifacts:
+        paths:
+            - target/*.jar
+        expire_in: 1 week
 
 # Partie frontend (nodejs)
 
