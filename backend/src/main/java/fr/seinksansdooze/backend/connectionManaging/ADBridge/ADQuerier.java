@@ -4,11 +4,14 @@ import fr.seinksansdooze.backend.model.response.FullPerson;
 import fr.seinksansdooze.backend.model.response.PartialGroup;
 import fr.seinksansdooze.backend.model.response.PartialPerson;
 import fr.seinksansdooze.backend.model.response.PartialStructure;
+import jakarta.xml.bind.DatatypeConverter;
+import lombok.val;
 
 import javax.naming.Context;
 import javax.naming.NamingEnumeration;
 import javax.naming.NamingException;
 import javax.naming.directory.*;
+import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 import java.util.Properties;
 
@@ -31,6 +34,9 @@ public class ADQuerier implements IMemberADQuerier, IPublicADQuerier {
     protected ADQuerier(String username, String pwd) {
         //rajouter un systeme de session et d'authentification
         boolean connected = this.login(username, pwd);
+        if (!connected) {
+            throw new RuntimeException("Impossible de se connecter à l'annuaire Active Directory");
+        }
     }
 
     public ADQuerier() {
@@ -174,6 +180,36 @@ public class ADQuerier implements IMemberADQuerier, IPublicADQuerier {
             return null;
         }
     }
+
+    /////////////////////////// Méthodes pour le MemberController ///////////////////////////
+
+    public boolean changePassword(String cn, String prevPwd,String newPwd){
+        String filter = "(&(objectClass=user)(CN=" + cn + "))";
+        SearchControls searchControls = new SearchControls();
+        searchControls.setSearchScope(SearchControls.SUBTREE_SCOPE);
+        NamingEnumeration<SearchResult> res;
+        try {
+            res = this.context.search(AD_BASE, filter, searchControls);
+            if (res.hasMore()) {
+                SearchResult currentPerson = res.next();
+                String dn = currentPerson.getNameInNamespace();
+                System.out.println(dn);
+                this.context.addToEnvironment(Context.SECURITY_PRINCIPAL, dn);
+                this.context.addToEnvironment(Context.SECURITY_CREDENTIALS, prevPwd);
+                ModificationItem[] mods = new ModificationItem[1];
+                val encodedPwd = DatatypeConverter.printBase64Binary(('"'+"Jfi8ZH8#k"+'"').getBytes("UTF-16LE"));
+                mods[0] = new ModificationItem(DirContext.REPLACE_ATTRIBUTE, new BasicAttribute("unicodePwd", encodedPwd));
+                this.context.modifyAttributes(dn, mods);
+                return true;
+            }
+            return false;
+        } catch (NamingException e) {
+            throw new RuntimeException(e);
+        } catch (UnsupportedEncodingException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
 
     /////////////////////////// Méthodes pour le AdminController ///////////////////////////
 
