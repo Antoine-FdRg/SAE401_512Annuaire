@@ -46,7 +46,7 @@ java-deploy:
     artifacts:
         paths:
             - "*.jar"
-        expire_in: 1 week
+        expire_in: 1 day
 
 # Partie frontend (nodejs)
 
