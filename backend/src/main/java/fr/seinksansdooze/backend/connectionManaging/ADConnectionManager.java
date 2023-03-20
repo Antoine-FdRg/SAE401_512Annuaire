@@ -3,6 +3,8 @@ package fr.seinksansdooze.backend.connectionManaging;
 import fr.seinksansdooze.backend.connectionManaging.ADBridge.IMemberADQuerier;
 import fr.seinksansdooze.backend.connectionManaging.tokenManaging.ITokenGenerator;
 import fr.seinksansdooze.backend.connectionManaging.tokenManaging.ITokenSanitizer;
+import fr.seinksansdooze.backend.model.SeinkSansDoozeBackException;
+import org.springframework.http.HttpStatus;
 
 import javax.naming.NamingException;
 import java.lang.reflect.InvocationTargetException;
@@ -70,9 +72,13 @@ public class ADConnectionManager {
      * @param token Le token de la connexion à supprimer.
      */
     public void removeConnection(String token) {
-        connections.remove(token); // TODO: 13/03/2023 Est-ce que on ferme la connexion ou ça se fait tout seul
+        if (connections.get(token) == null) {
+            throw new SeinkSansDoozeBackException(
+                    HttpStatus.NOT_ACCEPTABLE,
+                    "Déconnexion impossible, la connexion visée n'existe pas.");
+        }
         connections.get(token).getQuerier().logout();
-
+        connections.remove(token);
 
     }
 

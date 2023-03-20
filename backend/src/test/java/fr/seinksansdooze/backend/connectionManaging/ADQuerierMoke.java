@@ -86,4 +86,9 @@ public class ADQuerierMoke implements IMemberADQuerier, IPublicADQuerier {
     public PartialPerson getFullPersonInfo(String cn) {
         return null;
     }
+
+    @Override
+    public boolean changePassword(String cn, String prevPwd, String newPwd) {
+        return false;
+    }
 }

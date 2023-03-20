@@ -26,5 +26,5 @@ public interface IMemberADQuerier extends IPublicADQuerier{
 
     PartialPerson getFullPersonInfo(String cn);
 
-
+    boolean changePassword(String cn, String prevPwd,String newPwd);
 }
