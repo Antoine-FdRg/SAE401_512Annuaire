@@ -42,11 +42,6 @@ java-deploy:
     stage: deploy
     script:
         - mvn $MAVEN_CLI_OPTS package -DskipTests
-        - cp target/*.jar $CI_PROJECT_DIR
-    artifacts:
-        paths:
-            - "*.jar"
-        expire_in: 1 day
 
 # Partie frontend (nodejs)
 
