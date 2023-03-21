@@ -1,12 +1,18 @@
 package fr.seinksansdooze.backend;
 
-import org.junit.jupiter.api.Disabled;
+import fr.seinksansdooze.backend.connectionManaging.ADBridge.IPublicADQuerier;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.test.mock.mockito.MockBean;
 
 @SpringBootTest
-@Disabled // FIXME: 20/03/2023 Temporaire en attendant de mock la connexion à AD
 class SSDBackendApplicationTests {
+    /**
+     * Nous mockons ce service ici pour eviter qu'il se connecte à AD au
+     * lancement de l'application lors des tests.
+     */
+    @MockBean
+    private IPublicADQuerier querier;
 
     @Test
     void contextLoads() {
