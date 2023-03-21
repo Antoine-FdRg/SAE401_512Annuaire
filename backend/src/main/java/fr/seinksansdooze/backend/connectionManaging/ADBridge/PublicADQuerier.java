@@ -2,6 +2,8 @@ package fr.seinksansdooze.backend.connectionManaging.ADBridge;
 
 import fr.seinksansdooze.backend.model.response.PartialPerson;
 import fr.seinksansdooze.backend.model.response.PartialStructure;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Repository;
 
 import javax.naming.NamingEnumeration;
@@ -12,8 +14,13 @@ import java.util.ArrayList;
 
 @Repository
 public class PublicADQuerier extends ADQuerier implements IPublicADQuerier {
-    public PublicADQuerier() {
-        super("dummy.query", "@Azertyuiop06200");
+
+    @Autowired
+    public PublicADQuerier(
+            @Value("${public.username}") String username,
+            @Value("${public.password}") String password
+    ) {
+        super(username, password);
     }
 
     /**
