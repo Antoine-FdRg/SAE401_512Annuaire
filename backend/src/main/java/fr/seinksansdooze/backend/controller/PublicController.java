@@ -1,6 +1,5 @@
 package fr.seinksansdooze.backend.controller;
 
-import fr.seinksansdooze.backend.connectionManaging.ADBridge.ADQuerier;
 import fr.seinksansdooze.backend.connectionManaging.ADBridge.IPublicADQuerier;
 import fr.seinksansdooze.backend.model.response.PartialPerson;
 import fr.seinksansdooze.backend.model.response.PartialStructure;
@@ -19,8 +18,8 @@ public class PublicController {
 
     private final IPublicADQuerier querier;
 
-    public PublicController() {
-        querier = ADQuerier.getPublicADQuerier();
+    public PublicController(IPublicADQuerier querier) {
+        this.querier = querier;
     }
 
     @ApiResponses({

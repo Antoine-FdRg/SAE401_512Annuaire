@@ -2,8 +2,6 @@ package fr.seinksansdooze.backend.connectionManaging.ADBridge;
 
 import fr.seinksansdooze.backend.model.response.FullPerson;
 import fr.seinksansdooze.backend.model.response.PartialGroup;
-import fr.seinksansdooze.backend.model.response.PartialPerson;
-import fr.seinksansdooze.backend.model.response.PartialStructure;
 import jakarta.xml.bind.DatatypeConverter;
 import lombok.val;
 
@@ -15,21 +13,11 @@ import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 import java.util.Properties;
 
-public class ADQuerier implements IMemberADQuerier, IPublicADQuerier {
+public abstract class ADQuerier implements IMemberADQuerier {
     private static final String AD_URL = "ldap://10.22.32.2:389";
-    private static final String AD_BASE = "OU=512BankFR,DC=EQUIPE1B,DC=local";
+    protected static final String AD_BASE = "OU=512BankFR,DC=EQUIPE1B,DC=local";
 
-    private DirContext context;
-
-    private static IPublicADQuerier publicADQuerier = null;
-
-    public static IPublicADQuerier getPublicADQuerier() {
-        if (publicADQuerier == null) {
-            //TODO créer un utilisateur public dans l'AD
-            publicADQuerier = new ADQuerier("antoine.fadda.rodriguez","@Arnaudisthebest83");
-        }
-        return publicADQuerier;
-    }
+    protected DirContext context;
 
     protected ADQuerier(String username, String pwd) {
         //rajouter un systeme de session et d'authentification
@@ -89,95 +77,6 @@ public class ADQuerier implements IMemberADQuerier, IPublicADQuerier {
             return true;
         } catch (NamingException e) {
             return false;
-        }
-    }
-
-    /////////////////////////// Méthodes pour le PublicController ///////////////////////////
-
-    /**
-     * Méthode répondant à la route GET /api/public/search/person
-     * @param searchedName le nom de la personne recherchée
-     * @return une liste de personnes correspondant à la recherche
-     */
-    public ArrayList<PartialPerson> searchPerson(String searchedName){
-        NamingEnumeration<SearchResult> res = this.search(ObjectType.PERSON, searchedName);
-        ArrayList<PartialPerson> persons = new ArrayList<>();
-        try {
-            while (res.hasMore()) {
-                SearchResult currentPerson = res.next();
-                PartialPerson person = new PartialPerson(currentPerson);
-                persons.add(person);
-            }
-            return persons;
-        }catch (NamingException e) {
-            return persons;
-        }
-    }
-
-    /**
-     * Méthode répondant à la route GET /api/public/search/structure
-     * @param searchedName le nom de la structure recherchée
-     * @return une liste de structures correspondant à la recherche
-     */
-    public ArrayList<PartialStructure> searchStructure(String searchedName){
-        NamingEnumeration<SearchResult> res = this.search(ObjectType.STRUCTURE, searchedName);
-        ArrayList<PartialStructure> structures = new ArrayList<>();
-        try {
-            while (res.hasMore()) {
-                SearchResult currentStructure = res.next();
-                PartialStructure structure = new PartialStructure(currentStructure);
-                structures.add(structure);
-            }
-            return structures;
-        }catch (NamingException e) {
-            return structures;
-        }
-    }
-
-
-    /**
-     * Méthode répondant à la route GET /api/public/info/person/{cn}
-     * @param cn le cn de la personne recherchée
-     * @return une personne correspondant à la recherche
-     */
-    public PartialPerson getPartialPersonInfo(String cn) {
-        String filter = "(&(objectClass=user)(CN=" + cn + "))";
-        SearchControls searchControls = new SearchControls();
-        searchControls.setSearchScope(SearchControls.SUBTREE_SCOPE);
-        NamingEnumeration<SearchResult> res;
-        try {
-            res = this.context.search(AD_BASE, filter, searchControls);
-            if (res.hasMore()) {
-                SearchResult currentPerson = res.next();
-                PartialPerson person = new PartialPerson(currentPerson);
-                return person;
-            }
-            return null;
-        } catch (NamingException e) {
-            return null;
-        }
-    }
-
-    /**
-     * Méthode répondant à la route GET /api/public/info/structure/{ou}
-     * @param ou le ou de la structure recherchée
-     * @return une structure correspondant à la recherche
-     */
-    @Override
-    public PartialStructure getPartialStructureInfo(String ou) {
-        String filter = "(&(objectClass=organizationalUnit)(distinguishedName=" + ou + "))";
-        SearchControls searchControls = new SearchControls();
-        searchControls.setSearchScope(SearchControls.SUBTREE_SCOPE);
-        NamingEnumeration<SearchResult> res;
-        try {
-            res = this.context.search(AD_BASE, filter, searchControls);
-            if (res.hasMore()) {
-                SearchResult currentStructure = res.next();
-                return new PartialStructure(currentStructure);
-            }
-            return null;
-        } catch (NamingException e) {
-            return null;
         }
     }
 
@@ -242,7 +141,7 @@ public class ADQuerier implements IMemberADQuerier, IPublicADQuerier {
     // recherche une personne ou une structure
     // consulter la liste des groupes
     // TODO rajouter un paramètre filtrer pour permettre les requetes incluant des filtres
-    private NamingEnumeration<SearchResult> search(ObjectType searchType, String searchValue) {
+    protected NamingEnumeration<SearchResult> search(ObjectType searchType, String searchValue) {
         String filter = "(&(objectClass=" + searchType + ")(" + searchType.getNamingAttribute() + "=*" + searchValue + "*))";
         SearchControls searchControls = new SearchControls();
         searchControls.setSearchScope(SearchControls.SUBTREE_SCOPE);
