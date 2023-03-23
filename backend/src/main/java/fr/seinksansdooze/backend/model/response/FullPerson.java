@@ -39,13 +39,18 @@ public class FullPerson extends PartialPerson {
 
     public FullPerson(SearchResult result) {
         super(result);
-        //TODO: ajouter les attributs manquants dans l'AD
+
         this.login = result.getAttributes().get("sAMAccountName").toString().split(": ")[1];
+        /*FIXME : Tous les objets sont a null ca provoque une erreure, il faut attendre l'implémentation des datas
+        //TODO: ajouter les attributs manquants dans l'AD
+
         this.email = result.getAttributes().get("mail").toString().split(": ")[1];
         this.personalPhone = result.getAttributes().get("mobile").toString().split(": ")[1];
         this.professionalPhone = result.getAttributes().get("telephoneNumber").toString().split(": ")[1];
         this.address = result.getAttributes().get("streetAddress").toString().split(": ")[1];
         this.managerFullName = result.getAttributes().get("manager").toString().split(",")[0].split("=")[1];
         this.managerCN = result.getAttributes().get("manager").toString().split(": ")[1];
+
+ */
     }
 }

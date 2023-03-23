@@ -14,7 +14,7 @@ public class TestADQuerier {
 
     public static void main(String[] args) {
         testPublicQuerier();
-//        testAuthenticatedQuerier();
+        testAuthenticatedQuerier();
 
 //
 
@@ -80,7 +80,10 @@ public class TestADQuerier {
         String id2 = "dummy.query";
         String pwd2 = "@Azertyuiop06200";
 
-        IAuthentifiedADQuerier querier = new AuthentifiedADQuerier(id2, pwd2);
+        String id3 = "thomas.gorisse";
+        String pwd3 = "@Arnaudisthebest83";
+
+        IAuthentifiedADQuerier querier = new AuthentifiedADQuerier(id3, pwd3);
         querier.getAllGroups().forEach(System.out::println);
         System.out.println(querier.createGroup("test1"));
         System.out.println(querier.getFullPersonInfo("Thomas TG. Gorisse"));
