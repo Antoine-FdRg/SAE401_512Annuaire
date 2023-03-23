@@ -1,3 +1,4 @@
+import { SearchService } from './../service/search.service';
 import { ApplicationRef, Component, ElementRef, Injector, ViewChild } from '@angular/core';
 import { elementAt } from 'rxjs';
 
@@ -7,29 +8,31 @@ import { elementAt } from 'rxjs';
   styleUrls: ['./home-page.component.css']
 })
 export class HomePageComponent {
-onSearch($event: SubmitEvent) {
-throw new Error('Method not implemented.');
-}
-  branches=["Bordeaux","Lyon","Marseille","Paris","Toulouse"];
-  constructor() {
 
-   }
+  branches = ["Bordeaux", "Lyon", "Marseille", "Paris", "Toulouse"];
+  constructor(private searchService: SearchService) {
+
+  }
 
   openDropdown() {
     document.getElementsByClassName("dropdown")![0].classList.toggle("show");
   }
   selectHouse() {
-    document.getElementById("house")!.style.display="block";
-    document.getElementById("person")!.style.display="none";
-    document.getElementById("house1")!.style.display="none";
-    document.getElementById("person1")!.style.display="block";
+    document.getElementById("house")!.style.display = "block";
+    document.getElementById("person")!.style.display = "none";
+    document.getElementById("house1")!.style.display = "none";
+    document.getElementById("person1")!.style.display = "block";
   }
   selectPerson() {
-    document.getElementById("person")!.style.display="block";
-    document.getElementById("house")!.style.display="none";
-    document.getElementById("person1")!.style.display="none";
-    document.getElementById("house1")!.style.display="block";
+    document.getElementById("person")!.style.display = "block";
+    document.getElementById("house")!.style.display = "none";
+    document.getElementById("person1")!.style.display = "none";
+    document.getElementById("house1")!.style.display = "block";
   }
-
+  onSearch($event: SubmitEvent) {
+    $event.preventDefault();
+    var search = (<HTMLInputElement>document.getElementById("search")).value;
+    this.searchService.search(search);
   }
+}
 

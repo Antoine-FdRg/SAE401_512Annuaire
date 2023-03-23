@@ -1,119 +1,99 @@
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Rounded:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" />
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Rounded:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" />
+<link
+  rel="stylesheet"
+  href="https://fonts.googleapis.com/css2?family=Material+Symbols+Rounded:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200"
+/>
+<link
+  rel="stylesheet"
+  href="https://fonts.googleapis.com/css2?family=Material+Symbols+Rounded:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200"
+/>
 
 <section id="sheetsContainer">
-    <section class="sheet" *ngFor="let person of listPerson">
-        <div class="topInfos">
-            <div class="names">
-                <div class="name">
-                    {{person.name}}
-                </div>
-                <div class="surname">
-                    {{person.surname}}
-                </div>
-            </div>
+  <section class="sheet" *ngFor="let person of listPerson">
+    <div class="topInfos">
+      <div class="names">
+        <div class="name">
+          {{ person.firstName }}
+        </div>
+        <div class="surname">
+          {{ person.lastName }}
+        </div>
+      </div>
 
-            <div class="role"
-                [class.blue] = "
-                person.role=='Directeur financier'
-                ||
-                person.role=='Responsable de paie'
-                ||
-                person.role=='Responsable comptabilité'
-                "
-                [class.orange] = "
-                person.role=='Directeur administratif et juridique'
-                ||
-                person.role=='Responsable juridique'
-                ||
-                person.role=='Responsable administration'
-                ||
-                person.role=='Responsable adjoint administratif'
-                ||
-                person.role=='Responsable adjoint juridique'
-                "
-                [class.green] = "
-                person.role=='Directeur ressources humaines'
-                ||
-                person.role=='Responsable gestion du personnel'
-                ||
-                person.role=='Responsable recrutement'
-                "
-                [class.lightBlue] = "
-                person.role=='Directrice technique'
-                ||
-                person.role=='Responsable recherche et développement'
-                ||
-                person.role=='Responsable logistique'
-                "
-                [class.purple] = "
-                person.role=='Directeur commercial'
-                ||
-                person.role=='Responsable prduit'
-                ||
-                person.role=='Responsable marketing'
-                "
-                [class.red1] = "
-                person.role=='Présidente'
-                "
-                [class.red2] = "
-                person.role=='Directeur général'
-                "
-                [class.red3] = "
-                person.role=='Directeur général adjoint'
-                ||
-                person.role=='Secrétaire général'
-                ||
-                person.role=='Responsable marketing'
-                ||
-                person.role=='Responsable produit'
-                "
-            >
-                {{person.role}}
-            </div>
+      <div
+        class="position"
+        [class.blue]="
+          person.position == 'Directeur financier' ||
+          person.position == 'Responsable de paie' ||
+          person.position == 'Responsable comptabilité'
+        "
+        [class.orange]="
+          person.position == 'Directeur administratif et juridique' ||
+          person.position == 'Responsable juridique' ||
+          person.position == 'Responsable administration' ||
+          person.position == 'Responsable adjoint administratif' ||
+          person.position == 'Responsable adjoint juridique'
+        "
+        [class.green]="
+          person.position == 'Directeur ressources humaines' ||
+          person.position == 'Responsable gestion du personnel' ||
+          person.position == 'Responsable recrutement'
+        "
+        [class.lightBlue]="
+          person.position == 'Directrice technique' ||
+          person.position == 'Responsable recherche et développement' ||
+          person.position == 'Responsable logistique'
+        "
+        [class.purple]="
+          person.position == 'Directeur commercial' ||
+          person.position == 'Responsable prduit' ||
+          person.position == 'Responsable marketing'
+        "
+        [class.red1]="person.position == 'Présidente'"
+        [class.red2]="person.position == 'Directeur général'"
+        [class.red3]="
+          person.position == 'Directeur général adjoint' ||
+          person.position == 'Secrétaire général' ||
+          person.position == 'Responsable marketing' ||
+          person.position == 'Responsable produit'
+        "
+      >
+        {{ person.position }}
+      </div>
 
-            <div class="contacts">
-                <div class="phone">
-                    <span class="material-symbols-rounded infoIcon">
-                        call
-                    </span>
-                    <span>
-                        {{person.phone}}
-                    </span>
-                </div>
-
-                <div class="email">
-                    <span class="material-symbols-rounded infoIcon">
-                        mail
-                    </span>
-
-                    <span>
-                        {{person.email}}
-                    </span>
-                </div>
-            </div>
+      <div class="contacts">
+        <div class="phone">
+          <span class="material-symbols-rounded infoIcon"> call </span>
+          <span>
+            {{ person.phone }}
+          </span>
         </div>
 
-        <div class="separator"></div>
+        <div class="email">
+          <span class="material-symbols-rounded infoIcon"> mail </span>
 
-        <div class="bottomInfos">
-            <div class="login">
-                <div class="entete">
-                    login
-                </div>
-                <div class="infoContent">
-                    {{person.login}}
-                </div>
-            </div>
-
-            <div class="tutor">
-                <div class="entete">
-                    responsable
-                </div>
-                <div class="infoContent">
-                    {{person.tutor}}
-                </div>
-            </div>
+          <span>
+            {{ person.email }}
+          </span>
         </div>
-    </section>
+      </div>
+    </div>
+
+    <div class="separator"></div>
+
+    <div class="bottomInfos">
+      <div class="login">
+        <div class="entete">login</div>
+        <div class="infoContent">
+          {{ person.login }}
+        </div>
+      </div>
+
+      <div class="tutor">
+        <div class="entete">responsable</div>
+        <div class="infoContent">
+          {{ person.tutor }}
+        </div>
+      </div>
+    </div>
+  </section>
 </section>

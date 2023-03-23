@@ -1,9 +1,10 @@
+import { Router, RouterModule } from '@angular/router';
 import { LoginService } from './../../service/login.service';
 import { AfterViewInit, Component, OnInit, ViewChild, ElementRef, HostListener, ApplicationRef, Injector } from '@angular/core';
 
 enum Status {
   connected,
-  diconnected
+  disconnected
 }
 
 @Component({
@@ -12,16 +13,17 @@ enum Status {
   styleUrls: ['./profile.component.css']
 })
 export class ProfileComponent {
-  status = Status.diconnected
+  status = Status.disconnected;
   menuShown = false;
 
   name = "Jean";
   surname = "Paul";
-  initials : string = "";
+  initials: string = "";
 
-  constructor(user : LoginService){
-    this.name = user.userBase.name;
-    this.surname = user.userBase.surname;
+  constructor(loginService: LoginService, private router: Router) {
+    this.status = Status.disconnected;
+    this.name = loginService.userBase.name;
+    this.surname = loginService.userBase.surname;
     this.initials = this.name.charAt(0) + this.surname.charAt(0);
   }
 
@@ -34,21 +36,32 @@ export class ProfileComponent {
 
   @HostListener('document:click', ['$event'])
   onDocumentClick(event: MouseEvent) {
-    let target : HTMLElement = event.target as HTMLElement;
-    if(target.id !== "connexionButton"){
+    let target: HTMLElement = event.target as HTMLElement;
+    if (target.id !== "connexionButton") {
       this.visibility["infoMenu"] = false;
       this.menuShown = false;
     }
   }
 
-  connexionClicked(){
-    if(this.menuShown){
-      this.visibility["infoMenu"] = false;
-      this.menuShown = false;
-      return;
+  connexionClicked() {
+
+    if (this.status == 1) {
+      // go to login page
+      console.log("go to login page");
+
+      this.router.navigate(['/login']);
     }
-    this.menuShown = true;
-    this.visibility["infoMenu"] = true;
+    else {
+
+      if (this.menuShown) {
+        this.visibility["infoMenu"] = false;
+        this.menuShown = false;
+        return;
+      }
+      this.menuShown = true;
+      this.visibility["infoMenu"] = true;
+    }
+
   }
 }
 

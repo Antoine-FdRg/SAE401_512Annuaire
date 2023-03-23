@@ -1,0 +1,25 @@
+import { AppComponent } from './../app.component';
+import { HttpClient } from '@angular/common/http';
+import { Injectable } from '@angular/core';
+import { apiURL } from './apiURL';
+import { Person } from '../person';
+@Injectable({
+  providedIn: 'root'
+})
+export class SearchService {
+  resultShowing: boolean = false;
+  lastResults: Person[] = [];
+  constructor(private http: HttpClient) { }
+
+  search(search: string) {
+    this.http.get(apiURL + "/public/search/person", { params: { name: search } }).subscribe(
+      (response) => {
+        console.log(response);
+        this.resultShowing = true;
+        this.lastResults = response as Person[];
+      }
+    );
+
+
+  }
+}

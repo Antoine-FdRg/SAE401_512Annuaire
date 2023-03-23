@@ -8,6 +8,7 @@
   font-style: normal;
   font-weight: 700;
   /* outline: 2px green solid; */
+  scroll-behavior: smooth;
 }
 :root {
   --blue512: #5271ff;
@@ -17,7 +18,7 @@
   --white-text: white;
   --white-gradient: white;
   --dark_blue_512: #1169d1;
-
+  --person512: #f6f6f6;
   /*
     TODO à modifier :
     (à obtenir avec 1ere lettre du prénom et premiere lettre du nom de l'utilisateur)
@@ -80,7 +81,6 @@ body {
 .profile-picture > div {
   font-size: 1.2em;
 }
-
 
 /*
 .profile-picture::after {

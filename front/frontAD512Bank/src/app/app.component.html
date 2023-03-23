@@ -1,5 +1,5 @@
 <header>
-  <div class="bouton512">
+  <div class="bouton512" routerLink="home">
     <img src="../assets/512_bank_officiel.png" alt="512Bank" />
     <div>512 Bank</div>
   </div>
@@ -10,6 +10,7 @@
   </section>
 </header>
 <main>
-  <app-home-page></app-home-page>
-  <router-outlet (activate)="showResults()"></router-outlet>
+  <router-outlet></router-outlet>
+
+  <app-result *ngIf="showResults()"></app-result>
 </main>

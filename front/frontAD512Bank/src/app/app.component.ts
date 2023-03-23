@@ -1,3 +1,4 @@
+import { SearchService } from './service/search.service';
 import { Component } from '@angular/core';
 
 @Component({
@@ -7,8 +8,8 @@ import { Component } from '@angular/core';
 })
 export class AppComponent {
   title = 'frontAD512Bank';
-
-  public showResults(){
-
+  constructor(private searchService: SearchService) { }
+  public showResults(): boolean {
+    return this.searchService.resultShowing;
   }
 }

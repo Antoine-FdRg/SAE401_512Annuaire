@@ -1,9 +1,9 @@
 export interface Person {
-  surname:string;
-  name:string;
-  phone:string;
-  role:string;
-  login:string;
-  tutor:string;
-  email:string;
+  firstName: string;
+  lastName: string;
+  phone: string;
+  position: string;
+  login?: string;
+  tutor?: string;
+  email?: string;
 }
