@@ -1,13 +1,11 @@
-package fr.seinksansdooze.backend.connectionManaging.ADBridge;
+package fr.seinksansdooze.backend.connectionManaging.ADBridge.interfaces;
 
+import fr.seinksansdooze.backend.model.response.FullPerson;
 import fr.seinksansdooze.backend.model.response.PartialGroup;
-import fr.seinksansdooze.backend.model.response.PartialPerson;
 
-import javax.naming.NamingEnumeration;
-import javax.naming.directory.SearchResult;
 import java.util.ArrayList;
 
-public interface IMemberADQuerier extends IPublicADQuerier{
+public interface IAuthentifiedADQuerier {
     boolean login(String username, String pwd);
 
     boolean logout();
@@ -22,9 +20,8 @@ public interface IMemberADQuerier extends IPublicADQuerier{
 
     boolean removeUserFromGroup(String groupName, String username);
 
-    NamingEnumeration<SearchResult> searchPerson(String person, String groupName);
-
-    PartialPerson getFullPersonInfo(String cn);
+    FullPerson getFullPersonInfo(String cn);
 
     boolean changePassword(String cn, String prevPwd,String newPwd);
+
 }

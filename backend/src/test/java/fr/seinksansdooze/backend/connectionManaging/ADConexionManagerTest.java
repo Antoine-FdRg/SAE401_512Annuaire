@@ -1,7 +1,7 @@
 package fr.seinksansdooze.backend.connectionManaging;
 
 
-import fr.seinksansdooze.backend.connectionManaging.ADBridge.IMemberADQuerier;
+import fr.seinksansdooze.backend.connectionManaging.ADBridge.interfaces.IAuthentifiedADQuerier;
 import fr.seinksansdooze.backend.connectionManaging.tokenManaging.TokenGenerator;
 import fr.seinksansdooze.backend.connectionManaging.tokenManaging.TokenSanitizer;
 import org.junit.jupiter.api.Test;
@@ -18,12 +18,10 @@ public class ADConexionManagerTest {
 
         ADConnectionManager manager = new ADConnectionManager(new TokenGenerator(), new TokenSanitizer(), ADQuerierMoke.class);
         AtomicReference<String> token = new AtomicReference<>();
-        assertDoesNotThrow(() -> {
-            token.set(manager.addConnection("user1", "mdp1"));
-        });
+        assertDoesNotThrow(() -> token.set(manager.addConnection("user1", "mdp1")));
         assertThrows(NamingException.class, () -> manager.addConnection("user2", "mdp2"));
         assertDoesNotThrow(() -> {
-            IMemberADQuerier q = manager.getQuerier(token.get());
+            IAuthentifiedADQuerier q = manager.getQuerier(token.get());
             assertTrue(q instanceof ADQuerierMoke);
         });
         manager.close();

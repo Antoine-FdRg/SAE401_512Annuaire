@@ -1,4 +1,4 @@
-package fr.seinksansdooze.backend.connectionManaging.ADBridge;
+package fr.seinksansdooze.backend.connectionManaging.ADBridge.model;
 
 
 public enum ObjectType {

@@ -1,17 +1,16 @@
 package fr.seinksansdooze.backend.connectionManaging;
 
-import fr.seinksansdooze.backend.connectionManaging.ADBridge.IMemberADQuerier;
-import fr.seinksansdooze.backend.connectionManaging.ADBridge.IPublicADQuerier;
+import fr.seinksansdooze.backend.connectionManaging.ADBridge.interfaces.IAuthentifiedADQuerier;
+import fr.seinksansdooze.backend.connectionManaging.ADBridge.interfaces.IPublicADQuerier;
+import fr.seinksansdooze.backend.model.response.FullPerson;
 import fr.seinksansdooze.backend.model.response.PartialGroup;
 import fr.seinksansdooze.backend.model.response.PartialPerson;
 import fr.seinksansdooze.backend.model.response.PartialStructure;
 
-import javax.naming.NamingEnumeration;
-import javax.naming.directory.SearchResult;
 import java.util.ArrayList;
 import java.util.HashMap;
 
-public class ADQuerierMoke implements IMemberADQuerier, IPublicADQuerier {
+public class ADQuerierMoke implements IAuthentifiedADQuerier, IPublicADQuerier {
 
     private static final HashMap<String, String> user = new HashMap<>(){{
         put("user1", "mdp1");
@@ -78,12 +77,7 @@ public class ADQuerierMoke implements IMemberADQuerier, IPublicADQuerier {
     }
 
     @Override
-    public NamingEnumeration<SearchResult> searchPerson(String person, String groupName) {
-        return null;
-    }
-
-    @Override
-    public PartialPerson getFullPersonInfo(String cn) {
+    public FullPerson getFullPersonInfo(String cn) {
         return null;
     }
 

@@ -1,4 +1,4 @@
-package fr.seinksansdooze.backend.connectionManaging.ADBridge;
+package fr.seinksansdooze.backend.connectionManaging.ADBridge.interfaces;
 
 import fr.seinksansdooze.backend.model.response.PartialPerson;
 import fr.seinksansdooze.backend.model.response.PartialStructure;

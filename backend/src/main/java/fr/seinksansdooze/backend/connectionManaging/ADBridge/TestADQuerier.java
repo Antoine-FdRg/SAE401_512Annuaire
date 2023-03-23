@@ -1,5 +1,9 @@
 package fr.seinksansdooze.backend.connectionManaging.ADBridge;
 
+import fr.seinksansdooze.backend.connectionManaging.ADBridge.interfaces.IAuthentifiedADQuerier;
+import fr.seinksansdooze.backend.connectionManaging.ADBridge.interfaces.IPublicADQuerier;
+import fr.seinksansdooze.backend.connectionManaging.ADBridge.model.ObjectType;
+
 import javax.naming.NamingEnumeration;
 import javax.naming.NamingException;
 import javax.naming.directory.Attributes;
@@ -9,12 +13,9 @@ import java.util.ArrayList;
 public class TestADQuerier {
 
     public static void main(String[] args) {
-//        IPublicADQuerier adQuerier = ADQuerier.getPublicADQuerier();
-//        IMemberADQuerier adQuerier = new ADQuerier("antoine.fadda.rodriguez","@Arnaudisthebest83");
-//        System.out.println(adQuerier.changePassword("Antoine AFR. Fadda Rodriguez","@Arnaudisthebest83","@Antoineisthebest83"));
-//        System.out.println("api/search/person   api/search/structures   api/admin/group/all");
+        testPublicQuerier();
+//        testAuthenticatedQuerier();
 
-//        adQuerier.searchPerson("thomas").forEach(System.out::println);
 //
 
 //        System.out.println("api/info/person/{cn}");
@@ -72,30 +73,28 @@ public class TestADQuerier {
 //            adQuerier.getAllGroups().forEach(System.out::println);
     }
 
-    public static void displayResults(NamingEnumeration<SearchResult> results, ObjectType searchedObject) {
-        System.out.println("Résultats :");
-        SearchResult searchResult;
-        while (true) {
-            try {
-                if (!results.hasMore()) break;
-                searchResult = results.next();
-            } catch (NamingException e) {
-                throw new RuntimeException(e);
-            }
-            Attributes attributes = searchResult.getAttributes();
-            System.out.println(attributes.get(searchedObject.getNamingAttribute()));
-//            System.out.println(attributes.get("member"));
-        }
-        System.out.println("\n");
+    private static void testAuthenticatedQuerier() {
+        String id = "antoine.fadda.rodriguez";
+        String pwd = "@Arnaudisthebest83";
+
+        String id2 = "dummy.query";
+        String pwd2 = "@Azertyuiop06200";
+
+        IAuthentifiedADQuerier querier = new AuthentifiedADQuerier(id2, pwd2);
+        querier.getAllGroups().forEach(System.out::println);
+        System.out.println(querier.createGroup("test1"));
+        System.out.println(querier.getFullPersonInfo("Thomas TG. Gorisse"));
     }
 
-    public static void displayResults(ArrayList<SearchResult> results, ObjectType searchedObject) {
-        System.out.println("Résultats :");
-        SearchResult searchResult;
-       for (SearchResult result : results) {
-            Attributes attributes = result.getAttributes();
-            System.out.println(attributes.get(searchedObject.getNamingAttribute()));
-        }
-        System.out.println("\n");
+    private static void testPublicQuerier(){
+        IPublicADQuerier adQuerier = new PublicADQuerier("dummy.query","@Azertyuiop06200");
+
+        adQuerier.searchPerson("thomas").forEach(System.out::println);
+        adQuerier.searchStructure("direc").forEach(System.out::println);
+        System.out.println(adQuerier.getPartialPersonInfo("Thomas TG. Gorisse"));
+        System.out.println(adQuerier.getPartialStructureInfo("OU=Direction Général,OU=512Direction,OU=512Batiment,OU=512BankFR,DC=EQUIPE1B,DC=local"));
+
+        ((ADQuerier) adQuerier).logout();
     }
+
 }
