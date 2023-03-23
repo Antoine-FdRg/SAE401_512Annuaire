@@ -2,7 +2,6 @@ package fr.seinksansdooze.backend.connectionManaging.ADBridge;
 
 import fr.seinksansdooze.backend.model.response.PartialPerson;
 import fr.seinksansdooze.backend.model.response.PartialStructure;
-import lombok.SneakyThrows;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Repository;
@@ -11,7 +10,6 @@ import javax.naming.NamingEnumeration;
 import javax.naming.NamingException;
 import javax.naming.directory.SearchControls;
 import javax.naming.directory.SearchResult;
-import java.util.ArrayList;
 import java.util.List;
 
 @Repository
@@ -23,53 +21,6 @@ public class PublicADQuerier extends ADQuerier implements IPublicADQuerier {
             @Value("${public.password}") String password
     ) {
         super(username, password);
-    }
-
-    /**
-     * Déroule les résultats d'une recherche LDAP, pagine-les et les place dans une liste.
-     *
-     * @param searchResults    Une énumération de résultats de recherche LDAP à dérouler. Si elle est nulle, une liste
-     *                         vide est automatiquement retournée.
-     * @param page             Le numéro de la page de résultats à retourner (commençant à zéro).
-     * @param perPage          Le nombre d'éléments par page à retourner.
-     * @param listContentClass La classe d'objet à instancier pour chaque résultat de recherche. Cette classe doit avoir
-     *                         un constructeur prenant un objet SearchResult en paramètre.
-     * @return Une liste d'objets correspondants au contenu de la liste spécifiée, paginée selon les paramètres
-     * spécifiés. Si aucun résultat n'est trouvé, une liste vide est renvoyée.
-     */
-    @SneakyThrows
-    private static List<?> unroll(NamingEnumeration<SearchResult> searchResults, int page, int perPage, Class<?> listContentClass) {
-        if (searchResults == null) return List.of();
-
-        List<Object> items = new ArrayList<>();
-
-        boolean hasMore;
-        while (true) {
-            try {
-                hasMore = searchResults.hasMore();
-            } catch (NamingException e) {
-                hasMore = false;
-            }
-            if (!hasMore) break;
-
-            SearchResult currentItem;
-            try {
-                currentItem = searchResults.next();
-            } catch (NamingException e) {
-                break;
-            }
-
-            Object content = listContentClass.getDeclaredConstructor(SearchResult.class).newInstance(currentItem);
-            items.add(content);
-        }
-
-        // On fait la pagination
-        int startIndex = page * perPage;
-        if (startIndex > items.size()) return List.of();
-
-        int endIndex = Math.min(startIndex + perPage, items.size());
-
-        return items.subList(startIndex, endIndex);
     }
 
     /**
