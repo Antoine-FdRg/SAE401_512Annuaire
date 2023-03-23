@@ -30,7 +30,7 @@ public class PublicController {
     public List<PartialPerson> searchPerson(@RequestParam String name,
                                             @RequestParam(defaultValue = "0") int page,
                                             @RequestParam(defaultValue = "25") int perPage) {
-        return querier.searchPerson(name);
+        return querier.searchPerson(name, page, perPage);
     }
 
     @ApiResponses({
@@ -41,7 +41,7 @@ public class PublicController {
     public List<PartialStructure> searchStructure(@RequestParam String name,
                                                   @RequestParam(defaultValue = "0") int page,
                                                   @RequestParam(defaultValue = "25") int perPage) {
-        return querier.searchStructure(name);
+        return querier.searchStructure(name, page, perPage);
     }
 
     @GetMapping("/info/person/{cn}")

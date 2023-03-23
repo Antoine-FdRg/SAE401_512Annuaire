@@ -10,6 +10,7 @@ import javax.naming.NamingEnumeration;
 import javax.naming.directory.SearchResult;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 
 public class ADQuerierMoke implements IMemberADQuerier, IPublicADQuerier {
 
@@ -37,12 +38,12 @@ public class ADQuerierMoke implements IMemberADQuerier, IPublicADQuerier {
     }
 
     @Override
-    public ArrayList<PartialPerson> searchPerson(String cn) {
+    public List<PartialPerson> searchPerson(String cn, int page, int perPage) {
         return null;
     }
 
     @Override
-    public ArrayList<PartialStructure> searchStructure(String ou) {
+    public List<PartialStructure> searchStructure(String ou, int page, int perPage) {
         return null;
     }
 
