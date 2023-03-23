@@ -16,6 +16,9 @@ import java.util.ArrayList;
 
 public class AuthentifiedADQuerier extends ADQuerier implements IAuthentifiedADQuerier {
 
+    public AuthentifiedADQuerier(String username, String pwd) {
+        super(username, pwd);
+    }
 
     /**
      * Méthode répondant à la route GET /api/admin/group/all

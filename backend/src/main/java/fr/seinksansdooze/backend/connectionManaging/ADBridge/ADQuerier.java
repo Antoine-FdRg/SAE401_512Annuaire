@@ -10,7 +10,7 @@ import java.util.ArrayList;
 import java.util.Properties;
 
 public abstract class ADQuerier {
-    private static final String AD_URL = "ldap://10.22.32.2:389";
+    private static final String AD_URL = "ldap://10.22.32.2:389/";  //389 (search et createSubcontext) ou 3268 (search only) ou 636 (SSL)
     protected static final String AD_BASE = "OU=512BankFR,DC=EQUIPE1B,DC=local";
 
     protected DirContext context;
@@ -37,15 +37,17 @@ public abstract class ADQuerier {
     public boolean login(String username, String pwd) {
         Properties env = new Properties();
         username = username + "@EQUIPE1B.local";
+        env.put(Context.INITIAL_CONTEXT_FACTORY, "com.sun.jndi.ldap.LdapCtxFactory");
+        env.put(Context.PROVIDER_URL, AD_URL);
+//        env.put(Context.SECURITY_PROTOCOL, "ssl");
         env.put(Context.SECURITY_AUTHENTICATION, "Simple");
         env.put(Context.SECURITY_PRINCIPAL, username);
         env.put(Context.SECURITY_CREDENTIALS, pwd);
-        env.put(Context.INITIAL_CONTEXT_FACTORY, "com.sun.jndi.ldap.LdapCtxFactory");
-        env.put(Context.PROVIDER_URL, AD_URL); //389 (search et createSubcontext) ou 3268 (search only)
         try {
             this.context = new InitialDirContext(env);
             return true;
         } catch (NamingException e) {
+            System.out.println(e);
             return false;
         }
     }
@@ -181,7 +183,7 @@ public abstract class ADQuerier {
     }
 
     //  api/admin/search/person/{person}/{groupName}
-    public NamingEnumeration<SearchResult> searchPerson(String person, String groupName) {
+    private NamingEnumeration<SearchResult> searchPerson(String person, String groupName) {
         String filter = "(&(objectClass=user)(CN=*" + person + "*))";
         SearchControls searchControls = new SearchControls();
         searchControls.setSearchScope(SearchControls.SUBTREE_SCOPE);
