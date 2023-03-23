@@ -9,7 +9,7 @@ public enum RateLimiterSingleton {
         rateLimiter = new RateLimiter(10,60);
     }
 
-    public RateLimiter getRateLimiter() {
+    public RateLimiter get() {
         return rateLimiter;
     }
 }

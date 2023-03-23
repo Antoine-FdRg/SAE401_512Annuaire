@@ -60,7 +60,7 @@ public class RateLimiter implements Closeable {
      */
     public boolean tryConsume(String key) {
         if (rateLimiters.containsKey(key)) {
-            return rateLimiters.get(key).tryConsume(1);
+            return rateLimiters.getAndUpdateTimeSinceLastUse(key).tryConsume(1);
         } else {
             Bucket bucket = bucketCreator();
             rateLimiters.put(key, bucket);

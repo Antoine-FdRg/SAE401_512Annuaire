@@ -3,6 +3,7 @@ package fr.seinksansdooze.backend.controller;
 
 import fr.seinksansdooze.backend.connectionManaging.ADConnectionManager;
 import fr.seinksansdooze.backend.connectionManaging.ADConnectionManagerSingleton;
+import fr.seinksansdooze.backend.connectionManaging.rateLimit.RateLimiterSingleton;
 import fr.seinksansdooze.backend.model.SeinkSansDoozeBackException;
 import fr.seinksansdooze.backend.model.payload.ChangeGroupsPayload;
 import fr.seinksansdooze.backend.model.response.PartialPerson;
@@ -12,6 +13,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
 import javax.naming.NamingException;
+import javax.servlet.http.HttpServletRequest;
 import java.util.List;
 
 /**
@@ -29,17 +31,23 @@ public class AdminController {
     })
     @GetMapping("/ping/{token}")
     public String ping(@CookieValue("token") String token) {
-        try {
-            if (connectionManager.getQuerier(token).getClass()!= null) {
-                return "ping réussi";
+        if (RateLimiterSingleton.INSTANCE.get().tryConsume("request.getRemoteAddr()")){
+            try {
+                if (connectionManager.getQuerier(token).getClass()!= null) {
+                    return "ping réussi";
+                }
+                throw new RuntimeException("Token invalide");
+            } catch (NamingException e) {
+                throw new SeinkSansDoozeBackException(
+                        HttpStatus.UNAUTHORIZED,
+                        "Erreur de connexion, la session a peut être expirée, veuillez vous reconnecter."
+                );
             }
-            throw new RuntimeException("Token invalide");
-        } catch (NamingException e) {
-            throw new SeinkSansDoozeBackException(
-                    HttpStatus.UNAUTHORIZED,
-                    "Erreur de connexion, la session a peut être expirée, veuillez vous reconnecter."
-            );
         }
+        throw new SeinkSansDoozeBackException(
+                HttpStatus.TOO_MANY_REQUESTS,
+                "Trop de requêtes, veuillez patienter."
+        );
     }
 
 
