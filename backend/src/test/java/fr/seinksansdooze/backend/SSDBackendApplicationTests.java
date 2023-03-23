@@ -1,6 +1,6 @@
 package fr.seinksansdooze.backend;
 
-import fr.seinksansdooze.backend.connectionManaging.ADBridge.IPublicADQuerier;
+import fr.seinksansdooze.backend.connectionManaging.ADBridge.interfaces.IPublicADQuerier;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;

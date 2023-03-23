@@ -1,5 +1,7 @@
 package fr.seinksansdooze.backend.connectionManaging.ADBridge;
 
+import fr.seinksansdooze.backend.connectionManaging.ADBridge.interfaces.IPublicADQuerier;
+import fr.seinksansdooze.backend.connectionManaging.ADBridge.model.ObjectType;
 import fr.seinksansdooze.backend.model.response.PartialPerson;
 import fr.seinksansdooze.backend.model.response.PartialStructure;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -71,6 +73,7 @@ public class PublicADQuerier extends ADQuerier implements IPublicADQuerier {
      * @param cn le cn de la personne recherchée
      * @return une personne correspondant à la recherche
      */
+    //TODO change cn by uuid
     public PartialPerson getPartialPersonInfo(String cn) {
         String filter = "(&(objectClass=user)(CN=" + cn + "))";
         SearchControls searchControls = new SearchControls();

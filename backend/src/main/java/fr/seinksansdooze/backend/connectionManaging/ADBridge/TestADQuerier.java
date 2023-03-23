@@ -1,5 +1,8 @@
 package fr.seinksansdooze.backend.connectionManaging.ADBridge;
 
+import fr.seinksansdooze.backend.connectionManaging.ADBridge.interfaces.IPublicADQuerier;
+import fr.seinksansdooze.backend.connectionManaging.ADBridge.model.ObjectType;
+
 import javax.naming.NamingEnumeration;
 import javax.naming.NamingException;
 import javax.naming.directory.Attributes;
@@ -9,12 +12,15 @@ import java.util.ArrayList;
 public class TestADQuerier {
 
     public static void main(String[] args) {
-//        IPublicADQuerier adQuerier = ADQuerier.getPublicADQuerier();
+        IPublicADQuerier adQuerier = new PublicADQuerier("dummy.query","@Azertyuiop06200");
 //        IMemberADQuerier adQuerier = new ADQuerier("antoine.fadda.rodriguez","@Arnaudisthebest83");
 //        System.out.println(adQuerier.changePassword("Antoine AFR. Fadda Rodriguez","@Arnaudisthebest83","@Antoineisthebest83"));
 //        System.out.println("api/search/person   api/search/structures   api/admin/group/all");
 
-//        adQuerier.searchPerson("thomas").forEach(System.out::println);
+        adQuerier.searchPerson("thomas").forEach(System.out::println);
+        adQuerier.searchStructure("direc").forEach(System.out::println);
+        System.out.println(adQuerier.getPartialPersonInfo("Thomas TG. Gorisse"));
+        System.out.println(adQuerier.getPartialStructureInfo("OU=Direction Général,OU=512Direction,OU=512Batiment,OU=512BankFR,DC=EQUIPE1B,DC=local"));
 //
 
 //        System.out.println("api/info/person/{cn}");

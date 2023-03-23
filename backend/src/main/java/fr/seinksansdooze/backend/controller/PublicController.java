@@ -1,6 +1,6 @@
 package fr.seinksansdooze.backend.controller;
 
-import fr.seinksansdooze.backend.connectionManaging.ADBridge.IPublicADQuerier;
+import fr.seinksansdooze.backend.connectionManaging.ADBridge.interfaces.IPublicADQuerier;
 import fr.seinksansdooze.backend.model.response.PartialPerson;
 import fr.seinksansdooze.backend.model.response.PartialStructure;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
