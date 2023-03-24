@@ -6,4 +6,5 @@ export interface Person {
   login:string;
   tutor:string;
   email:string;
+  selected:boolean;
 }

@@ -7,7 +7,7 @@ import { Person } from '../person';
 })
 export class ResultComponent {
   listPerson: Person[] = [];
-
+  
   constructor() {
     this.listPerson.push(
       {
@@ -16,8 +16,9 @@ export class ResultComponent {
         phone: '+33 95 74 24 12',
         email: 'truc@machin.com',
         role: 'Directeur financier',
-        login: 'ma102741',
-        tutor: 'raph@free.fr'
+        login: 'ma102748',
+        tutor: 'raph@free.fr',
+        selected: false
       },
 
       {
@@ -26,10 +27,22 @@ export class ResultComponent {
         phone: '+33 95 74 24 12',
         email: 'raph@raphael.con',
         role: 'Responsable comptabilité',
-        login: 'con102741',
-        tutor: 'antoine.maistre@etu.unice.fr'
+        login: 'con102748',
+        tutor: 'antoine.maistre@etu.unice.fr',
+        selected: false
       },
 
+      
+    );
+  }
+
+  personClicked(person : Person){
+    console.log("click"); 
+    person.selected=true;
+  }
+}
+
+/*
       {
         surname: 'Caldwell',
         name: 'Raphaël',
@@ -171,6 +184,4 @@ export class ResultComponent {
         login: 'con102741',
         tutor: 'antoine.maistre@etu.unice.fr'
       },
-    );
-  }
-}
+      */
