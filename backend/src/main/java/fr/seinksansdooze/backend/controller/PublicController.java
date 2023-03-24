@@ -3,6 +3,7 @@ package fr.seinksansdooze.backend.controller;
 import fr.seinksansdooze.backend.connectionManaging.ADBridge.interfaces.IPublicADQuerier;
 import fr.seinksansdooze.backend.model.response.PartialPerson;
 import fr.seinksansdooze.backend.model.response.PartialStructure;
+import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import org.springframework.web.bind.annotation.*;
@@ -23,6 +24,7 @@ public class PublicController {
         this.querier = querier;
     }
 
+    @Operation(summary = "Recherche une personne en fonction de son nom")
     @ApiResponses({
             @ApiResponse(responseCode = "200", description = "Les résultats sont disponibles"),
             @ApiResponse(responseCode = "400", description = "Il manque un ou plusieurs paramètres")
@@ -34,6 +36,7 @@ public class PublicController {
         return querier.searchPerson(name, page, perPage);
     }
 
+    @Operation(summary = "Recherche une structure en fonction de son nom")
     @ApiResponses({
             @ApiResponse(responseCode = "200", description = "Les résultats sont disponibles"),
             @ApiResponse(responseCode = "400", description = "Il manque un ou plusieurs paramètres")
@@ -45,11 +48,13 @@ public class PublicController {
         return querier.searchStructure(name, page, perPage);
     }
 
+    @Operation(summary = "Récupère les informations d'une personne en fonction de son cn")
     @GetMapping("/info/person/{cn}")
     public PartialPerson personInfo(@PathVariable String cn) {
         return querier.getPartialPersonInfo(cn);
     }
 
+    @Operation(summary = "Récupère les informations d'une structure en fonction de son ou")
     @GetMapping("/info/structure/{ou}")
     public PartialStructure structureInfo(@PathVariable String ou) {
         return querier.getPartialStructureInfo(ou);
