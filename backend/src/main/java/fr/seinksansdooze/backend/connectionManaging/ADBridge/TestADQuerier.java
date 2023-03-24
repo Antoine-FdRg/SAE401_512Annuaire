@@ -92,8 +92,8 @@ public class TestADQuerier {
     private static void testPublicQuerier(){
         IPublicADQuerier adQuerier = new PublicADQuerier("dummy.query","@Azertyuiop06200");
 
-        adQuerier.searchPerson("thomas").forEach(System.out::println);
-        adQuerier.searchStructure("direc").forEach(System.out::println);
+        adQuerier.searchPerson("thomas", 0, 25).forEach(System.out::println);
+        adQuerier.searchStructure("direc", 0, 25).forEach(System.out::println);
         System.out.println(adQuerier.getPartialPersonInfo("Thomas TG. Gorisse"));
         System.out.println(adQuerier.getPartialStructureInfo("OU=Direction Général,OU=512Direction,OU=512Batiment,OU=512BankFR,DC=EQUIPE1B,DC=local"));
 
