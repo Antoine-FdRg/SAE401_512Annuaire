@@ -21,7 +21,8 @@ export class ResultComponent {
     window.scrollTo(0, 1000);
   }
 
-  addPerson(person: Person) {
-    this.listPerson.push(person);
-  }
+
 }
+
+
+

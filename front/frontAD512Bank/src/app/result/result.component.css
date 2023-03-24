@@ -1,4 +1,4 @@
-#sheetsContainer{
+/* #sheetsContainer{
     padding: 100px;
     display: flex;
     gap: 150px;
@@ -94,7 +94,7 @@
 
 /* ---------------- */
 
-
+/* 
 .separator{
     border-radius: 15px;
     background-color: rgb(140, 140, 140);
@@ -152,12 +152,12 @@
 
 .contacts>.email>span{
     width: 76%;
-}
+} */
 
 
 /* QUERIES */
 
-@media only screen and (max-width:1000px) {
+/* @media only screen and (max-width:1000px) {
     #sheetsContainer{
         margin-top: 50px;
         margin-bottom: 50px;
@@ -165,4 +165,77 @@
         gap: 30px;
         flex-direction: column;
     }
+} */
+
+:root {
+    --selection-position:0px;
+}
+
+#results-container{
+    width: 90%;
+    margin: 0 auto;
+    padding: 40px;
+    display: flex;
+    gap: 30px;
+    justify-content: center;
+}
+
+#person-container{
+    position: relative;
+    width: 40%;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+#person-details {
+    background-color: var(--white-gradient);
+    border-radius: 20px;
+    width: 40%;
+}
+
+.person{
+    position: relative;
+    z-index: 1;
+    cursor: pointer;
+    /* background-color: var(--white-gradient); */
+    border-radius: 20px;
+
+    height: 100px;
+
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+
+    padding-left: 30px;
+    padding-right: 60px;
+    gap: 50px;
+    transition: 1s;
+    width: 100%;
+}
+
+.role{
+    min-width: 55%;
+}
+
+.names{
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+    font-size: 20px;
+}
+
+
+#selection-person{
+    position: absolute;
+    z-index: -1;
+    transition: 0.3s;
+    top: 0px;
+    width: 110%;
+    /* border-style: solid;
+    border-color: var(--white-gradient); */
+    background-color: var(--white-gradient);
+
+    border-bottom-right-radius: 0px;
+    border-top-right-radius: 0px;
 }
