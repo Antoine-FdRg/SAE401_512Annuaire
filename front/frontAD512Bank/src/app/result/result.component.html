@@ -120,48 +120,48 @@
       (click)="personClicked(person, i)"
     >
       <div
-        class="role"
+        class="position"
         [class.blue]="
-          person.role == 'Directeur financier' ||
-          person.role == 'Responsable de paie' ||
-          person.role == 'Responsable comptabilité'
+          person.position == 'Directeur financier' ||
+          person.position == 'Responsable de paie' ||
+          person.position == 'Responsable comptabilité'
         "
         [class.orange]="
-          person.role == 'Directeur administratif et juridique' ||
-          person.role == 'Responsable juridique' ||
-          person.role == 'Responsable administration' ||
-          person.role == 'Responsable adjoint administratif' ||
-          person.role == 'Responsable adjoint juridique'
+          person.position == 'Directeur administratif et juridique' ||
+          person.position == 'Responsable juridique' ||
+          person.position == 'Responsable administration' ||
+          person.position == 'Responsable adjoint administratif' ||
+          person.position == 'Responsable adjoint juridique'
         "
         [class.green]="
-          person.role == 'Directeur ressources humaines' ||
-          person.role == 'Responsable gestion du personnel' ||
-          person.role == 'Responsable recrutement'
+          person.position == 'Directeur ressources humaines' ||
+          person.position == 'Responsable gestion du personnel' ||
+          person.position == 'Responsable recrutement'
         "
         [class.lightBlue]="
-          person.role == 'Directrice technique' ||
-          person.role == 'Responsable recherche et développement' ||
-          person.role == 'Responsable logistique'
+          person.position == 'Directrice technique' ||
+          person.position == 'Responsable recherche et développement' ||
+          person.position == 'Responsable logistique'
         "
         [class.purple]="
-          person.role == 'Directeur commercial' ||
-          person.role == 'Responsable prduit' ||
-          person.role == 'Responsable marketing'
+          person.position == 'Directeur commercial' ||
+          person.position == 'Responsable prduit' ||
+          person.position == 'Responsable marketing'
         "
-        [class.red1]="person.role == 'Présidente'"
-        [class.red2]="person.role == 'Directeur général'"
+        [class.red1]="person.position == 'Présidente'"
+        [class.red2]="person.position == 'Directeur général'"
         [class.red3]="
-          person.role == 'Directeur général adjoint' ||
-          person.role == 'Secrétaire général' ||
-          person.role == 'Responsable marketing' ||
-          person.role == 'Responsable produit'
+          person.position == 'Directeur général adjoint' ||
+          person.position == 'Secrétaire général' ||
+          person.position == 'Responsable marketing' ||
+          person.position == 'Responsable produit'
         "
       >
-        {{ person.role }}
+        {{ person.position }}
       </div>
       <div class="names">
-        <div>{{ person.name }}</div>
-        <div>{{ person.surname }}</div>
+        <div>{{ person.firstName }}</div>
+        <div>{{ person.lastName }}</div>
       </div>
     </div>
 
