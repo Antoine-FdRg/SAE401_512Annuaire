@@ -9,6 +9,7 @@ import fr.seinksansdooze.backend.model.response.PartialStructure;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 
 public class ADQuerierMoke implements IAuthentifiedADQuerier, IPublicADQuerier {
 
@@ -36,12 +37,12 @@ public class ADQuerierMoke implements IAuthentifiedADQuerier, IPublicADQuerier {
     }
 
     @Override
-    public ArrayList<PartialPerson> searchPerson(String cn) {
+    public List<PartialPerson> searchPerson(String cn, int page, int perPage) {
         return null;
     }
 
     @Override
-    public ArrayList<PartialStructure> searchStructure(String ou) {
+    public List<PartialStructure> searchStructure(String ou, int page, int perPage) {
         return null;
     }
 
