@@ -121,11 +121,7 @@
 <section id="results-container">
     <section id="person-container">
         <div class="person"
-         *ngFor="let person of listPerson" (click)="personClicked(person)"
-         [class.personClicked]= "
-            this.person.selected==true
-            "
-         >
+         *ngFor="let person of listPerson; let i = index" [attr.data-index]='i' (click)="personClicked(person, i)">
             <div class="role" [class.blue] = "
             person.role=='Directeur financier'
             ||
@@ -182,11 +178,15 @@
             " 
             
             >{{person.role}}</div>
-
             <div class="names">
                 <div>{{person.name}}</div>
                 <div>{{person.surname}}</div>
             </div>
+        </div>
+
+        <div id="selection-person" class="person"
+        [style.top.px] = "clickedPosition*120"
+        >
         </div>
     </section>
 

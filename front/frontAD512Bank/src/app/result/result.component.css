@@ -167,6 +167,9 @@
     }
 } */
 
+:root {
+    --selection-position:0px;
+}
 
 #results-container{
     width: 90%;
@@ -178,6 +181,7 @@
 }
 
 #person-container{
+    position: relative;
     width: 40%;
     display: flex;
     flex-direction: column;
@@ -191,7 +195,10 @@
 }
 
 .person{
-    background-color: var(--white-gradient);
+    position: relative;
+    z-index: 1;
+    cursor: pointer;
+    /* background-color: var(--white-gradient); */
     border-radius: 20px;
 
     height: 100px;
@@ -218,7 +225,17 @@
     font-size: 20px;
 }
 
-.personClicked{
-    width: 110% !important;
-    transition: 1s;
+
+#selection-person{
+    position: absolute;
+    z-index: -1;
+    transition: 0.3s;
+    top: 0px;
+    width: 110%;
+    /* border-style: solid;
+    border-color: var(--white-gradient); */
+    background-color: var(--white-gradient);
+
+    border-bottom-right-radius: 0px;
+    border-top-right-radius: 0px;
 }

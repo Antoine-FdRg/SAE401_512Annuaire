@@ -7,6 +7,8 @@ import { Person } from '../person';
 })
 export class ResultComponent {
   listPerson: Person[] = [];
+  clickedPosition : number = 0;
+  i : number = 0;
   
   constructor() {
     this.listPerson.push(
@@ -36,9 +38,10 @@ export class ResultComponent {
     );
   }
 
-  personClicked(person : Person){
-    console.log("click"); 
+  personClicked(person : Person, position : number){
     person.selected=true;
+    this.clickedPosition = position;
+    
   }
 }
 
