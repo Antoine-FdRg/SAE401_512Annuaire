@@ -7,6 +7,90 @@
   href="https://fonts.googleapis.com/css2?family=Material+Symbols+Rounded:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200"
 />
 
+
+<section id="results-container">
+  <section id="person-container">
+    <div
+      class="person"
+      *ngFor="let person of listPerson; let i = index"
+      [attr.data-index]="i"
+      (click)="personClicked(person, i)"
+    >
+      <div
+        class="position"
+        [class.blue]="
+          person.position == 'Directeur financier' ||
+          person.position == 'Responsable de paie' ||
+          person.position == 'Responsable comptabilité'
+        "
+        [class.orange]="
+          person.position == 'Directeur administratif et juridique' ||
+          person.position == 'Responsable juridique' ||
+          person.position == 'Responsable administration' ||
+          person.position == 'Responsable adjoint administratif' ||
+          person.position == 'Responsable adjoint juridique'
+        "
+        [class.green]="
+          person.position == 'Directeur ressources humaines' ||
+          person.position == 'Responsable gestion du personnel' ||
+          person.position == 'Responsable recrutement'
+        "
+        [class.lightBlue]="
+          person.position == 'Directrice technique' ||
+          person.position == 'Responsable recherche et développement' ||
+          person.position == 'Responsable logistique'
+        "
+        [class.purple]="
+          person.position == 'Directeur commercial' ||
+          person.position == 'Responsable prduit' ||
+          person.position == 'Responsable marketing'
+        "
+        [class.red1]="person.position == 'Présidente'"
+        [class.red2]="person.position == 'Directeur général'"
+        [class.red3]="
+          person.position == 'Directeur général adjoint' ||
+          person.position == 'Secrétaire général' ||
+          person.position == 'Responsable marketing' ||
+          person.position == 'Responsable produit'
+        "
+      >
+        {{ person.position }}
+      </div>
+      <div class="names">
+        <div>{{ person.firstName }}</div>
+        <div>{{ person.lastName }}</div>
+      </div>
+    </div>
+
+    <div
+      id="selection-person"
+      [style.display]="selectionState"
+      [style.top.px]="clickedPosition * 120"
+    ></div>
+  </section>
+
+  <div id="person-details"
+  >
+    <div id="start-text">
+      Cliquez sur un élément pour voir plus de détails
+    </div>
+
+    <div id="text512">
+      <div id="seink">
+        5
+      </div>
+
+      <div id="sans">
+        1
+      </div>
+
+      <div id="dooze">
+        2
+      </div>
+    </div>
+  </div>
+</section>
+
 <!-- <section id="sheetsContainer">
     <section class="sheet" *ngFor="let person of listPerson">
         <div class="topInfos">
@@ -110,67 +194,3 @@
         </div>
     </section>
 </section> -->
-
-<section id="results-container">
-  <section id="person-container">
-    <div
-      class="person"
-      *ngFor="let person of listPerson; let i = index"
-      [attr.data-index]="i"
-      (click)="personClicked(person, i)"
-    >
-      <div
-        class="position"
-        [class.blue]="
-          person.position == 'Directeur financier' ||
-          person.position == 'Responsable de paie' ||
-          person.position == 'Responsable comptabilité'
-        "
-        [class.orange]="
-          person.position == 'Directeur administratif et juridique' ||
-          person.position == 'Responsable juridique' ||
-          person.position == 'Responsable administration' ||
-          person.position == 'Responsable adjoint administratif' ||
-          person.position == 'Responsable adjoint juridique'
-        "
-        [class.green]="
-          person.position == 'Directeur ressources humaines' ||
-          person.position == 'Responsable gestion du personnel' ||
-          person.position == 'Responsable recrutement'
-        "
-        [class.lightBlue]="
-          person.position == 'Directrice technique' ||
-          person.position == 'Responsable recherche et développement' ||
-          person.position == 'Responsable logistique'
-        "
-        [class.purple]="
-          person.position == 'Directeur commercial' ||
-          person.position == 'Responsable prduit' ||
-          person.position == 'Responsable marketing'
-        "
-        [class.red1]="person.position == 'Présidente'"
-        [class.red2]="person.position == 'Directeur général'"
-        [class.red3]="
-          person.position == 'Directeur général adjoint' ||
-          person.position == 'Secrétaire général' ||
-          person.position == 'Responsable marketing' ||
-          person.position == 'Responsable produit'
-        "
-      >
-        {{ person.position }}
-      </div>
-      <div class="names">
-        <div>{{ person.firstName }}</div>
-        <div>{{ person.lastName }}</div>
-      </div>
-    </div>
-
-    <div
-      id="selection-person"
-      class="person"
-      [style.top.px]="clickedPosition * 120"
-    ></div>
-  </section>
-
-  <div id="person-details"></div>
-</section>

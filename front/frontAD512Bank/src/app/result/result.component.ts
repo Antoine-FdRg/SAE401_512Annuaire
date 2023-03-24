@@ -1,4 +1,5 @@
 import { Component } from '@angular/core';
+import { first } from 'rxjs';
 import { Person } from '../person';
 import { SearchService } from '../service/search.service';
 @Component({
@@ -10,10 +11,41 @@ export class ResultComponent {
   listPerson: Person[] = [];
   clickedPosition: number = 0;
   i: number = 0;
+  selectionState : string = "none" 
 
 
   constructor(private searchService: SearchService) {
     this.listPerson = this.searchService.lastResults;
+    this.listPerson.push(
+      {
+        firstName: "placeholder",
+        lastName: "placeholder",
+        phone: "placeholder",
+        position: "placeholder",
+        login: "placeholder",
+        tutor: "placeholder",
+        email: "placeholder"
+      },
+      {
+        firstName: "placeholder",
+        lastName: "placeholder",
+        phone: "placeholder",
+        position: "placeholder",
+        login: "placeholder",
+        tutor: "placeholder",
+        email: "placeholder"
+      },
+      {
+        firstName: "placeholder",
+        lastName: "placeholder",
+        phone: "placeholder",
+        position: "placeholder",
+        login: "placeholder",
+        tutor: "placeholder",
+        email: "placeholder"
+      },
+    )
+
     console.log(this.listPerson);
     // scroll to top of component
 
@@ -25,11 +57,9 @@ export class ResultComponent {
   }
 
   personClicked(person: Person, position: number) {
+    this.selectionState = "block";
     this.clickedPosition = position;
-
   }
-
-
 }
 
 
