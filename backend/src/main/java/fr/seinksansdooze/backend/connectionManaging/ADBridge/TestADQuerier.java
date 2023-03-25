@@ -2,18 +2,10 @@ package fr.seinksansdooze.backend.connectionManaging.ADBridge;
 
 import fr.seinksansdooze.backend.connectionManaging.ADBridge.interfaces.IAuthentifiedADQuerier;
 import fr.seinksansdooze.backend.connectionManaging.ADBridge.interfaces.IPublicADQuerier;
-import fr.seinksansdooze.backend.connectionManaging.ADBridge.model.ObjectType;
-
-import javax.naming.NamingEnumeration;
-import javax.naming.NamingException;
-import javax.naming.directory.Attributes;
-import javax.naming.directory.SearchResult;
-import java.util.ArrayList;
-
 public class TestADQuerier {
 
     public static void main(String[] args) {
-        testPublicQuerier();
+//        testPublicQuerier();
         testAuthenticatedQuerier();
 
 //
@@ -77,16 +69,14 @@ public class TestADQuerier {
         String id = "antoine.fadda.rodriguez";
         String pwd = "@Arnaudisthebest83";
 
-        String id2 = "dummy.query";
-        String pwd2 = "@Azertyuiop06200";
-
-        String id3 = "thomas.gorisse";
-        String pwd3 = "@Arnaudisthebest83";
-
-        IAuthentifiedADQuerier querier = new AuthentifiedADQuerier(id3, pwd3);
+        IAuthentifiedADQuerier querier = new AuthentifiedADQuerier(id, pwd);
         querier.getAllGroups().forEach(System.out::println);
-        System.out.println(querier.createGroup("test1"));
+        System.out.println("Récupération des infos de Thomas");
         System.out.println(querier.getFullPersonInfo("Thomas TG. Gorisse"));
+        System.out.println("Création du groupe test1");
+        System.out.println(querier.createGroup("test1"));
+        System.out.println("Suppression du groupe test1");
+        System.out.println(querier.deleteGroup("test1"));
     }
 
     private static void testPublicQuerier(){

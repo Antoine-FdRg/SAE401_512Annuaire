@@ -6,6 +6,7 @@ import fr.seinksansdooze.backend.connectionManaging.ADConnectionManagerSingleton
 import fr.seinksansdooze.backend.connectionManaging.rateLimit.RateLimiterSingleton;
 import fr.seinksansdooze.backend.model.SeinkSansDoozeBackException;
 import fr.seinksansdooze.backend.model.payload.ChangeGroupsPayload;
+import fr.seinksansdooze.backend.model.response.FullPerson;
 import fr.seinksansdooze.backend.model.response.PartialPerson;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
@@ -13,7 +14,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
 import javax.naming.NamingException;
-import javax.servlet.http.HttpServletRequest;
 import java.util.List;
 
 /**
@@ -29,7 +29,7 @@ public class AdminController {
             @ApiResponse(responseCode = "200", description = "Ping réussi"),
             @ApiResponse(responseCode = "401", description = "Token invalide")
     })
-    @GetMapping("/ping/{token}")
+    @GetMapping("/ping")
     public String ping(@CookieValue("token") String token) {
         if (RateLimiterSingleton.INSTANCE.get().tryConsume("request.getRemoteAddr()")){
             try {
@@ -56,7 +56,7 @@ public class AdminController {
             @ApiResponse(responseCode = "401", description = "Token invalide")
     })
     @GetMapping("/info/person")
-    public PartialPerson personInfo(@CookieValue("token") String token, @RequestParam String cn) {
+    public FullPerson personInfo(@CookieValue("token") String token, @RequestParam String cn) {
         try {
             return connectionManager.getQuerier(token).getFullPersonInfo(cn);
         } catch (NamingException e) {

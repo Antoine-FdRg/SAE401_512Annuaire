@@ -15,7 +15,7 @@ public class ADConnection {
     /**
      * Temps d'expiration d'une connexion en millisecondes
      */
-    private static final long EXPIRATION_TIME = 1000 * 60;
+    private static final long EXPIRATION_TIME = 1000 * 60 * 60;
 
     public ADConnection() {
         setTokenEmissionDate(new Date());

@@ -20,7 +20,7 @@ public class ADConnectionManager {
     private final ITokenGenerator tokenGenerator;
     private final ITokenSanitizer tokenSanitizer;
     /**
-     * Le querierClass est la classe qui permet de créer un nouveau querier doit implémenter IADQuerier
+     * Le querierClass est la classe qui permet de créer un nouveau querier doit implémenter IAuthentifiedADQuerier
      */
     private final Class<?> querierClass;
 

@@ -20,6 +20,9 @@ public class AuthentifiedADQuerier extends ADQuerier implements IAuthentifiedADQ
         super(username, pwd);
     }
 
+    public AuthentifiedADQuerier() {
+    }
+
     /**
      * Méthode répondant à la route GET /api/admin/group/all
      * @return la liste de tous les groupes
