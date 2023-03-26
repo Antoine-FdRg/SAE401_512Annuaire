@@ -5,7 +5,6 @@ import fr.seinksansdooze.backend.connectionManaging.ADConnectionManager;
 import fr.seinksansdooze.backend.connectionManaging.ADConnectionManagerSingleton;
 import fr.seinksansdooze.backend.model.SeinkSansDoozeBackException;
 import fr.seinksansdooze.backend.model.payload.UserAndGroupPayload;
-import fr.seinksansdooze.backend.model.payload.ChangeGroupsPayload;
 import fr.seinksansdooze.backend.model.response.FullPerson;
 import fr.seinksansdooze.backend.model.response.PartialGroup;
 import fr.seinksansdooze.backend.model.response.PartialPerson;
@@ -172,23 +171,9 @@ public class AdminController {
 //    }
 
 
-    @PutMapping("/group/person/{cn}")
-    public void changeGroups(@RequestBody ChangeGroupsPayload payload, @PathVariable String cn) {
-        // Faire la modification de groupes ici...
-    }
-
     @GetMapping("/search/person")
     public List<PartialPerson> searchPersonAsAdmin(@RequestParam String name, @RequestParam String group) {
         return List.of();
     }
 
-    @PutMapping("/add/{cn}")
-    public void addAdmin(@PathVariable String cn) {
-        // Ajouter un utilisateur comme admin ici...
-    }
-
-    @DeleteMapping("/delete/{cn}")
-    public void removeAdmin(@PathVariable String cn) {
-        // Enlever un utilisateur comme admin ici...
-    }
 }
