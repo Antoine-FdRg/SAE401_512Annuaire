@@ -8,6 +8,7 @@ import fr.seinksansdooze.backend.model.payload.LoginPayload;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import jakarta.validation.Valid;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseCookie;
@@ -22,6 +23,13 @@ import javax.naming.NamingException;
 @RestController
 @RequestMapping("/api/auth")
 public class AuthentificationController {
+
+    @Value("${session.duration.long}")
+    private int longSessionDuration;
+
+    @Value("${session.duration.short}")
+    private int shortSessionDuration;
+
     ADConnectionManager connectionManager = ADConnectionManagerSingleton.INSTANCE.get();
 
     //TODO comprendre pq les requete public ne fontyionne plus apres une connexion
@@ -48,9 +56,9 @@ public class AuthentificationController {
         // Durée de vie de la session
         int sessionAge;
         if (payload.isRememberMe()) {
-            sessionAge = 24 * 60 * 60 * 30; // 1 mois
+            sessionAge = longSessionDuration;
         } else {
-            sessionAge = 60 * 60; // 1 heure
+            sessionAge = shortSessionDuration;
         }
 
         ResponseCookie responseCookie = ResponseCookie.from("token", token)
