@@ -2,7 +2,6 @@ package fr.seinksansdooze.backend.controller;
 
 import fr.seinksansdooze.backend.connectionManaging.ADConnectionManager;
 import fr.seinksansdooze.backend.connectionManaging.ADConnectionManagerSingleton;
-import fr.seinksansdooze.backend.connectionManaging.tokenManaging.TokenSanitizer;
 import fr.seinksansdooze.backend.model.SeinkSansDoozeBackException;
 import fr.seinksansdooze.backend.model.payload.LoginPayload;
 import io.swagger.v3.oas.annotations.Operation;
@@ -77,16 +76,10 @@ public class AuthentificationController {
 
     @Operation(summary = "Déconnecte un utilisateur")
     @ApiResponses({
-            @ApiResponse(responseCode = "200", description = "Déconnexion faite avec succès"),
-            @ApiResponse(responseCode = "406", description = "Token invalide")
+            @ApiResponse(responseCode = "200", description = "Déconnexion faite avec succès : la session n'existe plus")
     })
     @PostMapping("/logout")
     public ResponseEntity<String> logout(@CookieValue("token") String token) {
-        if (!new TokenSanitizer().valideToken(token)) {
-            throw new SeinkSansDoozeBackException(
-                    HttpStatus.NOT_ACCEPTABLE,
-                    "Token invalide");
-        }
         connectionManager.removeConnection(token);
 
         ResponseCookie resCookie = ResponseCookie.from("token", "")

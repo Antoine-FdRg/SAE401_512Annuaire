@@ -3,8 +3,6 @@ package fr.seinksansdooze.backend.connectionManaging;
 import fr.seinksansdooze.backend.connectionManaging.ADBridge.interfaces.IAuthentifiedADQuerier;
 import fr.seinksansdooze.backend.connectionManaging.tokenManaging.ITokenGenerator;
 import fr.seinksansdooze.backend.connectionManaging.tokenManaging.ITokenSanitizer;
-import fr.seinksansdooze.backend.model.SeinkSansDoozeBackException;
-import org.springframework.http.HttpStatus;
 
 import javax.naming.NamingException;
 import java.lang.reflect.InvocationTargetException;
@@ -72,14 +70,11 @@ public class ADConnectionManager {
      * @param token Le token de la connexion à supprimer.
      */
     public void removeConnection(String token) {
-        if (connections.get(token) == null) {
-            throw new SeinkSansDoozeBackException(
-                    HttpStatus.NOT_ACCEPTABLE,
-                    "Déconnexion impossible, la connexion visée n'existe pas.");
-        }
-        connections.get(token).getQuerier().logout();
-        connections.remove(token);
+        ADConnection connection = connections.get(token);
+        if (connection == null) return;
 
+        connection.getQuerier().logout();
+        connections.remove(token);
     }
 
     /**
