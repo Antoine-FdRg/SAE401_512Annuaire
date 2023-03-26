@@ -97,7 +97,7 @@ public class AdminController {
         return new ResponseEntity<>("Groupe supprimé avec succès.", HttpStatus.OK);
     }
 
-    @PostMapping("/group/members/{cn}")
+    @GetMapping("/group/members/{cn}")
     public List<PartialPerson> getGroupMembers(@CookieValue("token") String token, @PathVariable String cn) {
         try {
             return connectionManager.getQuerier(token).getGroupMembers(cn);
