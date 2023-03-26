@@ -68,6 +68,11 @@ public class ADQuerierMoke implements IAuthentifiedADQuerier, IPublicADQuerier {
     }
 
     @Override
+    public ArrayList<PartialPerson> getGroupMembers(String groupName) {
+        return null;
+    }
+
+    @Override
     public boolean addUserToGroup(String groupName, String username) {
         return false;
     }
