@@ -4,6 +4,7 @@ package fr.seinksansdooze.backend.controller;
 import fr.seinksansdooze.backend.connectionManaging.ADConnectionManager;
 import fr.seinksansdooze.backend.connectionManaging.ADConnectionManagerSingleton;
 import fr.seinksansdooze.backend.model.SeinkSansDoozeBackException;
+import fr.seinksansdooze.backend.model.payload.AddUserToGroupPayload;
 import fr.seinksansdooze.backend.model.payload.ChangeGroupsPayload;
 import fr.seinksansdooze.backend.model.response.FullPerson;
 import fr.seinksansdooze.backend.model.response.PartialGroup;
@@ -94,7 +95,7 @@ public class AdminController {
                     "Erreur de connexion, la session a peut être expirée, veuillez vous reconnecter."
             );
         }
-        return isGroupCreated ? new ResponseEntity<>("Groupe créé avec succès.", HttpStatus.OK) : new ResponseEntity<>("Erreur lors de la création du groupe.", HttpStatus.BAD_REQUEST);
+        return isGroupCreated ? new ResponseEntity<>("Groupe créé avec succès.", HttpStatus.OK) : new ResponseEntity<>("Erreur lors de la création du groupe.", HttpStatus.CONFLICT);
     }
 
 
@@ -123,6 +124,21 @@ public class AdminController {
             );
         }
     }
+
+    @PostMapping("/group/addUser")
+    public ResponseEntity<String> addUserToGroup(@CookieValue("token") String token, @RequestBody AddUserToGroupPayload payload) {
+        boolean isUserAdded;
+        try {
+            isUserAdded = connectionManager.getQuerier(token).addUserToGroup(payload.getCn(), payload.getGroupName());
+        } catch (NamingException e) {
+            throw new SeinkSansDoozeBackException(
+                    HttpStatus.UNAUTHORIZED,
+                    "Erreur de connexion, la session a peut être expirée, veuillez vous reconnecter."
+            );
+        }
+        return isUserAdded ? new ResponseEntity<>("Utilisateur ajouté au groupe avec succès.", HttpStatus.OK) : new ResponseEntity<>("Erreur lors de l'ajout de l'utilisateur au groupe.", HttpStatus.NOT_ACCEPTABLE);
+    }
+
 
 
 

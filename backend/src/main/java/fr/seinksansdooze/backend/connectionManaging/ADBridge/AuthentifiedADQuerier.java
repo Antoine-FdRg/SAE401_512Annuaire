@@ -103,8 +103,9 @@ public class AuthentifiedADQuerier extends ADQuerier implements IAuthentifiedADQ
         return members;
     }
 
+    //TODO: gerer l'erreur si le groupe n'existe pas, ou si l'utilisateur n'existe pas, ou si l'utilisateur est deja dans le groupe
     @Override
-    public boolean addUserToGroup(String groupName, String username) {
+    public boolean addUserToGroup(String username , String groupName) {
         String filter = "(&(objectClass=group)(CN=" + groupName + "))";
         SearchControls searchControls = new SearchControls();
         searchControls.setSearchScope(SearchControls.SUBTREE_SCOPE);

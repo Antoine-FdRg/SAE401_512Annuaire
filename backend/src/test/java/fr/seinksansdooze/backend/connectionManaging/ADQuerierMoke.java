@@ -73,7 +73,7 @@ public class ADQuerierMoke implements IAuthentifiedADQuerier, IPublicADQuerier {
     }
 
     @Override
-    public boolean addUserToGroup(String groupName, String username) {
+    public boolean addUserToGroup(String username , String groupName) {
         return false;
     }
 
