@@ -77,6 +77,10 @@ public class TestADQuerier {
         System.out.println(querier.createGroup("test1"));
         System.out.println("Suppression du groupe test1");
         System.out.println(querier.deleteGroup("test1"));
+        System.out.println("Ajout de Thomas au groupe test");
+        System.out.println(querier.addUserToGroup("test", "Thomas TG. Gorisse"));
+        System.out.println("Affichage des membres du groupe test");
+        querier.getGroupMembers("test").forEach(System.out::println);
     }
 
     private static void testPublicQuerier(){

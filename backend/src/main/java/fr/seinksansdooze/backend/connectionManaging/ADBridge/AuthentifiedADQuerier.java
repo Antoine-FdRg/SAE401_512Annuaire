@@ -4,6 +4,7 @@ import fr.seinksansdooze.backend.connectionManaging.ADBridge.interfaces.IAuthent
 import fr.seinksansdooze.backend.connectionManaging.ADBridge.model.ObjectType;
 import fr.seinksansdooze.backend.model.response.FullPerson;
 import fr.seinksansdooze.backend.model.response.PartialGroup;
+import fr.seinksansdooze.backend.model.response.PartialPerson;
 import jakarta.xml.bind.DatatypeConverter;
 import lombok.val;
 
@@ -70,6 +71,7 @@ public class AuthentifiedADQuerier extends ADQuerier implements IAuthentifiedADQ
         }
     }
 
+    //TODO: gerer l'erreur si le groupe n'existe pas
     @Override
     public boolean deleteGroup(String groupName) {
         String filter = "(&(objectClass=group)(CN=" + groupName + "))";
@@ -87,6 +89,17 @@ public class AuthentifiedADQuerier extends ADQuerier implements IAuthentifiedADQ
         } catch (NamingException e) {
             return false;
         }
+    }
+
+    @Override
+    public ArrayList<PartialPerson> getGroupMembers(String groupName) {
+        ArrayList<SearchResult> res = this.queryGroupMembers(groupName);
+        ArrayList<PartialPerson> members = new ArrayList<>();
+        for (SearchResult currentMember : res) {
+            PartialPerson member = new PartialPerson(currentMember);
+            members.add(member);
+        }
+        return members;
     }
 
     @Override
@@ -176,9 +189,7 @@ public class AuthentifiedADQuerier extends ADQuerier implements IAuthentifiedADQ
                 return true;
             }
             return false;
-        } catch (NamingException e) {
-            throw new RuntimeException(e);
-        } catch (UnsupportedEncodingException e) {
+        } catch (NamingException | UnsupportedEncodingException e) {
             throw new RuntimeException(e);
         }
     }

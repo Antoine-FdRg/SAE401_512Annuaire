@@ -1,10 +1,6 @@
 package fr.seinksansdooze.backend.connectionManaging.ADBridge;
 
-import fr.seinksansdooze.backend.model.response.FullPerson;
-import fr.seinksansdooze.backend.model.response.PartialGroup;
-import jakarta.xml.bind.DatatypeConverter;
 import lombok.SneakyThrows;
-import lombok.val;
 import fr.seinksansdooze.backend.connectionManaging.ADBridge.model.ObjectType;
 
 import javax.naming.Context;
@@ -199,7 +195,8 @@ public abstract class ADQuerier {
 
 
     //  api/admin/group/members/{groupName}
-    public ArrayList<SearchResult> searchGroupMembers(String groupName) {
+    //TODO gérer l'erreur si le groupe n'existe pas et si le groupe est vide
+    public ArrayList<SearchResult> queryGroupMembers(String groupName) {
         String filter = "(&(objectClass=group)(CN=" + groupName + "))";
         SearchControls searchControls = new SearchControls();
         searchControls.setSearchScope(SearchControls.SUBTREE_SCOPE);

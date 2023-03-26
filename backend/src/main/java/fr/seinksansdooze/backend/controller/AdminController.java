@@ -11,6 +11,7 @@ import fr.seinksansdooze.backend.model.response.PartialPerson;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.naming.NamingException;
@@ -80,7 +81,38 @@ public class AdminController {
             );
         }
     }
-    
+
+
+    @DeleteMapping("/group/delete/{cn}")
+    public ResponseEntity<String> deleteGroup(@CookieValue("token") String token, @PathVariable String cn) {
+        try {
+            connectionManager.getQuerier(token).deleteGroup(cn);
+        } catch (NamingException e) {
+            throw new SeinkSansDoozeBackException(
+                    HttpStatus.UNAUTHORIZED,
+                    "Erreur de connexion, la session a peut être expirée, veuillez vous reconnecter."
+            );
+        }
+
+        return new ResponseEntity<>("Groupe supprimé avec succès.", HttpStatus.OK);
+    }
+
+    @PostMapping("/group/members/{cn}")
+    public List<PartialPerson> getGroupMembers(@CookieValue("token") String token, @PathVariable String cn) {
+        try {
+            return connectionManager.getQuerier(token).getGroupMembers(cn);
+        } catch (NamingException e) {
+            throw new SeinkSansDoozeBackException(
+                    HttpStatus.UNAUTHORIZED,
+                    "Erreur de connexion, la session a peut être expirée, veuillez vous reconnecter."
+            );
+        }
+    }
+
+
+
+
+
 
 //    @GetMapping("/info/person/{cn}")
 //    public PartialPerson personInfo(@PathVariable String cn) {
@@ -98,10 +130,6 @@ public class AdminController {
 
     // TODO: 2/10/2023 POST /api/admin/group/create
 
-    @DeleteMapping("/group/delete/{name}")
-    public void deleteGroup(@PathVariable String name) {
-        // Faire la suppression de groupe ici...
-    }
 
     @PutMapping("/group/person/{cn}")
     public void changeGroups(@RequestBody ChangeGroupsPayload payload, @PathVariable String cn) {
