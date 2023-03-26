@@ -2,12 +2,13 @@ package fr.seinksansdooze.backend.controller;
 
 import fr.seinksansdooze.backend.connectionManaging.ADConnectionManager;
 import fr.seinksansdooze.backend.connectionManaging.ADConnectionManagerSingleton;
-import fr.seinksansdooze.backend.connectionManaging.tokenManaging.TokenSanitizer;
 import fr.seinksansdooze.backend.model.SeinkSansDoozeBackException;
 import fr.seinksansdooze.backend.model.payload.LoginPayload;
+import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import jakarta.validation.Valid;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseCookie;
@@ -22,10 +23,18 @@ import javax.naming.NamingException;
 @RestController
 @RequestMapping("/api/auth")
 public class AuthentificationController {
+
+    @Value("${session.duration.long}")
+    private int longSessionDuration;
+
+    @Value("${session.duration.short}")
+    private int shortSessionDuration;
+
     ADConnectionManager connectionManager = ADConnectionManagerSingleton.INSTANCE.get();
 
     //TODO comprendre pq les requete public ne fontyionne plus apres une connexion
 
+    @Operation(summary = "Connecte un utilisateur")
     @ApiResponses({
             @ApiResponse(responseCode = "200", description = "Connexion avec succès"),
             @ApiResponse(responseCode = "400", description = "Requête malformée, vérifiez que le payload contient bien les champs demandé"),
@@ -48,9 +57,9 @@ public class AuthentificationController {
         // Durée de vie de la session
         int sessionAge;
         if (payload.isRememberMe()) {
-            sessionAge = 24 * 60 * 60 * 30; // 1 mois
+            sessionAge = longSessionDuration;
         } else {
-            sessionAge = 60 * 60; // 1 heure
+            sessionAge = shortSessionDuration;
         }
 
         ResponseCookie responseCookie = ResponseCookie.from("token", token)
@@ -65,17 +74,12 @@ public class AuthentificationController {
                 .body("Connexion avec succès");
     }
 
+    @Operation(summary = "Déconnecte un utilisateur")
     @ApiResponses({
-            @ApiResponse(responseCode = "200", description = "Déconnexion faite avec succès"),
-            @ApiResponse(responseCode = "406", description = "Token invalide")
+            @ApiResponse(responseCode = "200", description = "Déconnexion faite avec succès : la session n'existe plus")
     })
     @PostMapping("/logout")
     public ResponseEntity<String> logout(@CookieValue("token") String token) {
-        if(!new TokenSanitizer().valideToken(token)){
-            throw new SeinkSansDoozeBackException(
-                    HttpStatus.NOT_ACCEPTABLE,
-                    "Token invalide");
-        }
         connectionManager.removeConnection(token);
 
         ResponseCookie resCookie = ResponseCookie.from("token", "")
