@@ -3,10 +3,10 @@ package fr.seinksansdooze.backend.controller;
 
 import fr.seinksansdooze.backend.connectionManaging.ADConnectionManager;
 import fr.seinksansdooze.backend.connectionManaging.ADConnectionManagerSingleton;
-import fr.seinksansdooze.backend.connectionManaging.rateLimit.RateLimiterSingleton;
 import fr.seinksansdooze.backend.model.SeinkSansDoozeBackException;
 import fr.seinksansdooze.backend.model.payload.ChangeGroupsPayload;
 import fr.seinksansdooze.backend.model.response.FullPerson;
+import fr.seinksansdooze.backend.model.response.PartialGroup;
 import fr.seinksansdooze.backend.model.response.PartialPerson;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
@@ -25,30 +25,30 @@ public class AdminController {
 
     ADConnectionManager connectionManager = ADConnectionManagerSingleton.INSTANCE.get();
 
-    @ApiResponses({
-            @ApiResponse(responseCode = "200", description = "Ping réussi"),
-            @ApiResponse(responseCode = "401", description = "Token invalide")
-    })
-    @GetMapping("/ping")
-    public String ping(@CookieValue("token") String token) {
-        if (RateLimiterSingleton.INSTANCE.get().tryConsume("request.getRemoteAddr()")){
-            try {
-                if (connectionManager.getQuerier(token).getClass()!= null) {
-                    return "ping réussi";
-                }
-                throw new RuntimeException("Token invalide");
-            } catch (NamingException e) {
-                throw new SeinkSansDoozeBackException(
-                        HttpStatus.UNAUTHORIZED,
-                        "Erreur de connexion, la session a peut être expirée, veuillez vous reconnecter."
-                );
-            }
-        }
-        throw new SeinkSansDoozeBackException(
-                HttpStatus.TOO_MANY_REQUESTS,
-                "Trop de requêtes, veuillez patienter."
-        );
-    }
+//    @ApiResponses({
+//            @ApiResponse(responseCode = "200", description = "Ping réussi"),
+//            @ApiResponse(responseCode = "401", description = "Token invalide")
+//    })
+//    @GetMapping("/ping")
+//    public String ping(@CookieValue("token") String token) {
+//        if (RateLimiterSingleton.INSTANCE.get().tryConsume("request.getRemoteAddr()")){
+//            try {
+//                if (connectionManager.getQuerier(token).getClass()!= null) {
+//                    return "ping réussi";
+//                }
+//                throw new RuntimeException("Token invalide");
+//            } catch (NamingException e) {
+//                throw new SeinkSansDoozeBackException(
+//                        HttpStatus.UNAUTHORIZED,
+//                        "Erreur de connexion, la session a peut être expirée, veuillez vous reconnecter."
+//                );
+//            }
+//        }
+//        throw new SeinkSansDoozeBackException(
+//                HttpStatus.TOO_MANY_REQUESTS,
+//                "Trop de requêtes, veuillez patienter."
+//        );
+//    }
 
 
     @ApiResponses({
@@ -58,6 +58,7 @@ public class AdminController {
     @GetMapping("/info/person")
     public FullPerson personInfo(@CookieValue("token") String token, @RequestParam String cn) {
         try {
+            //TODO @ba101397 bloquer les perm de lectures des attributs que l'on considère comme sensibles pour les utilisateurs non admin
             return connectionManager.getQuerier(token).getFullPersonInfo(cn);
         } catch (NamingException e) {
             throw new SeinkSansDoozeBackException(
@@ -67,15 +68,18 @@ public class AdminController {
         }
     }
 
-    // TODO : implémenter la verifification correctement
-//    @GetMapping("/group/all")
-//    public List<PartialGroup> getAllGroups(@RequestBody LoginResponse loginResponse) {
-//        try {
-//            return connectionManager.getQuerier(loginResponse.getToken()).getAllGroups();
-//        } catch (NamingException e) {
-//            throw new RuntimeException(e);
-//        }
-//    }
+    // TODO : implémenter la verification correctement
+    @GetMapping("/group/all")
+    public List<PartialGroup> getAllGroups(@CookieValue("token") String token) {
+        try {
+            return connectionManager.getQuerier(token).getAllGroups();
+        } catch (NamingException e) {
+            throw new SeinkSansDoozeBackException(
+                    HttpStatus.UNAUTHORIZED,
+                    "Erreur de connexion, la session a peut être expirée, veuillez vous reconnecter."
+            );
+        }
+    }
     
 
 //    @GetMapping("/info/person/{cn}")
