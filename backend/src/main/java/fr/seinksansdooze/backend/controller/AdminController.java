@@ -4,7 +4,7 @@ package fr.seinksansdooze.backend.controller;
 import fr.seinksansdooze.backend.connectionManaging.ADConnectionManager;
 import fr.seinksansdooze.backend.connectionManaging.ADConnectionManagerSingleton;
 import fr.seinksansdooze.backend.model.SeinkSansDoozeBackException;
-import fr.seinksansdooze.backend.model.payload.AddUserToGroupPayload;
+import fr.seinksansdooze.backend.model.payload.UserAndGroupPayload;
 import fr.seinksansdooze.backend.model.payload.ChangeGroupsPayload;
 import fr.seinksansdooze.backend.model.response.FullPerson;
 import fr.seinksansdooze.backend.model.response.PartialGroup;
@@ -125,8 +125,8 @@ public class AdminController {
         }
     }
 
-    @PostMapping("/group/addUser")
-    public ResponseEntity<String> addUserToGroup(@CookieValue("token") String token, @RequestBody AddUserToGroupPayload payload) {
+    @PutMapping("/group/addUser")
+    public ResponseEntity<String> addUserToGroup(@CookieValue("token") String token, @RequestBody UserAndGroupPayload payload) {
         boolean isUserAdded;
         try {
             isUserAdded = connectionManager.getQuerier(token).addUserToGroup(payload.getCn(), payload.getGroupName());
@@ -137,6 +137,20 @@ public class AdminController {
             );
         }
         return isUserAdded ? new ResponseEntity<>("Utilisateur ajouté au groupe avec succès.", HttpStatus.OK) : new ResponseEntity<>("Erreur lors de l'ajout de l'utilisateur au groupe.", HttpStatus.NOT_ACCEPTABLE);
+    }
+
+    @DeleteMapping("/group/removeUser")
+    public ResponseEntity<String> removeUserFromGroup(@CookieValue("token") String token, @RequestBody UserAndGroupPayload payload) {
+        boolean isUserRemoved;
+        try {
+            isUserRemoved = connectionManager.getQuerier(token).removeUserFromGroup(payload.getCn(), payload.getGroupName());
+        } catch (NamingException e) {
+            throw new SeinkSansDoozeBackException(
+                    HttpStatus.UNAUTHORIZED,
+                    "Erreur de connexion, la session a peut être expirée, veuillez vous reconnecter."
+            );
+        }
+        return isUserRemoved ? new ResponseEntity<>("Utilisateur supprimé du groupe avec succès.", HttpStatus.OK) : new ResponseEntity<>("Erreur lors de la suppression de l'utilisateur du groupe.", HttpStatus.NOT_ACCEPTABLE);
     }
 
 

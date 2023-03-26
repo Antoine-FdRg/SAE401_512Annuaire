@@ -1,10 +1,10 @@
 package fr.seinksansdooze.backend.model.payload;
 
-public class AddUserToGroupPayload {
+public class UserAndGroupPayload {
     private final String cn;
     private final String groupName;
 
-    public AddUserToGroupPayload(String cn, String groupName) {
+    public UserAndGroupPayload(String cn, String groupName) {
         this.cn = cn;
         this.groupName = groupName;
     }

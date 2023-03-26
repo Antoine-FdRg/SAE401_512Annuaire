@@ -73,12 +73,12 @@ public class TestADQuerier {
         querier.getAllGroups().forEach(System.out::println);
         System.out.println("Récupération des infos de Thomas");
         System.out.println(querier.getFullPersonInfo("Thomas TG. Gorisse"));
-        System.out.println("Création du groupe test1");
-        System.out.println(querier.createGroup("test1"));
-        System.out.println("Suppression du groupe test1");
-        System.out.println(querier.deleteGroup("test1"));
         System.out.println("Ajout de Thomas au groupe test");
-        System.out.println(querier.addUserToGroup("test", "Thomas TG. Gorisse"));
+        System.out.println(querier.addUserToGroup( "Thomas TG. Gorisse", "test"));
+        System.out.println("Affichage des membres du groupe test");
+        querier.getGroupMembers("test").forEach(System.out::println);
+        System.out.println("Suppression de Thomas du groupe test");
+        System.out.println(querier.removeUserFromGroup("Thomas TG. Gorisse", "test"));
         System.out.println("Affichage des membres du groupe test");
         querier.getGroupMembers("test").forEach(System.out::println);
     }

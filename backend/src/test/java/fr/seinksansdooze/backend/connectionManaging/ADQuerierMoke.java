@@ -78,7 +78,7 @@ public class ADQuerierMoke implements IAuthentifiedADQuerier, IPublicADQuerier {
     }
 
     @Override
-    public boolean removeUserFromGroup(String groupName, String username) {
+    public boolean removeUserFromGroup(String username, String groupName) {
         return false;
     }
 

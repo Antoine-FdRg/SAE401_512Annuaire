@@ -126,8 +126,9 @@ public class AuthentifiedADQuerier extends ADQuerier implements IAuthentifiedADQ
         }
     }
 
+    //TODO: gerer l'erreur si le groupe n'existe pas, ou si l'utilisateur n'existe pas, ou si l'utilisateur n'est pas dans le groupe
     @Override
-    public boolean removeUserFromGroup(String groupName, String username) {
+    public boolean removeUserFromGroup(String username , String groupName) {
         String filter = "(&(objectClass=group)(CN=" + groupName + "))";
         SearchControls searchControls = new SearchControls();
         searchControls.setSearchScope(SearchControls.SUBTREE_SCOPE);
@@ -141,10 +142,11 @@ public class AuthentifiedADQuerier extends ADQuerier implements IAuthentifiedADQ
                 this.context.modifyAttributes("CN=" + groupName + ","+ADQuerier.AD_BASE, modificationItems);
                 return true;
             } else {
+                System.out.println("et ben non");
                 return false;
             }
         } catch (NamingException e) {
-            return false;
+            throw new RuntimeException(e);
         }
     }
 
