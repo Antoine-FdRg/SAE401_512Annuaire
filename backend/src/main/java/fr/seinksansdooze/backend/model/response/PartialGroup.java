@@ -20,4 +20,12 @@ public class PartialGroup {
             throw new RuntimeException(e);
         }
     }
+
+    public String getCn() {
+        return cn;
+    }
+
+    public String toString() {
+        return this.cn;
+    }
 }

@@ -82,6 +82,21 @@ public class AdminController {
         }
     }
 
+    @PostMapping("/group/create")
+    public ResponseEntity<String> createGroup(@CookieValue("token") String token, @RequestBody PartialGroup group) {
+        System.out.println("name = " + group.getCn());
+        boolean isGroupCreated;
+        try {
+            isGroupCreated =connectionManager.getQuerier(token).createGroup(group.getCn());
+        } catch (NamingException e) {
+            throw new SeinkSansDoozeBackException(
+                    HttpStatus.UNAUTHORIZED,
+                    "Erreur de connexion, la session a peut être expirée, veuillez vous reconnecter."
+            );
+        }
+        return isGroupCreated ? new ResponseEntity<>("Groupe créé avec succès.", HttpStatus.OK) : new ResponseEntity<>("Erreur lors de la création du groupe.", HttpStatus.BAD_REQUEST);
+    }
+
 
     @DeleteMapping("/group/delete/{cn}")
     public ResponseEntity<String> deleteGroup(@CookieValue("token") String token, @PathVariable String cn) {
@@ -125,10 +140,6 @@ public class AdminController {
 //            return null;
 //        }
 //    }
-
-    // TODO: 2/10/2023 GET /api/admin/group/all
-
-    // TODO: 2/10/2023 POST /api/admin/group/create
 
 
     @PutMapping("/group/person/{cn}")

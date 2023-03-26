@@ -44,6 +44,7 @@ public class AuthentifiedADQuerier extends ADQuerier implements IAuthentifiedADQ
         }
     }
 
+    //TODO : gerer l'erreur si le groupe existe deja
     @Override
     public boolean createGroup(String groupName) {
         String filter = "(&(objectClass=group)(CN=" + groupName + "))";
