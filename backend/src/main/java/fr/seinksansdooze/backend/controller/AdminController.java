@@ -8,6 +8,7 @@ import fr.seinksansdooze.backend.model.payload.UserAndGroupPayload;
 import fr.seinksansdooze.backend.model.response.FullPerson;
 import fr.seinksansdooze.backend.model.response.PartialGroup;
 import fr.seinksansdooze.backend.model.response.PartialPerson;
+import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import org.springframework.http.HttpStatus;
@@ -51,7 +52,7 @@ public class AdminController {
 //        );
 //    }
 
-
+    @Operation(summary = "Renvoie toutes les informations disponibles sur une personne")
     @ApiResponses({
             @ApiResponse(responseCode = "200", description = "Recherche réussie"),
             @ApiResponse(responseCode = "401", description = "Token invalide")
@@ -70,6 +71,11 @@ public class AdminController {
     }
 
     // TODO : implémenter la verification correctement
+    @Operation(summary = "Renvoie la liste de tout les groupes")
+    @ApiResponses({
+            @ApiResponse(responseCode = "200", description = "Recherche réussie"),
+            @ApiResponse(responseCode = "401", description = "Token invalide")
+    })
     @GetMapping("/group/all")
     public List<PartialGroup> getAllGroups(@CookieValue("token") String token) {
         try {
@@ -82,12 +88,18 @@ public class AdminController {
         }
     }
 
+    @Operation(summary = "Créer un groupe")
+    @ApiResponses({
+            @ApiResponse(responseCode = "200", description = "Groupe créé"),
+            @ApiResponse(responseCode = "401", description = "Token invalide"),
+            @ApiResponse(responseCode = "409", description = "Erreur lors de la création du groupe")
+    })
     @PostMapping("/group/create")
     public ResponseEntity<String> createGroup(@CookieValue("token") String token, @RequestBody PartialGroup group) {
         System.out.println("name = " + group.getCn());
         boolean isGroupCreated;
         try {
-            isGroupCreated =connectionManager.getQuerier(token).createGroup(group.getCn());
+            isGroupCreated = connectionManager.getQuerier(token).createGroup(group.getCn());
         } catch (NamingException e) {
             throw new SeinkSansDoozeBackException(
                     HttpStatus.UNAUTHORIZED,
@@ -97,7 +109,11 @@ public class AdminController {
         return isGroupCreated ? new ResponseEntity<>("Groupe créé avec succès.", HttpStatus.OK) : new ResponseEntity<>("Erreur lors de la création du groupe.", HttpStatus.CONFLICT);
     }
 
-
+    @Operation(summary = "Supprime un groupe")
+    @ApiResponses({
+            @ApiResponse(responseCode = "200", description = "Groupe supprimé"),
+            @ApiResponse(responseCode = "401", description = "Token invalide")
+    })
     @DeleteMapping("/group/delete/{cn}")
     public ResponseEntity<String> deleteGroup(@CookieValue("token") String token, @PathVariable String cn) {
         try {
@@ -112,6 +128,11 @@ public class AdminController {
         return new ResponseEntity<>("Groupe supprimé avec succès.", HttpStatus.OK);
     }
 
+    @Operation(summary = "Renvoie la liste des membres d'un groupe")
+    @ApiResponses({
+            @ApiResponse(responseCode = "200", description = "Recherche réussie"),
+            @ApiResponse(responseCode = "401", description = "Token invalide")
+    })
     @GetMapping("/group/members/{cn}")
     public List<PartialPerson> getGroupMembers(@CookieValue("token") String token, @PathVariable String cn) {
         try {
@@ -124,6 +145,12 @@ public class AdminController {
         }
     }
 
+    @Operation(summary = "Ajoute un utilisateur à un groupe")
+    @ApiResponses({
+            @ApiResponse(responseCode = "200", description = "Utilisateur ajouté au groupe"),
+            @ApiResponse(responseCode = "401", description = "Token invalide"),
+            @ApiResponse(responseCode = "406", description = "Erreur lors de l'ajout de l'utilisateur au groupe")
+    })
     @PutMapping("/group/addUser")
     public ResponseEntity<String> addUserToGroup(@CookieValue("token") String token, @RequestBody UserAndGroupPayload payload) {
         boolean isUserAdded;
@@ -138,6 +165,12 @@ public class AdminController {
         return isUserAdded ? new ResponseEntity<>("Utilisateur ajouté au groupe avec succès.", HttpStatus.OK) : new ResponseEntity<>("Erreur lors de l'ajout de l'utilisateur au groupe.", HttpStatus.NOT_ACCEPTABLE);
     }
 
+    @Operation(summary = "Supprime un utilisateur d'un groupe")
+    @ApiResponses({
+            @ApiResponse(responseCode = "200", description = "Utilisateur supprimé du groupe"),
+            @ApiResponse(responseCode = "401", description = "Token invalide"),
+            @ApiResponse(responseCode = "406", description = "Erreur lors de la suppression de l'utilisateur du groupe")
+    })
     @DeleteMapping("/group/removeUser")
     public ResponseEntity<String> removeUserFromGroup(@CookieValue("token") String token, @RequestBody UserAndGroupPayload payload) {
         boolean isUserRemoved;
@@ -151,11 +184,6 @@ public class AdminController {
         }
         return isUserRemoved ? new ResponseEntity<>("Utilisateur supprimé du groupe avec succès.", HttpStatus.OK) : new ResponseEntity<>("Erreur lors de la suppression de l'utilisateur du groupe.", HttpStatus.NOT_ACCEPTABLE);
     }
-
-
-
-
-
 
 
 //    @GetMapping("/info/person/{cn}")
