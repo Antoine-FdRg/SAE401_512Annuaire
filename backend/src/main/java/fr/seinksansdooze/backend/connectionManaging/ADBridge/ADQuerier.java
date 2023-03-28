@@ -7,7 +7,6 @@ import javax.naming.Context;
 import javax.naming.NamingEnumeration;
 import javax.naming.NamingException;
 import javax.naming.directory.*;
-import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Properties;
@@ -38,6 +37,7 @@ public abstract class ADQuerier {
      * @return true si la connexion a réussi, false sinon
      */
     public boolean login(String username, String pwd) {
+        //TODO verifier si le login est valide
         Properties env = new Properties();
         username = username + "@EQUIPE1B.local";
         env.put(Context.INITIAL_CONTEXT_FACTORY, "com.sun.jndi.ldap.LdapCtxFactory");
@@ -127,14 +127,6 @@ public abstract class ADQuerier {
         return items.subList(startIndex, endIndex);
     }
 
-    /////////////////////////// Méthodes pour le MemberController ///////////////////////////
-
-
-
-
-    /////////////////////////// Méthodes pour le AdminController ///////////////////////////
-
-
 
     /////////////////////////// Méthodes de requete AD ///////////////////////////
 
@@ -143,6 +135,7 @@ public abstract class ADQuerier {
     // consulter la liste des groupes
     // TODO rajouter un paramètre filtrer pour permettre les requetes incluant des filtres
     protected NamingEnumeration<SearchResult> search(ObjectType searchType, String searchValue) {
+        searchValue = searchValue.replaceAll("(?<=\\w)(?=\\w)", "*");
         String filter = "(&(objectClass=" + searchType + ")(" + searchType.getNamingAttribute() + "=*" + searchValue + "*))";
         SearchControls searchControls = new SearchControls();
         searchControls.setSearchScope(SearchControls.SUBTREE_SCOPE);
@@ -155,21 +148,6 @@ public abstract class ADQuerier {
             return null;
         }
     }
-
-
-    //  api/info/structure/{ou}
-//    public NamingEnumeration<SearchResult> searchStructure(String ou) {
-//        String filter = "(&(objectClass=organizationalUnit)(distinguishedName=" + ou + "))";
-//        SearchControls searchControls = new SearchControls();
-//        searchControls.setSearchScope(SearchControls.SUBTREE_SCOPE);
-//        NamingEnumeration<SearchResult> res;
-//        try {
-//            res = this.context.search(AD_BASE, filter, searchControls);
-//            return res;
-//        } catch (NamingException e) {
-//            return null;
-//        }
-//    }
 
 
 
@@ -217,6 +195,7 @@ public abstract class ADQuerier {
                 NamingEnumeration<?> membersList = groupMembersName.getAll();
                 while (membersList.hasMore()) {
                     String currentMemberCN = membersList.next().toString();
+                    //TODO s'assurer que le search ne créé pas de bug
                     NamingEnumeration<SearchResult> currentMemberEnum = search(ObjectType.PERSON,currentMemberCN.split(",")[0].split("=")[1]);
                     if(currentMemberEnum.hasMore()){
                         SearchResult currentMember = currentMemberEnum.next();

@@ -217,11 +217,11 @@ public class AdminController {
 //    }
 
 
-    @GetMapping("/search/person")
-    public List<PartialPerson> searchPersonAsAdmin(@RequestParam String name, @RequestParam String group, HttpServletRequest request) {
-        RateLimiterSingleton.INSTANCE.get().tryConsume(request.getRemoteAddr());
-
-        return List.of();
-    }
+//    @GetMapping("/search/person")
+//    public List<PartialPerson> searchPersonAsAdmin(@RequestParam String name, @RequestParam String group, HttpServletRequest request) {
+//        RateLimiterSingleton.INSTANCE.get().tryConsume(request.getRemoteAddr());
+//
+//        return List.of();
+//    }
 
 }
