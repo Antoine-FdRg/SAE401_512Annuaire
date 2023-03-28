@@ -10,6 +10,7 @@ import { elementAt } from 'rxjs';
 export class HomePageComponent {
 
   branches = ["Bordeaux", "Lyon", "Marseille", "Paris", "Toulouse"];
+
   constructor(private searchService: SearchService) {
 
   }
@@ -33,6 +34,10 @@ export class HomePageComponent {
     $event.preventDefault();
     var search = (<HTMLInputElement>document.getElementById("search")).value;
     this.searchService.search(search);
+  }
+
+  showResults() {
+    this.searchService.resultShowing = true;
   }
 }
 

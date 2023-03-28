@@ -10,8 +10,9 @@ import { SearchService } from '../service/search.service';
 export class ResultComponent {
   listPerson: Person[] = [];
   clickedPosition: number = 0;
+  opacity: number = 0;
   i: number = 0;
-  selectionState : string = "none" 
+  selectionState : string = "block" 
 
 
   constructor(private searchService: SearchService) {
@@ -57,8 +58,8 @@ export class ResultComponent {
   }
 
   personClicked(person: Person, position: number) {
-    this.selectionState = "block";
     this.clickedPosition = position;
+    this.opacity = 1;
   }
 }
 

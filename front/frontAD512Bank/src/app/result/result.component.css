@@ -51,9 +51,19 @@
 } */
 
 @media (max-width:1000px){
+
+    #person-container {
+        width: 100%!important;
+    }
+
+    #person-details {
+        width: 100%!important;
+    }
+
     #results-container {
         flex-direction: column;
         align-items: center;
+        padding: 0px!important;
     }
 
     #selection-person {
@@ -131,6 +141,7 @@
 
 
 #selection-person {
+    opacity: 0;
     position: relative;
     z-index: 1;
     border-radius: 20px;
@@ -178,7 +189,7 @@
     font-size: 140px;
     gap: 5px;
     opacity: 0.5;
-
+    user-select: none;
 }
 
 #seink, #sans, #dooze {
