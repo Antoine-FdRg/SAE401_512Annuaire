@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { first } from 'rxjs';
+import { elementAt, first } from 'rxjs';
 import { Person } from '../person';
 import { SearchService } from '../service/search.service';
 @Component({
@@ -58,6 +58,7 @@ export class ResultComponent {
   }
 
   personClicked(person: Person, position: number) {
+
     this.clickedPosition = position;
     this.opacity = 1;
   }

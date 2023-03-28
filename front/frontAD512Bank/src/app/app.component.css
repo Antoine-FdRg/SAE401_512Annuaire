@@ -41,7 +41,7 @@ header {
 }
 
 main {
-  width: 100vw;
+  /* width: 100vw; */
   height: 85vh;
   background: url("../assets/World_map_blue_dots.svg");
   background-size: contain;
