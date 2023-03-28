@@ -626,7 +626,7 @@ public class ConcurrentHashmapAutoCleaningTest {
             long lastUseTimeWivoutCall = newCurrentTimeWivoutCall - 1;
             theMock.when(TimeHelper::currentTimeMillis).thenReturn(lastUseTimeWivoutCall);
             assertTrue(mapToTestWivoutCall.containsKey("key1"));
-
+            theMock.when(TimeHelper::currentTimeMillis).thenReturn(lastUseTimeWiveCall);
             assertEquals("value1", mapToTestWiveCall.getAndUpdateTimeSinceLastUse("key1"));//On met a jour la derniere utilisation sur une map
 
             theMock.when(TimeHelper::currentTimeMillis).thenReturn(lastUseTimeWiveCall + 1);//On simule le temps pour que la valeur soit supprimée
