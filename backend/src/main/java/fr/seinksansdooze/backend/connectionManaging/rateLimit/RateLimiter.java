@@ -57,14 +57,36 @@ public class RateLimiter implements Closeable {
      *
      * @param key la clé qui correspond au seau à vérifier.
      * @return true si un jeton a été consommé avec succès et si le seau a suffisamment de jetons pour consommer un autre jeton, sinon false.
+     * @throws TooManyRequestsexeption si le seau n'a pas suffisamment de jetons pour consommer un jeton supplémentaire.
      */
-    public boolean tryConsume(String key) {
+
+    public void tryConsume(String key){
+        tryConsume(key,1);
+    }
+
+    /**
+     * Tente de consommer un jeton dans le seau correspondant à la clé spécifiée.
+     * Si le seau existe, cette méthode tente de consommer un jeton. Si le seau n'existe pas,
+     * un nouveau seau est créé pour la clé et un jeton est consommé.
+     * Si le seau a suffisamment de jetons pour consommer un jeton supplémentaire,
+     * la méthode renvoie true. Sinon, elle renvoie false.
+     *
+     * @param key la clé qui correspond au seau à vérifier.
+     * @param numToken le nombre de jeton à consommer
+     * @return true si un jeton a été consommé avec succès et si le seau a suffisamment de jetons pour consommer un autre jeton, sinon false.
+     * @throws TooManyRequestsexeption si le seau n'a pas suffisamment de jetons pour consommer un jeton supplémentaire.
+     */
+    public void tryConsume(String key,int numToken) {
+        boolean result = false;
         if (rateLimiters.containsKey(key)) {
-            return rateLimiters.getAndUpdateTimeSinceLastUse(key).tryConsume(1);
+            result=rateLimiters.getAndUpdateTimeSinceLastUse(key).tryConsume(numToken);
         } else {
             Bucket bucket = bucketCreator();
             rateLimiters.put(key, bucket);
-            return bucket.tryConsume(1);
+            result=bucket.tryConsume(1);
+        }
+        if (!result) {
+            throw new TooManyRequestsexeption();
         }
     }
     /**

@@ -2,6 +2,7 @@ package fr.seinksansdooze.backend.controller;
 
 import fr.seinksansdooze.backend.connectionManaging.ADConnectionManager;
 import fr.seinksansdooze.backend.connectionManaging.ADConnectionManagerSingleton;
+import fr.seinksansdooze.backend.connectionManaging.rateLimit.RateLimiterSingleton;
 import fr.seinksansdooze.backend.model.SeinkSansDoozeBackException;
 import fr.seinksansdooze.backend.model.payload.LoginPayload;
 import io.swagger.v3.oas.annotations.Operation;
@@ -16,6 +17,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.naming.NamingException;
+import javax.servlet.http.HttpServletRequest;
 
 /**
  * Controller permettant de gérer les requêtes d'authentification et de déconnexion
@@ -41,7 +43,9 @@ public class AuthentificationController {
             @ApiResponse(responseCode = "401", description = "Identifiant ou mot de passe incorrect")
     })
     @PostMapping("/login")
-    public ResponseEntity<String> login(@Valid @RequestBody LoginPayload payload) {
+    public ResponseEntity<String> login(@Valid @RequestBody LoginPayload payload, HttpServletRequest request) {
+        RateLimiterSingleton.INSTANCE.get().tryConsume(request.getRemoteAddr(),10);
+
         String token;
 
         try {
@@ -79,7 +83,9 @@ public class AuthentificationController {
             @ApiResponse(responseCode = "200", description = "Déconnexion faite avec succès : la session n'existe plus")
     })
     @PostMapping("/logout")
-    public ResponseEntity<String> logout(@CookieValue("token") String token) {
+    public ResponseEntity<String> logout(@CookieValue("token") String token, HttpServletRequest request) {
+        RateLimiterSingleton.INSTANCE.get().tryConsume(request.getRemoteAddr());
+
         connectionManager.removeConnection(token);
 
         ResponseCookie resCookie = ResponseCookie.from("token", "")

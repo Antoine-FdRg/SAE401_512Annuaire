@@ -6,7 +6,7 @@ public enum RateLimiterSingleton {
     private final RateLimiter rateLimiter;
 
     RateLimiterSingleton() {
-        rateLimiter = new RateLimiter(10,60);
+        rateLimiter = new RateLimiter(60*10,60*10);
     }
 
     public RateLimiter get() {
