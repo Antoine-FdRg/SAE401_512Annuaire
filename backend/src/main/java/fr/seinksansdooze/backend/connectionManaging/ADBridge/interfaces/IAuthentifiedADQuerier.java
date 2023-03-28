@@ -4,6 +4,7 @@ import fr.seinksansdooze.backend.model.response.FullPerson;
 import fr.seinksansdooze.backend.model.response.PartialGroup;
 import fr.seinksansdooze.backend.model.response.PartialPerson;
 
+import javax.naming.NamingException;
 import java.util.ArrayList;
 
 public interface IAuthentifiedADQuerier {

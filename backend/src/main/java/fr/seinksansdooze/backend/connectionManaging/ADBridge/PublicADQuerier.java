@@ -2,10 +2,14 @@ package fr.seinksansdooze.backend.connectionManaging.ADBridge;
 
 import fr.seinksansdooze.backend.connectionManaging.ADBridge.interfaces.IPublicADQuerier;
 import fr.seinksansdooze.backend.connectionManaging.ADBridge.model.ObjectType;
+import fr.seinksansdooze.backend.model.exception.SeinkSansDoozeBackException;
+import fr.seinksansdooze.backend.model.exception.SeinkSansDoozeBadRequest;
+import fr.seinksansdooze.backend.model.exception.user.SeinkSansDoozeUserNotFound;
 import fr.seinksansdooze.backend.model.response.PartialPerson;
 import fr.seinksansdooze.backend.model.response.PartialStructure;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Repository;
 
 import javax.naming.NamingEnumeration;
@@ -73,9 +77,9 @@ public class PublicADQuerier extends ADQuerier implements IPublicADQuerier {
                 SearchResult currentPerson = res.next();
                 return new PartialPerson(currentPerson);
             }
-            return null;
+            throw new SeinkSansDoozeUserNotFound();
         } catch (NamingException e) {
-            return null;
+            throw new SeinkSansDoozeBadRequest();
         }
     }
 
@@ -97,9 +101,9 @@ public class PublicADQuerier extends ADQuerier implements IPublicADQuerier {
                 SearchResult currentStructure = res.next();
                 return new PartialStructure(currentStructure);
             }
-            return null;
+            throw new SeinkSansDoozeBackException(HttpStatus.NOT_FOUND,"La structure n'existe pas");
         } catch (NamingException e) {
-            return null;
+            throw new SeinkSansDoozeBadRequest();
         }
     }
 }

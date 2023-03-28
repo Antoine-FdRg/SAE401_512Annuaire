@@ -1,6 +1,6 @@
 package fr.seinksansdooze.backend.connectionManaging.rateLimit;
 
-import fr.seinksansdooze.backend.model.SeinkSansDoozeBackException;
+import fr.seinksansdooze.backend.model.exception.SeinkSansDoozeBackException;
 import org.springframework.http.HttpStatus;
 
 public class TooManyRequestsexeption extends SeinkSansDoozeBackException {

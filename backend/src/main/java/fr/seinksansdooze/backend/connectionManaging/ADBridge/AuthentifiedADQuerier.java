@@ -2,11 +2,17 @@ package fr.seinksansdooze.backend.connectionManaging.ADBridge;
 
 import fr.seinksansdooze.backend.connectionManaging.ADBridge.interfaces.IAuthentifiedADQuerier;
 import fr.seinksansdooze.backend.connectionManaging.ADBridge.model.ObjectType;
+import fr.seinksansdooze.backend.model.exception.*;
+import fr.seinksansdooze.backend.model.exception.SeinkSansDoozeBadRequest;
+import fr.seinksansdooze.backend.model.exception.group.SeinkSansDoozeGroupNotFound;
+import fr.seinksansdooze.backend.model.exception.user.SeinkSansDoozeUserNotFound;
+import fr.seinksansdooze.backend.model.exception.user.SeinkSansDoozeUserNotInGroup;
 import fr.seinksansdooze.backend.model.response.FullPerson;
 import fr.seinksansdooze.backend.model.response.PartialGroup;
 import fr.seinksansdooze.backend.model.response.PartialPerson;
 import jakarta.xml.bind.DatatypeConverter;
 import lombok.val;
+import org.springframework.http.HttpStatus;
 
 import javax.naming.Context;
 import javax.naming.NamingEnumeration;
@@ -32,6 +38,7 @@ public class AuthentifiedADQuerier extends ADQuerier implements IAuthentifiedADQ
     public ArrayList<PartialGroup> getAllGroups() {
         NamingEnumeration<SearchResult> res = this.searchAllGroups();
         ArrayList<PartialGroup> groups = new ArrayList<>();
+
         try {
             while (res.hasMore()) {
                 SearchResult currentGroup = res.next();
@@ -44,7 +51,6 @@ public class AuthentifiedADQuerier extends ADQuerier implements IAuthentifiedADQ
         }
     }
 
-    //TODO : gerer l'erreur si le groupe existe deja
     @Override
     public boolean createGroup(String groupName) {
         String filter = "(&(objectClass=group)(CN=" + groupName + "))";
@@ -54,7 +60,7 @@ public class AuthentifiedADQuerier extends ADQuerier implements IAuthentifiedADQ
         try {
             res = this.context.search(AD_BASE, filter, searchControls);
             if (res.hasMore()) {
-                return false;
+                throw new SeinkSansDoozeBackException(HttpStatus.CONFLICT, "Le groupe existe déjà");
             } else {
                 Attributes attributes = new BasicAttributes();
                 Attribute objectClass = new BasicAttribute("objectClass");
@@ -68,11 +74,11 @@ public class AuthentifiedADQuerier extends ADQuerier implements IAuthentifiedADQ
                 return true;
             }
         } catch (NamingException e) {
-            return false;
+            throw new SeinkSansDoozeBadRequest();
         }
+
     }
 
-    //TODO: gerer l'erreur si le groupe n'existe pas
     @Override
     public boolean deleteGroup(String groupName) {
         String filter = "(&(objectClass=group)(CN=" + groupName + "))";
@@ -85,11 +91,12 @@ public class AuthentifiedADQuerier extends ADQuerier implements IAuthentifiedADQ
                 this.context.destroySubcontext("CN=" + groupName + ","+ADQuerier.AD_BASE);
                 return true;
             } else {
-                return false;
+                throw new SeinkSansDoozeGroupNotFound();
             }
         } catch (NamingException e) {
-            return false;
+            throw new SeinkSansDoozeBadRequest();
         }
+
     }
 
     @Override
@@ -102,8 +109,6 @@ public class AuthentifiedADQuerier extends ADQuerier implements IAuthentifiedADQ
         }
         return members;
     }
-
-    //TODO: gerer l'erreur si le groupe n'existe pas, ou si l'utilisateur n'existe pas, ou si l'utilisateur est deja dans le groupe
     @Override
     public boolean addUserToGroup(String username , String groupName) {
         String filter = "(&(objectClass=group)(CN=" + groupName + "))";
@@ -116,37 +121,50 @@ public class AuthentifiedADQuerier extends ADQuerier implements IAuthentifiedADQ
                 ModificationItem[] modificationItems = new ModificationItem[1];
                 String dn = search(ObjectType.PERSON,username).next().getNameInNamespace();
                 modificationItems[0] = new ModificationItem(DirContext.ADD_ATTRIBUTE, new BasicAttribute("member", dn));
-                this.context.modifyAttributes("CN=" + groupName + ","+ADQuerier.AD_BASE, modificationItems);
-                return true;
+                try{
+                    this.context.modifyAttributes("CN=" + groupName + ","+ADQuerier.AD_BASE, modificationItems);
+                    return true;
+                }catch(NamingException e){
+                    throw new SeinkSansDoozeUserNotInGroup();
+                }
             } else {
-                return false;
+                throw new SeinkSansDoozeGroupNotFound();
             }
         } catch (NamingException e) {
-            return false;
+            throw new SeinkSansDoozeBadRequest();
+
         }
     }
 
-    //TODO: gerer l'erreur si le groupe n'existe pas, ou si l'utilisateur n'existe pas, ou si l'utilisateur n'est pas dans le groupe
     @Override
     public boolean removeUserFromGroup(String username , String groupName) {
         String filter = "(&(objectClass=group)(CN=" + groupName + "))";
         SearchControls searchControls = new SearchControls();
         searchControls.setSearchScope(SearchControls.SUBTREE_SCOPE);
         NamingEnumeration<SearchResult> res;
+
         try {
             res = this.context.search(AD_BASE, filter, searchControls);
+
             if (res.hasMore()) {
                 ModificationItem[] modificationItems = new ModificationItem[1];
                 String dn = search(ObjectType.PERSON,username).next().getNameInNamespace();
                 modificationItems[0] = new ModificationItem(DirContext.REMOVE_ATTRIBUTE, new BasicAttribute("member", dn));
-                this.context.modifyAttributes("CN=" + groupName + ","+ADQuerier.AD_BASE, modificationItems);
+                try{
+                    this.context.modifyAttributes("CN=" + groupName + ","+ADQuerier.AD_BASE, modificationItems);
+
+                }
+                catch(NamingException e){
+                    throw new SeinkSansDoozeUserNotInGroup();
+                }
                 return true;
             } else {
-                System.out.println("et ben non");
-                return false;
+                throw new SeinkSansDoozeGroupNotFound();
+
             }
         } catch (NamingException e) {
-            throw new RuntimeException(e);
+
+            throw new SeinkSansDoozeBadRequest();
         }
     }
 
@@ -167,9 +185,9 @@ public class AuthentifiedADQuerier extends ADQuerier implements IAuthentifiedADQ
                 FullPerson person = new FullPerson(currentPerson);
                 return person;
             }
-            return null;
+            throw new SeinkSansDoozeUserNotFound();
         } catch (NamingException e) {
-            return null;
+            throw new SeinkSansDoozeBadRequest();
         }
     }
 
@@ -187,14 +205,20 @@ public class AuthentifiedADQuerier extends ADQuerier implements IAuthentifiedADQ
                 this.context.addToEnvironment(Context.SECURITY_PRINCIPAL, dn);
                 this.context.addToEnvironment(Context.SECURITY_CREDENTIALS, prevPwd);
                 ModificationItem[] mods = new ModificationItem[1];
-                val encodedPwd = DatatypeConverter.printBase64Binary(('"'+"Jfi8ZH8#k"+'"').getBytes("UTF-16LE"));
+
+                String encodedPwd;
+                try {
+                    encodedPwd = DatatypeConverter.printBase64Binary(('"'+"Jfi8ZH8#k"+'"').getBytes("UTF-16LE"));
+                } catch (UnsupportedEncodingException e) {
+                    throw new SeinkSansDoozeBackException(HttpStatus.NOT_ACCEPTABLE,"Erreur lors de l'encodage du mot de passe");
+                }
                 mods[0] = new ModificationItem(DirContext.REPLACE_ATTRIBUTE, new BasicAttribute("unicodePwd", encodedPwd));
                 this.context.modifyAttributes(dn, mods);
                 return true;
             }
-            return false;
-        } catch (NamingException | UnsupportedEncodingException e) {
-            throw new RuntimeException(e);
+            throw new SeinkSansDoozeUserNotFound();
+        } catch (NamingException e) {
+            throw new SeinkSansDoozeBadRequest();
         }
     }
 
