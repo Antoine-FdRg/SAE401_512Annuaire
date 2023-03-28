@@ -1,6 +1,7 @@
 package fr.seinksansdooze.backend.connectionManaging.ADBridge;
 
 import fr.seinksansdooze.backend.model.exception.group.SeinkSansDoozeGroupNotFound;
+import fr.seinksansdooze.backend.model.exception.user.SeinkSansDoozeUserNotFound;
 import lombok.SneakyThrows;
 import fr.seinksansdooze.backend.connectionManaging.ADBridge.model.ObjectType;
 import org.springframework.http.HttpStatus;
@@ -78,7 +79,7 @@ public abstract class ADQuerier {
             this.context.close();
             return true;
         } catch (NamingException e) {
-            return false;
+            throw new SeinkSansDoozeBackException(HttpStatus.INTERNAL_SERVER_ERROR, "Erreur lors de la déconnexion");
         }
     }
 
@@ -147,7 +148,7 @@ public abstract class ADQuerier {
             return res;
         } catch (NamingException e) {
 //            throw new RuntimeException(e);
-            return null;
+            throw new SeinkSansDoozeBadRequest();
         }
     }
 
@@ -165,7 +166,7 @@ public abstract class ADQuerier {
             res = this.context.search(AD_BASE, filter, searchControls);
             return res;
         } catch (NamingException e) {
-            return null;
+            throw new SeinkSansDoozeBadRequest();
         }
     }
 
@@ -223,10 +224,10 @@ public abstract class ADQuerier {
             if (res.hasMore()) {
                 return res;
             } else {
-                return null;
+                throw new SeinkSansDoozeUserNotFound();
             }
         } catch (NamingException e) {
-            return null;
+            throw new SeinkSansDoozeBadRequest();
         }
     }
 
