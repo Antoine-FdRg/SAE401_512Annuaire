@@ -106,4 +106,21 @@ public class PublicADQuerier extends ADQuerier implements IPublicADQuerier {
             throw new SeinkSansDoozeBadRequest();
         }
     }
+
+    @Override
+    public boolean userExists(String username) {
+        String filter = "(&(objectClass=user)(samAccountName =" + username + "))";
+        SearchControls searchControls = new SearchControls();
+        searchControls.setSearchScope(SearchControls.SUBTREE_SCOPE);
+        NamingEnumeration<SearchResult> res;
+        try {
+            res = this.context.search(AD_BASE, filter, searchControls);
+            if (res.hasMore()) {
+                return true;
+            }
+        } catch (NamingException e) {
+            throw new RuntimeException(e);
+        }
+        return false;
+    }
 }

@@ -1,8 +1,10 @@
 package fr.seinksansdooze.backend.connectionManaging.ADBridge;
 
+import fr.seinksansdooze.backend.connectionManaging.ADBridge.interfaces.IPublicADQuerier;
 import fr.seinksansdooze.backend.model.exception.group.SeinkSansDoozeGroupNotFound;
 import lombok.SneakyThrows;
 import fr.seinksansdooze.backend.connectionManaging.ADBridge.model.ObjectType;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import fr.seinksansdooze.backend.model.exception.*;
 import javax.naming.Context;
@@ -18,6 +20,7 @@ public abstract class ADQuerier {
     protected static final String AD_BASE = "OU=512BankFR,DC=EQUIPE1B,DC=local";
 
     protected DirContext context;
+
 
     protected ADQuerier(String username, String pwd) {
         //rajouter un systeme de session et d'authentification
@@ -39,7 +42,10 @@ public abstract class ADQuerier {
      * @return true si la connexion a réussi, false sinon
      */
     public boolean login(String username, String pwd) {
-        //TODO verifier si le login est valide
+        //TODO a finir
+//        if (!this.publicADQuerier.userExists(username)) {
+//            throw new SeinkSansDoozeBackException(HttpStatus.UNAUTHORIZED, "Nom d'utilisateur incorrect");
+//        }
         Properties env = new Properties();
         username = username + "@EQUIPE1B.local";
         env.put(Context.INITIAL_CONTEXT_FACTORY, "com.sun.jndi.ldap.LdapCtxFactory");
@@ -52,7 +58,7 @@ public abstract class ADQuerier {
             this.context = new InitialDirContext(env);
             return true;
         } catch (NamingException e) {
-            throw new SeinkSansDoozeBackException(HttpStatus.UNAUTHORIZED, "Nom d'utilisateur ou mot de passe incorrect");
+            throw new SeinkSansDoozeBackException(HttpStatus.UNAUTHORIZED, "Mot de passe incorrect");
         }
     }
 
