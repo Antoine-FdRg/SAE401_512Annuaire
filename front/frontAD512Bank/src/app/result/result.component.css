@@ -50,9 +50,7 @@
     }
 } */
 
-@media (max-width:1000px){
-
-    
+@media (max-width:1030px){
 
     #person-details, #person-container {
         width: 100%!important;
@@ -96,11 +94,6 @@
     gap: 20px;
 }
 
-#person-details {
-    background-color: var(--white-gradient);
-    border-radius: 20px;
-    width: 40%;
-}
 
 .person {
     position: relative;
@@ -161,9 +154,10 @@
 
 
 #person-details {
-   
+    background-color: var(--white-gradient);
+    border-radius: 20px;
     padding-top: 100px;
-    width: 800px;
+    width: 535px;
     height: 1000px;
     display: flex;
     flex-direction: column;
@@ -225,4 +219,16 @@
     100%{
         top: 0px;
     }
+}
+
+
+
+
+/* RESULTATS NON TROUVES */
+#no-results{
+    font-size: 50px;
+    text-align: center;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
 }

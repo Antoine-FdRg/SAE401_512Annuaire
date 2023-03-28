@@ -14,7 +14,6 @@ export class ResultComponent {
   i: number = 0;
   selectionState : string = "block" 
 
-
   constructor(private searchService: SearchService) {
     this.listPerson = this.searchService.lastResults;
     this.listPerson.push(
@@ -46,10 +45,8 @@ export class ResultComponent {
         email: "placeholder"
       },
     )
-
-    console.log(this.listPerson);
+    this.listPerson = [];
     // scroll to top of component
-
   }
   ngAfterViewInit(): void {
     //Called after ngAfterContentInit when the component's view has been initialized. Applies to components only.
@@ -57,10 +54,19 @@ export class ResultComponent {
     window.scrollTo(0, 1000);
   }
 
-  personClicked(person: Person, position: number) {
+  displayNotFound() : string {
+    if(this.listPerson.length === 0){
+      return "flex";
+    }
+    return "none";
+  }
 
+
+
+  personClicked(person: Person, position: number) {
     this.clickedPosition = position;
     this.opacity = 1;
+  
   }
 }
 

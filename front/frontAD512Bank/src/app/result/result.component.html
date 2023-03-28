@@ -7,8 +7,11 @@
   href="https://fonts.googleapis.com/css2?family=Material+Symbols+Rounded:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200"
 />
 
+<section id="no-results" [style.display]="displayNotFound()">
+  Oups, nous n'avons pas trouvé de résultats correspondants à votre recherche
+</section>
 
-<section id="results-container">
+<section id="results-container" [style.display]="displayNotFound()=='none' ? 'flex' : 'none'">
   <section id="person-container">
     <div
       class="person"
