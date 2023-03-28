@@ -16,6 +16,7 @@ import javax.servlet.http.HttpServletRequest;
  * Controller permettant de gérer les requêtes des membres connectés
  */
 @RestController
+@CrossOrigin
 @RequestMapping("/api/member")
 public class MemberController {
     ADConnectionManager connectionManager = ADConnectionManagerSingleton.INSTANCE.get();

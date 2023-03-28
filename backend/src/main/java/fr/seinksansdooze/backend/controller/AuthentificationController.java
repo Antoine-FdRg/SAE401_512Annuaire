@@ -23,6 +23,7 @@ import javax.servlet.http.HttpServletRequest;
  * Controller permettant de gérer les requêtes d'authentification et de déconnexion
  */
 @RestController
+@CrossOrigin
 @RequestMapping("/api/auth")
 public class AuthentificationController {
 
