@@ -1,11 +1,35 @@
+$ErrorActionPreference = "Stop"
+
+# On ve dans le repertoire du service qui tourne
 $here = Split-Path $MyInvocation.MyCommand.Path
 Set-Location $here
 
-Write-Output "[SERVEUR] Redemarage du service..."
-.\backend-service.exe restart
+# On stop completement le service
+Write-Output "[SERVEUR] Arret du service..."
+.\backend-service.exe stop
 
-if ($LastExitCode -ne 0) {
-    Write-Error "[SERVEUR] Erreur lors du redemarrage du service (regardez plus haut)."
-    exit 1
-}
-Write-Output "[SERVEUR] Service redemare !"
+Write-Output "[SERVEUR] Desinstallation du service..."
+.\backend-service.exe uninstall
+
+# On supprime les fichiers
+Write-Output "[SERVEUR] Suppression des anciens fichiers..."
+Remove-Item * -Force -Recurse
+
+Set-Location ..
+
+# On copie les nouveaux fichiers
+Write-Output "[SERVEUR] Copie des nouveaux fichiers..."
+Copy-Item "winservice_temp\*" "winservice" -Recurse
+
+# On supprime les fichiers temporaires
+Write-Output "[SERVEUR] Suppression des fichiers temporaires..."
+Remove-Item "winservice_temp" -Force -Recurse
+
+Set-Location "winservice"
+
+# On peut créer et lancer le service
+Write-Output "[SERVEUR] Installation du service..."
+.\backend-service.exe install
+
+Write-Output "[SERVEUR] Demarage du service..."
+.\backend-service.exe start

@@ -1,12 +1,12 @@
 $ErrorActionPreference = "Stop"
 
 if (!(Get-Command java -ErrorAction SilentlyContinue)) {
-    Write-Error "Java n'est pas detecté, impossible de build le backend."
+    Write-Error "Java n'est pas detecte, impossible de build le backend."
     exit 1
 }
 
 if (!(Get-Command mvn -ErrorAction SilentlyContinue)) {
-    Write-Error "Maven n'est pas detecté, impossible de build le backend."
+    Write-Error "Maven n'est pas detecte, impossible de build le backend."
     exit 1
 }
 
@@ -17,7 +17,7 @@ mvn clean
 mvn package -DskipTests
 Set-Location ..
 
-Move-Item backend\target\backend-0.0.1-SNAPSHOT.jar winservice\backend.jar -Force
+Move-Item "backend\target\backend-0.0.1-SNAPSHOT.jar" "winservice\backend.jar" -Force
 
 Write-Output "Fini !"
 Write-Output ""
@@ -25,7 +25,7 @@ Write-Output ""
 # Copie des fichiers sur la machine
 Write-Output "Copie des fichiers sur la machine..."
 Write-Output "Entrez le mot de passe du serveur :"
-scp.exe -v -r winservice "administrateur@10.22.32.2:C:\Users\Administrateur\Desktop\backend\"
+scp.exe -r ".\winservice\" "administrateur@10.22.32.2:C:\Users\Administrateur\Desktop\backend\winservice_temp"
 Write-Output ""
 
 # Redemarage du service
