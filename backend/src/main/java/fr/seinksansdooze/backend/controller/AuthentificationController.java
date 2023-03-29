@@ -62,7 +62,6 @@ public class AuthentificationController {
 
         String token = (String) userAndToken[1];
         LoggedInUser connectedUser = (LoggedInUser) userAndToken[0];
-        System.out.println("connectedUser = " + connectedUser);
 
         // Durée de vie de la session
         int sessionAge;
