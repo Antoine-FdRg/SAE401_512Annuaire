@@ -18,7 +18,7 @@ public class ADConexionManagerTest {
 
         ADConnectionManager manager = new ADConnectionManager(new TokenGenerator(), new TokenSanitizer(), ADQuerierMoke.class);
         AtomicReference<String> token = new AtomicReference<>();
-        assertDoesNotThrow(() -> token.set(manager.addConnection("user1", "mdp1")));
+        assertDoesNotThrow(() -> token.set((String) manager.addConnection("user1", "mdp1")[1]));
         assertThrows(NamingException.class, () -> manager.addConnection("user2", "mdp2"));
         assertDoesNotThrow(() -> {
             IAuthentifiedADQuerier q = manager.getQuerier(token.get());

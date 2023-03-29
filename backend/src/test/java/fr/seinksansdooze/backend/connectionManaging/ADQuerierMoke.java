@@ -2,10 +2,7 @@ package fr.seinksansdooze.backend.connectionManaging;
 
 import fr.seinksansdooze.backend.connectionManaging.ADBridge.interfaces.IAuthentifiedADQuerier;
 import fr.seinksansdooze.backend.connectionManaging.ADBridge.interfaces.IPublicADQuerier;
-import fr.seinksansdooze.backend.model.response.FullPerson;
-import fr.seinksansdooze.backend.model.response.PartialGroup;
-import fr.seinksansdooze.backend.model.response.PartialPerson;
-import fr.seinksansdooze.backend.model.response.PartialStructure;
+import fr.seinksansdooze.backend.model.response.*;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -19,11 +16,11 @@ public class ADQuerierMoke implements IAuthentifiedADQuerier, IPublicADQuerier {
 
 
     @Override
-    public boolean login(String username, String pwd) {
-        if (user.containsKey(username)) {
-            return user.get(username).equals(pwd);
+    public LoggedInUser login(String username, String pwd) {
+        if (user.containsKey(username) && user.get(username).equals(pwd)){
+            return new LoggedInUser();
         }
-        return false;
+        return null;
     }
 
     @Override

@@ -3,6 +3,7 @@ package fr.seinksansdooze.backend.connectionManaging;
 import fr.seinksansdooze.backend.connectionManaging.ADBridge.interfaces.IAuthentifiedADQuerier;
 import fr.seinksansdooze.backend.connectionManaging.tokenManaging.ITokenGenerator;
 import fr.seinksansdooze.backend.connectionManaging.tokenManaging.ITokenSanitizer;
+import fr.seinksansdooze.backend.model.response.LoggedInUser;
 
 import javax.naming.NamingException;
 import java.lang.reflect.InvocationTargetException;
@@ -40,7 +41,7 @@ public class ADConnectionManager {
      * @throws NamingException si la connexion échoue
      */
 
-    public String addConnection(String username, String password) throws NamingException {
+    public Object[] addConnection(String username, String password) throws NamingException {
 
         //on crée un nouveau querier pour la connexion avec l'ObjectClass
         IAuthentifiedADQuerier querier;
@@ -52,13 +53,16 @@ public class ADConnectionManager {
             throw new RuntimeException(e);
         }
 
-        boolean connectionSuccess = querier.login(username, password);
-        if (connectionSuccess) {
+        LoggedInUser connectedUser = querier.login(username, password);
+        if (connectedUser!=null) {
             String token = this.tokenGenerator.generateNewToken();
             ADConnection connection = new ADConnection();
             connection.setQuerier(querier);
             this.connections.put(token, connection);
-            return token;
+            Object[] userAndToken = new Object[2];
+            userAndToken[0] = connectedUser;
+            userAndToken[1] = token;
+            return userAndToken;
         } else {
             throw new NamingException("Connection failed");
         }
