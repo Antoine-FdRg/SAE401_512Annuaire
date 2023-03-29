@@ -3,6 +3,8 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { apiURL } from './apiURL';
 import { Person } from '../person';
+import { ResultComponent } from '../result/result.component';
+
 @Injectable({
   providedIn: 'root'
 })
@@ -14,9 +16,10 @@ export class SearchService {
   search(search: string) {
     this.http.get(apiURL + "/public/search/person", { params: { name: search } }).subscribe(
       (response) => {
-        console.log(response);
+        // console.log(response);
         this.resultShowing = true;
         this.lastResults = response as Person[];
+        console.log(this.lastResults);
       }
     );
 
