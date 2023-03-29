@@ -17,7 +17,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.naming.NamingException;
-import javax.servlet.http.HttpServletRequest;
+import org.springframework.http.server.reactive.ServerHttpRequest;
 
 /**
  * Controller permettant de gérer les requêtes d'authentification et de déconnexion
@@ -44,8 +44,8 @@ public class AuthentificationController {
             @ApiResponse(responseCode = "401", description = "Identifiant ou mot de passe incorrect")
     })
     @PostMapping("/login")
-    public ResponseEntity<String> login(@Valid @RequestBody LoginPayload payload, HttpServletRequest request) {
-        RateLimiterSingleton.INSTANCE.get().tryConsume(request.getRemoteAddr(),10);
+    public ResponseEntity<String> login(@Valid @RequestBody LoginPayload payload, ServerHttpRequest request) {
+        RateLimiterSingleton.INSTANCE.get().tryConsume(String.valueOf(request.getLocalAddress()),10);
 
         String token;
 
@@ -84,8 +84,8 @@ public class AuthentificationController {
             @ApiResponse(responseCode = "200", description = "Déconnexion faite avec succès : la session n'existe plus")
     })
     @PostMapping("/logout")
-    public ResponseEntity<String> logout(@CookieValue("token") String token, HttpServletRequest request) {
-        RateLimiterSingleton.INSTANCE.get().tryConsume(request.getRemoteAddr());
+    public ResponseEntity<String> logout(@CookieValue("token") String token, ServerHttpRequest request) {
+        RateLimiterSingleton.INSTANCE.get().tryConsume(String.valueOf(request.getLocalAddress()));
 
         connectionManager.removeConnection(token);
 

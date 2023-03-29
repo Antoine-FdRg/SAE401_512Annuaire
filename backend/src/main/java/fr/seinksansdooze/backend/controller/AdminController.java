@@ -15,7 +15,7 @@ import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import javax.servlet.http.HttpServletRequest;
+import org.springframework.http.server.reactive.ServerHttpRequest;
 
 import javax.naming.NamingException;
 import java.util.List;
@@ -61,8 +61,8 @@ public class AdminController {
             @ApiResponse(responseCode = "401", description = "Token invalide")
     })
     @GetMapping("/info/person")
-    public FullPerson personInfo(@CookieValue("token") String token, @RequestParam String cn, HttpServletRequest request) {
-        RateLimiterSingleton.INSTANCE.get().tryConsume(request.getRemoteAddr());
+    public FullPerson personInfo(@CookieValue("token") String token, @RequestParam String cn, ServerHttpRequest request) {
+        RateLimiterSingleton.get().tryConsume(String.valueOf(request.getLocalAddress()));
 
         try {
             //TODO @ba101397 bloquer les perm de lectures des attributs que l'on considère comme sensibles pour les utilisateurs non admin
@@ -82,8 +82,8 @@ public class AdminController {
             @ApiResponse(responseCode = "401", description = "Token invalide")
     })
     @GetMapping("/group/all")
-    public List<PartialGroup> getAllGroups(@CookieValue("token") String token, HttpServletRequest request) {
-        RateLimiterSingleton.INSTANCE.get().tryConsume(request.getRemoteAddr());
+    public List<PartialGroup> getAllGroups(@CookieValue("token") String token, ServerHttpRequest request) {
+        RateLimiterSingleton.INSTANCE.get().tryConsume(String.valueOf(request.getLocalAddress()));
 
         try {
             return connectionManager.getQuerier(token).getAllGroups();
@@ -102,8 +102,8 @@ public class AdminController {
             @ApiResponse(responseCode = "409", description = "Erreur lors de la création du groupe")
     })
     @PostMapping("/group/create")
-    public ResponseEntity<String> createGroup(@CookieValue("token") String token, @RequestBody PartialGroup group, HttpServletRequest request) {
-        RateLimiterSingleton.INSTANCE.get().tryConsume(request.getRemoteAddr());
+    public ResponseEntity<String> createGroup(@CookieValue("token") String token, @RequestBody PartialGroup group, ServerHttpRequest request) {
+        RateLimiterSingleton.INSTANCE.get().tryConsume(String.valueOf(request.getLocalAddress()));
 
         System.out.println("name = " + group.getCn());
         boolean isGroupCreated;
@@ -124,8 +124,8 @@ public class AdminController {
             @ApiResponse(responseCode = "401", description = "Token invalide")
     })
     @DeleteMapping("/group/delete/{cn}")
-    public ResponseEntity<String> deleteGroup(@CookieValue("token") String token, @PathVariable String cn, HttpServletRequest request) {
-        RateLimiterSingleton.INSTANCE.get().tryConsume(request.getRemoteAddr());
+    public ResponseEntity<String> deleteGroup(@CookieValue("token") String token, @PathVariable String cn, ServerHttpRequest request) {
+        RateLimiterSingleton.INSTANCE.get().tryConsume(String.valueOf(request.getLocalAddress()));
 
         try {
             connectionManager.getQuerier(token).deleteGroup(cn);
@@ -145,8 +145,8 @@ public class AdminController {
             @ApiResponse(responseCode = "401", description = "Token invalide")
     })
     @GetMapping("/group/members/{cn}")
-    public List<PartialPerson> getGroupMembers(@CookieValue("token") String token, @PathVariable String cn, HttpServletRequest request) {
-        RateLimiterSingleton.INSTANCE.get().tryConsume(request.getRemoteAddr());
+    public List<PartialPerson> getGroupMembers(@CookieValue("token") String token, @PathVariable String cn, ServerHttpRequest request) {
+        RateLimiterSingleton.INSTANCE.get().tryConsume(String.valueOf(request.getLocalAddress()));
 
         try {
             return connectionManager.getQuerier(token).getGroupMembers(cn);
@@ -165,8 +165,8 @@ public class AdminController {
             @ApiResponse(responseCode = "406", description = "Erreur lors de l'ajout de l'utilisateur au groupe")
     })
     @PutMapping("/group/addUser")
-    public ResponseEntity<String> addUserToGroup(@CookieValue("token") String token, @RequestBody UserAndGroupPayload payload, HttpServletRequest request) {
-        RateLimiterSingleton.INSTANCE.get().tryConsume(request.getRemoteAddr());
+    public ResponseEntity<String> addUserToGroup(@CookieValue("token") String token, @RequestBody UserAndGroupPayload payload, ServerHttpRequest request) {
+        RateLimiterSingleton.INSTANCE.get().tryConsume(String.valueOf(request.getLocalAddress()));
 
         boolean isUserAdded;
         try {
@@ -187,8 +187,8 @@ public class AdminController {
             @ApiResponse(responseCode = "406", description = "Erreur lors de la suppression de l'utilisateur du groupe")
     })
     @DeleteMapping("/group/removeUser")
-    public ResponseEntity<String> removeUserFromGroup(@CookieValue("token") String token, @RequestBody UserAndGroupPayload payload, HttpServletRequest request) {
-        RateLimiterSingleton.INSTANCE.get().tryConsume(request.getRemoteAddr());
+    public ResponseEntity<String> removeUserFromGroup(@CookieValue("token") String token, @RequestBody UserAndGroupPayload payload, ServerHttpRequest request) {
+        RateLimiterSingleton.INSTANCE.get().tryConsume(String.valueOf(request.getLocalAddress()));
 
 
         boolean isUserRemoved;
