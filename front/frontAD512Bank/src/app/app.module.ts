@@ -8,15 +8,17 @@ import { HomePageComponent } from './home-page/home-page.component';
 import { ResultComponent } from './result/result.component';
 import { ProfileComponent } from './home-page/profile/profile.component';
 import { LoginComponent } from './login/login.component';
+import { ControlPanelComponent } from './controlPanel/controlPanel.component';
 
 @NgModule({
-  declarations: [
+  declarations: [	
     AppComponent,
     HomePageComponent,
     ResultComponent,
     ProfileComponent,
-    LoginComponent
-  ],
+    LoginComponent,
+      ControlPanelComponent
+   ],
   imports: [
     BrowserModule,
     AppRoutingModule,

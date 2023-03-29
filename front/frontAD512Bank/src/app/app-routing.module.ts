@@ -1,3 +1,5 @@
+import { MembersGestionComponent } from './controlPanel/membersGestion/membersGestion.component';
+import { ControlPanelComponent } from './controlPanel/controlPanel.component';
 import { LoginComponent } from './login/login.component';
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
@@ -14,6 +16,14 @@ const routes: Routes = [
   {
     path: 'login',
     component: LoginComponent
+  },
+  {
+    path: 'controlPanel',
+    component: ControlPanelComponent,
+  },
+  {
+    path: 'controlPanel/members',
+    component: MembersGestionComponent,
   }
 ];
 

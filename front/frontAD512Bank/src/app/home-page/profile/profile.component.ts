@@ -22,8 +22,8 @@ export class ProfileComponent {
 
   constructor(loginService: LoginService, private router: Router) {
     this.status = Status.disconnected;
-    this.name = loginService.userBase.name;
-    this.surname = loginService.userBase.surname;
+    this.name = loginService.userBase.firstName;
+    this.surname = loginService.userBase.lastName;
     this.initials = this.name.charAt(0) + this.surname.charAt(0);
   }
 

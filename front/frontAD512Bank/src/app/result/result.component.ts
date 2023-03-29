@@ -12,7 +12,7 @@ export class ResultComponent {
   clickedPosition: number = 0;
   opacity: number = 0;
   i: number = 0;
-  selectionState : string = "block" 
+  selectionState: string = "block"
 
 
   constructor(private searchService: SearchService) {
@@ -53,6 +53,7 @@ export class ResultComponent {
   }
   ngAfterViewInit(): void {
     //Called after ngAfterContentInit when the component's view has been initialized. Applies to components only.
+
     //Add 'implements AfterViewInit' to the class.
     window.scrollTo(0, 1000);
   }
