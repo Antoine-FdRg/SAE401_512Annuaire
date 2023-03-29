@@ -25,12 +25,12 @@ Write-Output ""
 # Copie des fichiers sur la machine
 Write-Output "Copie des fichiers sur la machine..."
 Write-Output "Entrez le mot de passe du serveur :"
-scp.exe -r .\winservice "administrateur@10.22.32.2:C:\Users\Administrateur\Desktop\backend\"
+scp.exe -v -r winservice "administrateur@10.22.32.2:C:\Users\Administrateur\Desktop\backend\"
 Write-Output ""
 
 # Redemarage du service
-Write-Output "Redemarage du service surr le serveur..."
-Write-Output "Entrez le mot de passe du serveur (c'est la dernière fois) :"
+Write-Output "Redemarage du service sur le serveur..."
+Write-Output "Entrez le mot de passe du serveur (c'est la derniere fois) :"
 ssh.exe administrateur@10.22.32.2 powershell "C:\Users\Administrateur\Desktop\backend\winservice\RestartService.ps1"
 
-Write-Output "Fini ! Tout devrait être bon."
+Write-Output "Fini ! Tout devrait etre bon."
