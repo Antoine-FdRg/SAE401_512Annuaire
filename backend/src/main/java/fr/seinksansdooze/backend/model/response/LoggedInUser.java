@@ -35,4 +35,8 @@ public class LoggedInUser extends PartialPerson{
                 ", isAdmin=" + isAdmin +
                 '}';
     }
+
+    public boolean isAdmin() {
+        return isAdmin;
+    }
 }
