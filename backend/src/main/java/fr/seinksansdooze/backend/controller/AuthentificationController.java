@@ -3,7 +3,7 @@ package fr.seinksansdooze.backend.controller;
 import fr.seinksansdooze.backend.connectionManaging.ADConnectionManager;
 import fr.seinksansdooze.backend.connectionManaging.ADConnectionManagerSingleton;
 import fr.seinksansdooze.backend.connectionManaging.rateLimit.RateLimiterSingleton;
-import fr.seinksansdooze.backend.model.SeinkSansDoozeBackException;
+import fr.seinksansdooze.backend.model.exception.SeinkSansDoozeBackException;
 import fr.seinksansdooze.backend.model.payload.LoginPayload;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;

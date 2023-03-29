@@ -56,6 +56,11 @@ public class ADQuerierMoke implements IAuthentifiedADQuerier, IPublicADQuerier {
         return null;
     }
 
+    @Override
+    public boolean userExists(String username) {
+        return false;
+    }
+
 
     @Override
     public boolean createGroup(String groupName) {

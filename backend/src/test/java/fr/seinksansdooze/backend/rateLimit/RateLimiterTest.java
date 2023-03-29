@@ -1,13 +1,11 @@
 package fr.seinksansdooze.backend.rateLimit;
 
 import fr.seinksansdooze.backend.connectionManaging.rateLimit.RateLimiter;
-import fr.seinksansdooze.backend.connectionManaging.rateLimit.TooManyRequestsexeption;
-import org.junit.jupiter.api.Assertions;
+import fr.seinksansdooze.backend.connectionManaging.rateLimit.TooManyRequestException;
 import org.junit.jupiter.api.Test;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.TimeUnit;
 
 import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
@@ -26,7 +24,7 @@ public class RateLimiterTest {
             if (i < maxRequests) {
                 assertDoesNotThrow(() -> rateLimiter.tryConsume(key), "The request should be allowed");
             } else {
-                assertThrows(TooManyRequestsexeption.class, () -> rateLimiter.tryConsume(key), "The request should be rejected");
+                assertThrows(TooManyRequestException.class, () -> rateLimiter.tryConsume(key), "The request should be rejected");
             }
         }
 
@@ -56,7 +54,7 @@ public class RateLimiterTest {
                     if (j < maxRequests) {
                         assertDoesNotThrow(() -> rateLimiter.tryConsume(user), "The request should be allowed");
                     } else {
-                        assertThrows(TooManyRequestsexeption.class, () -> rateLimiter.tryConsume(user), "The request should be rejected");
+                        assertThrows(TooManyRequestException.class, () -> rateLimiter.tryConsume(user), "The request should be rejected");
                     }
                 }
             });
@@ -72,7 +70,7 @@ public class RateLimiterTest {
         // Verify that each user has made the expected number of requests
         for (int i = 0; i < numUsers; i++) {
             String user = "user" + i;
-            assertThrows(TooManyRequestsexeption.class, () -> rateLimiter.tryConsume(user),
+            assertThrows(TooManyRequestException.class, () -> rateLimiter.tryConsume(user),
                     "The request should be rejected");
         }
     }

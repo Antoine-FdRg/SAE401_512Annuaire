@@ -14,4 +14,6 @@ public interface IPublicADQuerier {
     PartialPerson getPartialPersonInfo(String cn);
 
     PartialStructure getPartialStructureInfo(String ou);
+
+    boolean userExists(String username);
 }

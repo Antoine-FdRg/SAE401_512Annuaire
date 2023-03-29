@@ -4,7 +4,7 @@ package fr.seinksansdooze.backend.controller;
 import fr.seinksansdooze.backend.connectionManaging.ADConnectionManager;
 import fr.seinksansdooze.backend.connectionManaging.ADConnectionManagerSingleton;
 import fr.seinksansdooze.backend.connectionManaging.rateLimit.RateLimiterSingleton;
-import fr.seinksansdooze.backend.model.SeinkSansDoozeBackException;
+import fr.seinksansdooze.backend.model.exception.SeinkSansDoozeBackException;
 import fr.seinksansdooze.backend.model.payload.UserAndGroupPayload;
 import fr.seinksansdooze.backend.model.response.FullPerson;
 import fr.seinksansdooze.backend.model.response.PartialGroup;

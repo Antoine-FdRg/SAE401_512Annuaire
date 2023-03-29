@@ -1,8 +1,13 @@
 package fr.seinksansdooze.backend.connectionManaging.ADBridge;
 
+import fr.seinksansdooze.backend.connectionManaging.ADBridge.interfaces.IPublicADQuerier;
+import fr.seinksansdooze.backend.model.exception.group.SeinkSansDoozeGroupNotFound;
+import fr.seinksansdooze.backend.model.exception.user.SeinkSansDoozeUserNotFound;
 import lombok.SneakyThrows;
 import fr.seinksansdooze.backend.connectionManaging.ADBridge.model.ObjectType;
-
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import fr.seinksansdooze.backend.model.exception.*;
 import javax.naming.Context;
 import javax.naming.NamingEnumeration;
 import javax.naming.NamingException;
@@ -17,11 +22,12 @@ public abstract class ADQuerier {
 
     protected DirContext context;
 
+
     protected ADQuerier(String username, String pwd) {
         //rajouter un systeme de session et d'authentification
         boolean connected = this.login(username, pwd);
         if (!connected) {
-            throw new RuntimeException("Impossible de se connecter à l'annuaire Active Directory");
+            throw new SeinkSansDoozeBackException(HttpStatus.NOT_ACCEPTABLE,"Impossible de se connecter à l'annuaire Active Directory");
         }
     }
 
@@ -37,7 +43,10 @@ public abstract class ADQuerier {
      * @return true si la connexion a réussi, false sinon
      */
     public boolean login(String username, String pwd) {
-        //TODO verifier si le login est valide
+        //TODO a finir
+//        if (!this.publicADQuerier.userExists(username)) {
+//            throw new SeinkSansDoozeBackException(HttpStatus.UNAUTHORIZED, "Nom d'utilisateur incorrect");
+//        }
         Properties env = new Properties();
         username = username + "@EQUIPE1B.local";
         env.put(Context.INITIAL_CONTEXT_FACTORY, "com.sun.jndi.ldap.LdapCtxFactory");
@@ -50,7 +59,7 @@ public abstract class ADQuerier {
             this.context = new InitialDirContext(env);
             return true;
         } catch (NamingException e) {
-            return false;
+            throw new SeinkSansDoozeBackException(HttpStatus.UNAUTHORIZED, "Mot de passe incorrect");
         }
     }
 
@@ -63,7 +72,7 @@ public abstract class ADQuerier {
             res = this.context.search(AD_BASE, filter, searchControls);
             return res.hasMore();
         } catch (NamingException e) {
-            throw new RuntimeException(e);
+            throw new SeinkSansDoozeBadRequest();
         }
     }
 
@@ -76,7 +85,7 @@ public abstract class ADQuerier {
             this.context.close();
             return true;
         } catch (NamingException e) {
-            return false;
+            throw new SeinkSansDoozeBackException(HttpStatus.INTERNAL_SERVER_ERROR, "Erreur lors de la déconnexion");
         }
     }
 
@@ -145,7 +154,7 @@ public abstract class ADQuerier {
             return res;
         } catch (NamingException e) {
 //            throw new RuntimeException(e);
-            return null;
+            throw new SeinkSansDoozeBadRequest();
         }
     }
 
@@ -163,7 +172,7 @@ public abstract class ADQuerier {
             res = this.context.search(AD_BASE, filter, searchControls);
             return res;
         } catch (NamingException e) {
-            return null;
+            throw new SeinkSansDoozeBadRequest();
         }
     }
 
@@ -173,22 +182,18 @@ public abstract class ADQuerier {
 
 
     //  api/admin/group/members/{groupName}
-    //TODO gérer l'erreur si le groupe n'existe pas et si le groupe est vide
     public ArrayList<SearchResult> queryGroupMembers(String groupName) {
         String filter = "(&(objectClass=group)(CN=" + groupName + "))";
         SearchControls searchControls = new SearchControls();
         searchControls.setSearchScope(SearchControls.SUBTREE_SCOPE);
         NamingEnumeration<SearchResult> res;
         try {
-            try {
-                res = this.context.search(AD_BASE, filter, searchControls);
-            } catch (NamingException ex) {
-                throw new RuntimeException(ex);
-            }
-//            System.out.println("nom du group trouvé : ");
-//            TestADQuerier.displayResults(res,ObjectType.GROUP);
-            //le group test est bien trouvé
-            if (res.hasMore()) {
+            res = this.context.search(AD_BASE, filter, searchControls);
+        } catch (NamingException ex) {
+            throw new SeinkSansDoozeBadRequest();
+        }
+        try {
+            if(res.hasMore()){
                 Attributes groupAttributs = res.next().getAttributes();
                 Attribute groupMembersName = groupAttributs.get("member");
                 ArrayList<SearchResult> groupMembers = new ArrayList<>();
@@ -203,11 +208,14 @@ public abstract class ADQuerier {
                     }
                 }
                 return groupMembers;
-            }else {
-                return null;
+
+            }else{
+                throw new SeinkSansDoozeGroupNotFound();
             }
+
+
         } catch (NamingException ex) {
-            throw new RuntimeException(ex);
+            throw new SeinkSansDoozeGroupNotFound();
         }
     }
 
@@ -222,10 +230,10 @@ public abstract class ADQuerier {
             if (res.hasMore()) {
                 return res;
             } else {
-                return null;
+                throw new SeinkSansDoozeUserNotFound();
             }
         } catch (NamingException e) {
-            return null;
+            throw new SeinkSansDoozeBadRequest();
         }
     }
 

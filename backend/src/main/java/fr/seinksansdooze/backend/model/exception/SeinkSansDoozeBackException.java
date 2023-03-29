@@ -1,4 +1,4 @@
-package fr.seinksansdooze.backend.model;
+package fr.seinksansdooze.backend.model.exception;
 
 import fr.seinksansdooze.backend.controller.SeinkSansDoozeExceptionHandler;
 import org.springframework.http.HttpStatus;

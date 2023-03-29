@@ -1,6 +1,6 @@
 package fr.seinksansdooze.backend.controller;
 
-import fr.seinksansdooze.backend.model.SeinkSansDoozeBackException;
+import fr.seinksansdooze.backend.model.exception.SeinkSansDoozeBackException;
 import fr.seinksansdooze.backend.model.response.SeinkSansDoozeErrorResponse;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ControllerAdvice;

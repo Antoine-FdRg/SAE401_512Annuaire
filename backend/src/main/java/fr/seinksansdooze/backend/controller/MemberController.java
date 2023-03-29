@@ -4,7 +4,7 @@ import fr.seinksansdooze.backend.connectionManaging.ADConnectionManager;
 import fr.seinksansdooze.backend.connectionManaging.ADConnectionManagerSingleton;
 import fr.seinksansdooze.backend.connectionManaging.rateLimit.RateLimiterSingleton;
 import fr.seinksansdooze.backend.connectionManaging.tokenManaging.TokenSanitizer;
-import fr.seinksansdooze.backend.model.SeinkSansDoozeBackException;
+import fr.seinksansdooze.backend.model.exception.SeinkSansDoozeBackException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;

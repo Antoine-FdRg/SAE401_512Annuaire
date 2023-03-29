@@ -81,6 +81,9 @@ public class TestADQuerier {
         System.out.println(querier.removeUserFromGroup("Thomas TG. Gorisse", "test"));
         System.out.println("Affichage des membres du groupe test");
         querier.getGroupMembers("test").forEach(System.out::println);
+
+
+
     }
 
     private static void testPublicQuerier(){

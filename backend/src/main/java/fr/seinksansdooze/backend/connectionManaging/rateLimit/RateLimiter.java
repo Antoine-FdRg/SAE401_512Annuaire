@@ -57,7 +57,7 @@ public class RateLimiter implements Closeable {
      *
      * @param key la clé qui correspond au seau à vérifier.
      * @return true si un jeton a été consommé avec succès et si le seau a suffisamment de jetons pour consommer un autre jeton, sinon false.
-     * @throws TooManyRequestsexeption si le seau n'a pas suffisamment de jetons pour consommer un jeton supplémentaire.
+     * @throws TooManyRequestException si le seau n'a pas suffisamment de jetons pour consommer un jeton supplémentaire.
      */
 
     public void tryConsume(String key){
@@ -74,7 +74,7 @@ public class RateLimiter implements Closeable {
      * @param key la clé qui correspond au seau à vérifier.
      * @param numToken le nombre de jeton à consommer
      * @return true si un jeton a été consommé avec succès et si le seau a suffisamment de jetons pour consommer un autre jeton, sinon false.
-     * @throws TooManyRequestsexeption si le seau n'a pas suffisamment de jetons pour consommer un jeton supplémentaire.
+     * @throws TooManyRequestException si le seau n'a pas suffisamment de jetons pour consommer un jeton supplémentaire.
      */
     public void tryConsume(String key,int numToken) {
         boolean result = false;
@@ -86,7 +86,7 @@ public class RateLimiter implements Closeable {
             result=bucket.tryConsume(1);
         }
         if (!result) {
-            throw new TooManyRequestsexeption();
+            throw new TooManyRequestException();
         }
     }
     /**
