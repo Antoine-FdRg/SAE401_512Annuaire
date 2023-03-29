@@ -30,31 +30,6 @@ public class AdminController {
 
     ADConnectionManager connectionManager = ADConnectionManagerSingleton.INSTANCE.get();
 
-//    @ApiResponses({
-//            @ApiResponse(responseCode = "200", description = "Ping réussi"),
-//            @ApiResponse(responseCode = "401", description = "Token invalide")
-//    })
-//    @GetMapping("/ping")
-//    public String ping(@CookieValue("token") String token) {
-//        if (RateLimiterSingleton.INSTANCE.get().tryConsume("request.getRemoteAddr()")){
-//            try {
-//                if (connectionManager.getQuerier(token).getClass()!= null) {
-//                    return "ping réussi";
-//                }
-//                throw new RuntimeException("Token invalide");
-//            } catch (NamingException e) {
-//                throw new SeinkSansDoozeBackException(
-//                        HttpStatus.UNAUTHORIZED,
-//                        "Erreur de connexion, la session a peut être expirée, veuillez vous reconnecter."
-//                );
-//            }
-//        }
-//        throw new SeinkSansDoozeBackException(
-//                HttpStatus.TOO_MANY_REQUESTS,
-//                "Trop de requêtes, veuillez patienter."
-//        );
-//    }
-
     @Operation(summary = "Renvoie toutes les informations disponibles sur une personne")
     @ApiResponses({
             @ApiResponse(responseCode = "200", description = "Recherche réussie"),
@@ -67,6 +42,27 @@ public class AdminController {
         try {
             //TODO @ba101397 bloquer les perm de lectures des attributs que l'on considère comme sensibles pour les utilisateurs non admin
             return connectionManager.getQuerier(token).getFullPersonInfo(cn);
+        } catch (NamingException e) {
+            throw new SeinkSansDoozeBackException(
+                    HttpStatus.UNAUTHORIZED,
+                    "Erreur de connexion, la session a peut être expirée, veuillez vous reconnecter."
+            );
+        }
+    }
+
+
+    @Operation(summary = "Renvoie la liste des sous-structures ou personnes contenues dans une structure")
+    @ApiResponses({
+            @ApiResponse(responseCode = "200", description = "Recherche réussie"),
+            @ApiResponse(responseCode = "401", description = "Token invalide"),
+            @ApiResponse(responseCode = "404", description = "Structure non trouvée")
+    })
+    @GetMapping("/info/structure/")
+    public List<PartialPerson> getStructureInfo(@CookieValue("token") String token, @RequestParam String cn, ServerHttpRequest request) {
+        RateLimiterSingleton.INSTANCE.get().tryConsume(String.valueOf(request.getLocalAddress()));
+
+        try {
+            return connectionManager.getQuerier(token).getStructureInfo(cn);
         } catch (NamingException e) {
             throw new SeinkSansDoozeBackException(
                     HttpStatus.UNAUTHORIZED,
@@ -118,6 +114,25 @@ public class AdminController {
         return isGroupCreated ? new ResponseEntity<>("Groupe créé avec succès.", HttpStatus.OK) : new ResponseEntity<>("Erreur lors de la création du groupe.", HttpStatus.CONFLICT);
     }
 
+    @Operation(summary = "Renvoie la liste des membres d'un groupe")
+    @ApiResponses({
+            @ApiResponse(responseCode = "200", description = "Recherche réussie"),
+            @ApiResponse(responseCode = "401", description = "Token invalide")
+    })
+    @GetMapping("/group/members/{cn}")
+    public List<PartialPerson> getGroupMembers(@CookieValue("token") String token, @PathVariable String cn, ServerHttpRequest request) {
+        RateLimiterSingleton.INSTANCE.get().tryConsume(String.valueOf(request.getLocalAddress()));
+
+        try {
+            return connectionManager.getQuerier(token).getGroupMembers(cn);
+        } catch (NamingException e) {
+            throw new SeinkSansDoozeBackException(
+                    HttpStatus.UNAUTHORIZED,
+                    "Erreur de connexion, la session a peut être expirée, veuillez vous reconnecter."
+            );
+        }
+    }
+
     @Operation(summary = "Supprime un groupe")
     @ApiResponses({
             @ApiResponse(responseCode = "200", description = "Groupe supprimé"),
@@ -137,25 +152,6 @@ public class AdminController {
         }
 
         return new ResponseEntity<>("Groupe supprimé avec succès.", HttpStatus.OK);
-    }
-
-    @Operation(summary = "Renvoie la liste des membres d'un groupe")
-    @ApiResponses({
-            @ApiResponse(responseCode = "200", description = "Recherche réussie"),
-            @ApiResponse(responseCode = "401", description = "Token invalide")
-    })
-    @GetMapping("/group/members/{cn}")
-    public List<PartialPerson> getGroupMembers(@CookieValue("token") String token, @PathVariable String cn, ServerHttpRequest request) {
-        RateLimiterSingleton.INSTANCE.get().tryConsume(String.valueOf(request.getLocalAddress()));
-
-        try {
-            return connectionManager.getQuerier(token).getGroupMembers(cn);
-        } catch (NamingException e) {
-            throw new SeinkSansDoozeBackException(
-                    HttpStatus.UNAUTHORIZED,
-                    "Erreur de connexion, la session a peut être expirée, veuillez vous reconnecter."
-            );
-        }
     }
 
     @Operation(summary = "Ajoute un utilisateur à un groupe")

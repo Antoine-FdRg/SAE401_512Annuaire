@@ -96,4 +96,9 @@ public class ADQuerierMoke implements IAuthentifiedADQuerier, IPublicADQuerier {
     public boolean changePassword(String cn, String prevPwd, String newPwd) {
         return false;
     }
+
+    @Override
+    public List<PartialPerson> getStructureInfo(String cn) {
+        return null;
+    }
 }

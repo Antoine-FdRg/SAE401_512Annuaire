@@ -20,6 +20,7 @@ import javax.naming.NamingException;
 import javax.naming.directory.*;
 import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
+import java.util.List;
 
 public class AuthentifiedADQuerier extends ADQuerier implements IAuthentifiedADQuerier {
 
@@ -220,6 +221,12 @@ public class AuthentifiedADQuerier extends ADQuerier implements IAuthentifiedADQ
         } catch (NamingException e) {
             throw new SeinkSansDoozeBadRequest();
         }
+    }
+
+    @Override
+    public List<PartialPerson> getStructureInfo(String cn) {
+        //TODO
+        return List.of();
     }
 
 }

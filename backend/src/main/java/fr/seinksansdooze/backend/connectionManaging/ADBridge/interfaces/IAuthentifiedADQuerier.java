@@ -6,6 +6,7 @@ import fr.seinksansdooze.backend.model.response.PartialPerson;
 
 import javax.naming.NamingException;
 import java.util.ArrayList;
+import java.util.List;
 
 public interface IAuthentifiedADQuerier {
     boolean login(String username, String pwd);
@@ -28,4 +29,5 @@ public interface IAuthentifiedADQuerier {
 
     boolean changePassword(String cn, String prevPwd,String newPwd);
 
+    List<PartialPerson> getStructureInfo(String cn);
 }
