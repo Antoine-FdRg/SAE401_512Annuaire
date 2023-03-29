@@ -4,4 +4,4 @@ L'application deployée sur le serveur est gérée par WinSW, un outil pour tran
 
 Pour plus d'informations : [https://github.com/winsw/winsw](https://github.com/winsw/winsw).
 
-Référence des ccommandes : [https://github.com/winsw/winsw#usage](https://github.com/winsw/winsw#usage)
+Référence des commandes : [https://github.com/winsw/winsw#usage](https://github.com/winsw/winsw#usage)
