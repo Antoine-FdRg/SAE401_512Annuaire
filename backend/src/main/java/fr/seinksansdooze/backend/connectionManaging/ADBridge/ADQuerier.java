@@ -3,6 +3,8 @@ package fr.seinksansdooze.backend.connectionManaging.ADBridge;
 import fr.seinksansdooze.backend.connectionManaging.ADBridge.interfaces.IPublicADQuerier;
 import fr.seinksansdooze.backend.model.exception.group.SeinkSansDoozeGroupNotFound;
 import fr.seinksansdooze.backend.model.exception.user.SeinkSansDoozeUserNotFound;
+import fr.seinksansdooze.backend.model.response.LoggedInUser;
+import fr.seinksansdooze.backend.model.response.PartialPerson;
 import lombok.SneakyThrows;
 import fr.seinksansdooze.backend.connectionManaging.ADBridge.model.ObjectType;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -43,10 +45,6 @@ public abstract class ADQuerier {
      * @return true si la connexion a réussi, false sinon
      */
     public boolean login(String username, String pwd) {
-        //TODO a finir
-//        if (!this.publicADQuerier.userExists(username)) {
-//            throw new SeinkSansDoozeBackException(HttpStatus.UNAUTHORIZED, "Nom d'utilisateur incorrect");
-//        }
         Properties env = new Properties();
         username = username + "@EQUIPE1B.local";
         env.put(Context.INITIAL_CONTEXT_FACTORY, "com.sun.jndi.ldap.LdapCtxFactory");
@@ -57,10 +55,24 @@ public abstract class ADQuerier {
         env.put(Context.SECURITY_CREDENTIALS, pwd);
         try {
             this.context = new InitialDirContext(env);
-            return true;
         } catch (NamingException e) {
             throw new SeinkSansDoozeBackException(HttpStatus.UNAUTHORIZED, "Mot de passe incorrect");
         }
+        //TODO continuer la construction du LoggedInUser
+        try {
+            System.out.println("Connexion réussie");
+            //TODO cherche le bon truc
+
+            SearchControls searchControls = new SearchControls();
+            searchControls.setSearchScope(SearchControls.SUBTREE_SCOPE);
+            String filter = "(&(objectClass=user)(userPrincipalName=" + username + "))";
+            NamingEnumeration<SearchResult> res;
+            res = this.context.search(AD_BASE, filter, searchControls);
+            System.out.println(new LoggedInUser(res.next()));
+        } catch (NamingException e) {
+            throw new RuntimeException(e);
+        }
+        return true;
     }
 
     private boolean isAdminConnected(String username) {
