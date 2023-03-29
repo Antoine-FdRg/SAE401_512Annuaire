@@ -6,7 +6,7 @@ public class TestADQuerier {
 
     public static void main(String[] args) {
 //        testPublicQuerier();
-        testAuthenticatedQuerier();
+//        testAuthenticatedQuerier();
 
 //
 

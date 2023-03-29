@@ -5,6 +5,7 @@ import fr.seinksansdooze.backend.connectionManaging.ADConnectionManagerSingleton
 import fr.seinksansdooze.backend.connectionManaging.rateLimit.RateLimiterSingleton;
 import fr.seinksansdooze.backend.model.exception.SeinkSansDoozeBackException;
 import fr.seinksansdooze.backend.model.payload.LoginPayload;
+import fr.seinksansdooze.backend.model.response.LoggedInUser;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
@@ -44,13 +45,14 @@ public class AuthentificationController {
             @ApiResponse(responseCode = "401", description = "Identifiant ou mot de passe incorrect")
     })
     @PostMapping("/login")
-    public ResponseEntity<String> login(@Valid @RequestBody LoginPayload payload, ServerHttpRequest request) {
+    public ResponseEntity<LoggedInUser> login(@Valid @RequestBody LoginPayload payload, ServerHttpRequest request) {
         RateLimiterSingleton.INSTANCE.get().tryConsume(String.valueOf(request.getLocalAddress()),10);
 
-        String token;
+        Object[] userAndToken;
+
 
         try {
-            token = connectionManager.addConnection(payload.getUsername(), payload.getPassword());
+            userAndToken = connectionManager.addConnection(payload.getUsername(), payload.getPassword());
         } catch (NamingException e) {
             throw new SeinkSansDoozeBackException(
                     HttpStatus.UNAUTHORIZED,
@@ -58,6 +60,8 @@ public class AuthentificationController {
             );
         }
 
+        String token = (String) userAndToken[1];
+        LoggedInUser connectedUser = (LoggedInUser) userAndToken[0];
 
         // Durée de vie de la session
         int sessionAge;
@@ -76,7 +80,7 @@ public class AuthentificationController {
 
         return ResponseEntity.ok()
                 .header(HttpHeaders.SET_COOKIE, responseCookie.toString())
-                .body("Connexion avec succès");
+                .body(connectedUser);
     }
 
     @Operation(summary = "Déconnecte un utilisateur")

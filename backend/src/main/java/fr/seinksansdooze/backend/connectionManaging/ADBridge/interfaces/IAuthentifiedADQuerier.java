@@ -1,15 +1,15 @@
 package fr.seinksansdooze.backend.connectionManaging.ADBridge.interfaces;
 
 import fr.seinksansdooze.backend.model.response.FullPerson;
+import fr.seinksansdooze.backend.model.response.LoggedInUser;
 import fr.seinksansdooze.backend.model.response.PartialGroup;
 import fr.seinksansdooze.backend.model.response.PartialPerson;
 
-import javax.naming.NamingException;
 import java.util.ArrayList;
 import java.util.List;
 
 public interface IAuthentifiedADQuerier {
-    boolean login(String username, String pwd);
+    LoggedInUser login(String username, String pwd);
 
     boolean logout();
 

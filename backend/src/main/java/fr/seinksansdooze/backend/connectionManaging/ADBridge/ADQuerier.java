@@ -1,13 +1,13 @@
 package fr.seinksansdooze.backend.connectionManaging.ADBridge;
 
-import fr.seinksansdooze.backend.connectionManaging.ADBridge.interfaces.IPublicADQuerier;
 import fr.seinksansdooze.backend.model.exception.group.SeinkSansDoozeGroupNotFound;
 import fr.seinksansdooze.backend.model.exception.user.SeinkSansDoozeUserNotFound;
+import fr.seinksansdooze.backend.model.response.LoggedInUser;
 import lombok.SneakyThrows;
 import fr.seinksansdooze.backend.connectionManaging.ADBridge.model.ObjectType;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import fr.seinksansdooze.backend.model.exception.*;
+
 import javax.naming.Context;
 import javax.naming.NamingEnumeration;
 import javax.naming.NamingException;
@@ -25,9 +25,9 @@ public abstract class ADQuerier {
 
     protected ADQuerier(String username, String pwd) {
         //rajouter un systeme de session et d'authentification
-        boolean connected = this.login(username, pwd);
+        boolean connected = this.login(username, pwd) != null;
         if (!connected) {
-            throw new SeinkSansDoozeBackException(HttpStatus.NOT_ACCEPTABLE,"Impossible de se connecter à l'annuaire Active Directory");
+            throw new SeinkSansDoozeBackException(HttpStatus.NOT_ACCEPTABLE, "Impossible de se connecter à l'annuaire Active Directory");
         }
     }
 
@@ -38,15 +38,12 @@ public abstract class ADQuerier {
 
     /**
      * Méthode répondant à la route /api/auth/login en connectant l'utilisateur à l'annuaire Active Directory
+     *
      * @param username le nom d'utilisateur
-     * @param pwd le mot de passe
+     * @param pwd      le mot de passe
      * @return true si la connexion a réussi, false sinon
      */
-    public boolean login(String username, String pwd) {
-        //TODO a finir
-//        if (!this.publicADQuerier.userExists(username)) {
-//            throw new SeinkSansDoozeBackException(HttpStatus.UNAUTHORIZED, "Nom d'utilisateur incorrect");
-//        }
+    public LoggedInUser login(String username, String pwd) {
         Properties env = new Properties();
         username = username + "@EQUIPE1B.local";
         env.put(Context.INITIAL_CONTEXT_FACTORY, "com.sun.jndi.ldap.LdapCtxFactory");
@@ -57,9 +54,22 @@ public abstract class ADQuerier {
         env.put(Context.SECURITY_CREDENTIALS, pwd);
         try {
             this.context = new InitialDirContext(env);
-            return true;
+            return getLoggedInUser(username);
         } catch (NamingException e) {
             throw new SeinkSansDoozeBackException(HttpStatus.UNAUTHORIZED, "Mot de passe incorrect");
+        }
+    }
+
+    private LoggedInUser getLoggedInUser(String username) {
+        try {
+            SearchControls searchControls = new SearchControls();
+            searchControls.setSearchScope(SearchControls.SUBTREE_SCOPE);
+            String filter = "(&(objectClass=user)(userPrincipalName=" + username + "))";
+            NamingEnumeration<SearchResult> res;
+            res = this.context.search(AD_BASE, filter, searchControls);
+            return new LoggedInUser(res.next());
+        } catch (NamingException e) {
+            throw new SeinkSansDoozeUserNotFound();
         }
     }
 
@@ -78,6 +88,7 @@ public abstract class ADQuerier {
 
     /**
      * Méthode répondant à la route /api/auth/logout en déconnectant l'utilisateur de l'annuaire Active Directory
+     *
      * @return true si la déconnexion a réussi, false sinon
      */
     public boolean logout() {
@@ -159,9 +170,6 @@ public abstract class ADQuerier {
     }
 
 
-
-
-
     // api/admin/group/all
     public NamingEnumeration<SearchResult> searchAllGroups() {
         String filter = "(&(objectClass=group))";
@@ -175,7 +183,6 @@ public abstract class ADQuerier {
             throw new SeinkSansDoozeBadRequest();
         }
     }
-
 
 
     //  api/admin/group/remove/{groupName}/{username}
@@ -193,7 +200,7 @@ public abstract class ADQuerier {
             throw new SeinkSansDoozeBadRequest();
         }
         try {
-            if(res.hasMore()){
+            if (res.hasMore()) {
                 Attributes groupAttributs = res.next().getAttributes();
                 Attribute groupMembersName = groupAttributs.get("member");
                 ArrayList<SearchResult> groupMembers = new ArrayList<>();
@@ -201,15 +208,15 @@ public abstract class ADQuerier {
                 while (membersList.hasMore()) {
                     String currentMemberCN = membersList.next().toString();
                     //TODO s'assurer que le search ne créé pas de bug
-                    NamingEnumeration<SearchResult> currentMemberEnum = search(ObjectType.PERSON,currentMemberCN.split(",")[0].split("=")[1]);
-                    if(currentMemberEnum.hasMore()){
+                    NamingEnumeration<SearchResult> currentMemberEnum = search(ObjectType.PERSON, currentMemberCN.split(",")[0].split("=")[1]);
+                    if (currentMemberEnum.hasMore()) {
                         SearchResult currentMember = currentMemberEnum.next();
                         groupMembers.add(currentMember);
                     }
                 }
                 return groupMembers;
 
-            }else{
+            } else {
                 throw new SeinkSansDoozeGroupNotFound();
             }
 
@@ -218,23 +225,4 @@ public abstract class ADQuerier {
             throw new SeinkSansDoozeGroupNotFound();
         }
     }
-
-    //  api/admin/search/person/{person}/{groupName}
-    private NamingEnumeration<SearchResult> searchPerson(String person, String groupName) {
-        String filter = "(&(objectClass=user)(CN=*" + person + "*))";
-        SearchControls searchControls = new SearchControls();
-        searchControls.setSearchScope(SearchControls.SUBTREE_SCOPE);
-        NamingEnumeration<SearchResult> res;
-        try {
-            res = this.context.search(AD_BASE, filter, searchControls);
-            if (res.hasMore()) {
-                return res;
-            } else {
-                throw new SeinkSansDoozeUserNotFound();
-            }
-        } catch (NamingException e) {
-            throw new SeinkSansDoozeBadRequest();
-        }
-    }
-
 }
