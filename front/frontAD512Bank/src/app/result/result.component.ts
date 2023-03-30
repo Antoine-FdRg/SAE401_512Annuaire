@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { AfterViewInit, Component } from '@angular/core';
 import { elementAt, first } from 'rxjs';
 import { Person } from '../person';
 import { SearchService } from '../service/search.service';
@@ -17,7 +17,10 @@ export class ResultComponent {
   constructor(public searchService: SearchService) {
   }
 
-  ngAfterViewInit(): void {
+
+  ngAfterContentChecked(): void {
+    //Called after every check of the component's or directive's content.
+    //Add 'implements AfterContentChecked' to the class.
     window.scrollTo(0, 800);
   }
 
