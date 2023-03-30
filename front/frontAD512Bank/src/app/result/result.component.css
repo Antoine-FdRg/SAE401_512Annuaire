@@ -119,6 +119,12 @@
 
   height: 100px;
   background-color: rgba(240, 248, 255, 0.281);
+  background: linear-gradient(
+    to right,
+    rgba(240, 248, 255, 0.281),
+    rgba(156, 198, 232, 0)
+  );
+  /* mix-blend-mode: multiply; */
   display: flex;
   justify-content: space-between;
   align-items: center;

@@ -15,13 +15,19 @@ export class ResultComponent {
   selectionState: string = "block"
 
   constructor(public searchService: SearchService) {
+
+    //time out 1s to wait for the search service to be updated
+    setTimeout(() => {
+      window.scrollTo(0, 800);
+    }
+      , 300);
   }
 
 
   ngAfterContentChecked(): void {
     //Called after every check of the component's or directive's content.
     //Add 'implements AfterContentChecked' to the class.
-    window.scrollTo(0, 800);
+    //
   }
 
   displayNotFound(): string {
