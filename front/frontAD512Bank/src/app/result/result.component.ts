@@ -12,7 +12,8 @@ export class ResultComponent {
   clickedPosition: number = 0;
   opacity: number = 0;
   i: number = 0;
-  selectionState: string = "block"
+  selectionState: string = "block";
+  hideResponsiveDetails = false;
 
   constructor(public searchService: SearchService) {
   }
@@ -29,6 +30,13 @@ export class ResultComponent {
   }
 
   personClicked(person: Person, position: number) {
+    if(this.clickedPosition === position && !this.hideResponsiveDetails){
+      this.hideResponsiveDetails = true;
+    }
+    else {
+      this.hideResponsiveDetails = false;
+    }
+
     this.clickedPosition = position;
     this.opacity = 1;
   }
@@ -39,8 +47,6 @@ export class ResultComponent {
     }
     return 0;
   }
-
-
 }
 
 

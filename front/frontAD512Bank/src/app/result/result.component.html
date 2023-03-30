@@ -69,10 +69,9 @@
       </div>
       </div>
 
-      <div class="responsive-details" [style.height.px]="developDetails(i)">
+      <div class="responsive-details" [style.height.px]="this.hideResponsiveDetails === true ? 0 : developDetails(i)">
 
       </div>
-    
     </div>
 
     <div
