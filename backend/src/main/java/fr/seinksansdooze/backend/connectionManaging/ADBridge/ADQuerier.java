@@ -1,12 +1,14 @@
 package fr.seinksansdooze.backend.connectionManaging.ADBridge;
 
+import fr.seinksansdooze.backend.connectionManaging.ADBridge.model.ObjectType;
+import fr.seinksansdooze.backend.model.exception.SeinkSansDoozeBackException;
+import fr.seinksansdooze.backend.model.exception.SeinkSansDoozeBadRequest;
 import fr.seinksansdooze.backend.model.exception.group.SeinkSansDoozeGroupNotFound;
 import fr.seinksansdooze.backend.model.exception.user.SeinkSansDoozeUserNotFound;
 import fr.seinksansdooze.backend.model.response.LoggedInUser;
 import lombok.SneakyThrows;
-import fr.seinksansdooze.backend.connectionManaging.ADBridge.model.ObjectType;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
-import fr.seinksansdooze.backend.model.exception.*;
 
 import javax.naming.Context;
 import javax.naming.NamingEnumeration;
@@ -16,6 +18,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Properties;
 
+@Slf4j
 public abstract class ADQuerier {
     private static final String AD_URL = "ldap://10.22.32.2:389/";  //389 (search et createSubcontext) ou 3268 (search only) ou 636 (SSL)
     protected static final String AD_BASE = "OU=512BankFR,DC=EQUIPE1B,DC=local";
@@ -165,6 +168,7 @@ public abstract class ADQuerier {
             return res;
         } catch (NamingException e) {
 //            throw new RuntimeException(e);
+            log.error("Erreur lors de la recherche", e);
             throw new SeinkSansDoozeBadRequest();
         }
     }
