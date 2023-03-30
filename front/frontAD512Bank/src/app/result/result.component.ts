@@ -13,56 +13,35 @@ export class ResultComponent {
   opacity: number = 0;
   i: number = 0;
   selectionState: string = "block"
+  selectionState: string = "block"
 
-
-  constructor(private searchService: SearchService) {
-    this.listPerson = this.searchService.lastResults;
-    this.listPerson.push(
-      {
-        firstName: "placeholder",
-        lastName: "placeholder",
-        phone: "placeholder",
-        position: "placeholder",
-        login: "placeholder",
-        tutor: "placeholder",
-        email: "placeholder"
-      },
-      {
-        firstName: "placeholder",
-        lastName: "placeholder",
-        phone: "placeholder",
-        position: "placeholder",
-        login: "placeholder",
-        tutor: "placeholder",
-        email: "placeholder"
-      },
-      {
-        firstName: "placeholder",
-        lastName: "placeholder",
-        phone: "placeholder",
-        position: "placeholder",
-        login: "placeholder",
-        tutor: "placeholder",
-        email: "placeholder"
-      },
-    )
-
-    console.log(this.listPerson);
-    // scroll to top of component
-
+  constructor(public searchService: SearchService) {
   }
-  ngAfterViewInit(): void {
-    //Called after ngAfterContentInit when the component's view has been initialized. Applies to components only.
 
-    //Add 'implements AfterViewInit' to the class.
-    window.scrollTo(0, 1000);
+  ngAfterViewInit(): void {
+    window.scrollTo(0, 800);
+  }
+
+  displayNotFound(): string {
+    if (this.searchService.lastResults.length === 0) {
+      return "flex";
+    }
+    return "none";
   }
 
   personClicked(person: Person, position: number) {
-
     this.clickedPosition = position;
     this.opacity = 1;
   }
+
+  developDetails(i: number) {
+    if (this.clickedPosition === i) {
+      return 200;
+    }
+    return 0;
+  }
+
+
 }
 
 
