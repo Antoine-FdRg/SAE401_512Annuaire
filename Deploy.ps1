@@ -10,9 +10,39 @@ if (!(Get-Command mvn -ErrorAction SilentlyContinue)) {
     exit 1
 }
 
-# Rebuild du projet
+$BuildFrontend = 0
+if (!(Get-Command npm -ErrorAction SilentlyContinue)) {
+    Write-Warning "npm n'est pas detecte, le frontend ne va pas être build."
+} else {
+    $BuildFrontend = 1
+}
+
+# Build du frontend
+if ($BuildFrontend) {
+    Write-Output "Build du frontend..."
+    Set-Location ".\front\frontAD512Bank"
+
+    if (!(Test-Path "node_modules")) {
+        Write-Output "Le dossier node_modules n'est pas detecte, installation des dependances..."
+        npm i
+        Write-Output ""
+    }
+
+    npm run build
+    Write-Output ""
+
+    Write-Output "Copie des fichiers du frontend..."
+    Set-Location "..\.."
+    Copy-Item ".\front\frontAD512Bank\dist\front-ad512-bank\*" ".\backend\src\main\resources\public" -Recurse -Force
+    Write-Output ""
+
+    Write-Output "Fini !"
+    Write-Output ""
+}
+
+# Build du backend
 Write-Output "Build du backend..."
-Set-Location backend
+Set-Location "backend"
 mvn clean
 mvn package -DskipTests
 Set-Location ..
