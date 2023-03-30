@@ -13,7 +13,6 @@ export class ResultComponent {
   opacity: number = 0;
   i: number = 0;
   selectionState: string = "block"
-  selectionState: string = "block"
 
   constructor(public searchService: SearchService) {
   }
