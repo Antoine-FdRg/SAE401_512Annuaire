@@ -17,7 +17,6 @@ import java.util.List;
  */
 @RestController
 @RequestMapping("/api/public")
-@CrossOrigin
 public class PublicController {
 
     private final IPublicADQuerier querier;
