@@ -33,16 +33,13 @@ public class SSDBackendApplication {
         return (exchange, chain) -> {
             exchange.getResponse()
                     .getHeaders()
-                    .add(HttpHeaders.ACCESS_CONTROL_ALLOW_ORIGIN, "*");
+                    .add(HttpHeaders.ACCESS_CONTROL_ALLOW_ORIGIN, "http://localhost:4200");
             exchange.getResponse()
                     .getHeaders()
                     .add(HttpHeaders.ACCESS_CONTROL_ALLOW_METHODS, "GET, PUT, POST, DELETE, OPTIONS");
             exchange.getResponse()
                     .getHeaders()
                     .add(HttpHeaders.ACCESS_CONTROL_ALLOW_HEADERS, "*");
-            exchange.getResponse()
-                    .getHeaders()
-                    .add(HttpHeaders.ACCESS_CONTROL_ALLOW_CREDENTIALS, "true");
             return chain.filter(exchange);
         };
     }

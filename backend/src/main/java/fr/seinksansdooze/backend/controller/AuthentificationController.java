@@ -10,15 +10,12 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import jakarta.validation.Valid;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseCookie;
-import org.springframework.http.ResponseEntity;
+import org.springframework.http.server.reactive.ServerHttpRequest;
 import org.springframework.web.bind.annotation.*;
 
 import javax.naming.NamingException;
-import org.springframework.http.server.reactive.ServerHttpRequest;
 
 /**
  * Controller permettant de gérer les requêtes d'authentification et de déconnexion
@@ -26,12 +23,6 @@ import org.springframework.http.server.reactive.ServerHttpRequest;
 @RestController
 @RequestMapping("/api/auth")
 public class AuthentificationController {
-
-    @Value("${session.duration.long}")
-    private int longSessionDuration;
-
-    @Value("${session.duration.short}")
-    private int shortSessionDuration;
 
     ADConnectionManager connectionManager = ADConnectionManagerSingleton.INSTANCE.get();
 
@@ -44,11 +35,10 @@ public class AuthentificationController {
             @ApiResponse(responseCode = "401", description = "Identifiant ou mot de passe incorrect")
     })
     @PostMapping("/login")
-    public ResponseEntity<LoggedInUser> login(@Valid @RequestBody LoginPayload payload, ServerHttpRequest request) {
-        RateLimiterSingleton.INSTANCE.get().tryConsume(String.valueOf(request.getLocalAddress()),1);
+    public LoggedInUser login(@Valid @RequestBody LoginPayload payload, ServerHttpRequest request) {
+        RateLimiterSingleton.INSTANCE.get().tryConsume(String.valueOf(request.getLocalAddress()), 1);
 
         Object[] userAndToken;
-
 
         try {
             userAndToken = connectionManager.addConnection(payload.getUsername(), payload.getPassword());
@@ -62,24 +52,8 @@ public class AuthentificationController {
         String token = (String) userAndToken[1];
         LoggedInUser connectedUser = (LoggedInUser) userAndToken[0];
 
-        // Durée de vie de la session
-        int sessionAge;
-        if (payload.isRememberMe()) {
-            sessionAge = longSessionDuration;
-        } else {
-            sessionAge = shortSessionDuration;
-        }
-
-        ResponseCookie responseCookie = ResponseCookie.from("token", token)
-                .httpOnly(true)
-                //.secure(false) // a voir ce qu'on fait (le cookie est seulement transmis par https
-                .path("/")
-                .maxAge(sessionAge)
-                .build();
-
-        return ResponseEntity.ok()
-                .header(HttpHeaders.SET_COOKIE, responseCookie.toString())
-                .body(connectedUser);
+        connectedUser.setAuthorisation(token);
+        return connectedUser;
     }
 
     @Operation(summary = "Déconnecte un utilisateur")
@@ -87,19 +61,17 @@ public class AuthentificationController {
             @ApiResponse(responseCode = "200", description = "Déconnexion faite avec succès : la session n'existe plus")
     })
     @PostMapping("/logout")
-    public ResponseEntity<String> logout(@CookieValue("token") String token, ServerHttpRequest request) {
+    public String logout(@RequestHeader(HttpHeaders.AUTHORIZATION) String token, ServerHttpRequest request) {
         RateLimiterSingleton.INSTANCE.get().tryConsume(String.valueOf(request.getLocalAddress()));
 
         connectionManager.removeConnection(token);
 
-        ResponseCookie resCookie = ResponseCookie.from("token", "")
-                .httpOnly(true)
-                .path("/")
-                .maxAge(-1)
-                .build();
+        return "Déconnexion avec succès";
+    }
 
-        return ResponseEntity.ok()
-                .header(HttpHeaders.SET_COOKIE, resCookie.toString())
-                .body("Déconnexion avec succès");
+    @Operation(summary = "Renvoie le token passé en autorisation")
+    @GetMapping("/test")
+    public String getConnectedUser(@RequestHeader(HttpHeaders.AUTHORIZATION) String token) {
+        return "La valeur reçue : " + token;
     }
 }
