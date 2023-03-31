@@ -1,0 +1,68 @@
+#status-zone {
+  position: relative;
+}
+
+#profileMenu {
+  display: flex;
+  flex-direction: column;
+
+  position: absolute;
+
+  background-color: var(--blue512);
+  color: var(--white-text);
+
+  padding: 10px;
+  border-radius: 19px;
+
+  left: -122px;
+  top: 72px;
+  z-index: 2;
+}
+
+.hidden {
+  display: none !important;
+}
+
+.shown {
+  display: block;
+}
+
+#presentation {
+  display: flex;
+  align-items: center;
+
+  gap: 29px;
+  font-size: 28px;
+
+  border-radius: 19px;
+  border-bottom-left-radius: 0px;
+  border-bottom-right-radius: 0px;
+
+  background-color: var(--dark_blue_512);
+  padding: 5px;
+  padding-left: 19px;
+  padding-right: 19px;
+}
+
+#informations {
+  width: 100%;
+  text-align: center;
+  margin-top: 2px;
+
+  border-radius: 19px;
+  border-top-left-radius: 0px;
+  border-top-right-radius: 0px;
+
+  background-color: var(--dark_blue_512);
+  padding: 11px;
+}
+
+#deconnexion {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 22px;
+  margin-top: 10px;
+  margin-bottom: 5px;
+}
+

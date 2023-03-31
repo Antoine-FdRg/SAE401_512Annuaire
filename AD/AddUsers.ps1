@@ -18,6 +18,9 @@ foreach ($User in $ADUsers) {
         Write-Warning "The username $($User.username) is too long (Greater than 20)."
     }
     else {
+
+        $Manager = Get-ADUser -Filter "Name -eq '$($User.Responsable)'"
+
         try {
             New-ADUser `
                 -SamAccountName $User.username `
@@ -31,10 +34,12 @@ foreach ($User in $ADUsers) {
                 -State $User.state `
                 -City $User.city `
                 -StreetAddress $User.streetaddress `
-                -OfficePhone $User.telephone `
+                -OfficePhone $User.telephone_pro `
+                -MobilePhone $User.telephone_perso `
                 -EmailAddress $User.email `
                 -Title $User.jobtitle `
                 -Department $User.department `
+                -Manager $Manager.DistinguishedName `
                 -AccountPassword (convertto-securestring $User.password -AsPlainText -Force) `
                 -Enabled $True `
                 -ChangePasswordAtLogon $False `

@@ -1,0 +1,15 @@
+<header>
+  <div class="bouton512" routerLink="home">
+    <img src="../assets/512_bank_officiel.png" alt="512Bank" />
+    <div>512 Bank</div>
+  </div>
+
+  <section id="right-part-header">
+    <div class="help clickable">Aide</div>
+    <app-profile></app-profile>
+  </section>
+</header>
+<main>
+  <router-outlet></router-outlet>
+  <app-result *ngIf="showResults()"></app-result>
+</main>
