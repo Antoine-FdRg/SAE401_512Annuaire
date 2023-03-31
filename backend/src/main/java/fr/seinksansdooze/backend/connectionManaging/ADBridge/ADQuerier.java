@@ -174,7 +174,12 @@ public abstract class ADQuerier {
     }
 
     protected NamingEnumeration<SearchResult> search(ObjectType searchType, String searchValue, String rawFilter, String value) {
-        String filterAttribute = ADFilter.valueOf(rawFilter.toUpperCase()).getFilter();
+        String filterAttribute;
+        try {
+            filterAttribute = ADFilter.valueOf(rawFilter.toUpperCase()).getFilter();
+        } catch (IllegalArgumentException e) {
+            throw new SeinkSansDoozeBadRequest();
+        }
         searchValue = searchValue.replaceAll("(?<=\\w)(?=\\w)", "*");
         String filter = "(&(objectClass=" + searchType + ")(" + searchType.getNamingAttribute() + "=*" + searchValue + "*)("+filterAttribute+"=*"+value+"*))";
         SearchControls searchControls = new SearchControls();

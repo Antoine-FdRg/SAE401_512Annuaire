@@ -4,7 +4,6 @@ public enum ADFilter {
     CN("cn"),
     INITIALS("initials"),
     LASTNAME("sn"),
-    FIRSTNAME("givenName"),
     POSTALCODE("postalCode");
 
     private final String filter;
