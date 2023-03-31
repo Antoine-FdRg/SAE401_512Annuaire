@@ -46,7 +46,7 @@ public class AuthentificationController {
     })
     @PostMapping("/login")
     public ResponseEntity<LoggedInUser> login(@Valid @RequestBody LoginPayload payload, ServerHttpRequest request) {
-        RateLimiterSingleton.INSTANCE.get().tryConsume(String.valueOf(request.getLocalAddress()),10);
+        RateLimiterSingleton.INSTANCE.get().tryConsume(String.valueOf(request.getLocalAddress()),1);
 
         Object[] userAndToken;
 
