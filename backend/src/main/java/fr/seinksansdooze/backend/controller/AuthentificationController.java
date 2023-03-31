@@ -12,6 +12,7 @@ import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import jakarta.validation.Valid;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.http.server.reactive.ServerHttpRequest;
 import org.springframework.web.bind.annotation.*;
 
@@ -31,11 +32,12 @@ public class AuthentificationController {
     @Operation(summary = "Connecte un utilisateur")
     @ApiResponses({
             @ApiResponse(responseCode = "200", description = "Connexion avec succès"),
-            @ApiResponse(responseCode = "400", description = "Requête malformée, vérifiez que le payload contient bien les champs demandé"),
+            @ApiResponse(responseCode = "400", description = "Requête malformée, vérifiez que le payload contient bien" +
+                    " les champs demandé"),
             @ApiResponse(responseCode = "401", description = "Identifiant ou mot de passe incorrect")
     })
     @PostMapping("/login")
-    public LoggedInUser login(@Valid @RequestBody LoginPayload payload, ServerHttpRequest request) {
+    public ResponseEntity<LoggedInUser> login(@Valid @RequestBody LoginPayload payload, ServerHttpRequest request) {
         RateLimiterSingleton.INSTANCE.get().tryConsume(String.valueOf(request.getLocalAddress()), 1);
 
         Object[] userAndToken;
@@ -52,8 +54,9 @@ public class AuthentificationController {
         String token = (String) userAndToken[1];
         LoggedInUser connectedUser = (LoggedInUser) userAndToken[0];
 
-        connectedUser.setAuthorisation(token);
-        return connectedUser;
+        return ResponseEntity.ok()
+                .header(HttpHeaders.AUTHORIZATION, token)
+                .body(connectedUser);
     }
 
     @Operation(summary = "Déconnecte un utilisateur")

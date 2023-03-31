@@ -1,7 +1,5 @@
 package fr.seinksansdooze.backend.model.response;
 
-import lombok.Getter;
-import lombok.Setter;
 import lombok.SneakyThrows;
 
 import javax.naming.NamingException;
@@ -12,10 +10,6 @@ import java.util.Objects;
 
 public class LoggedInUser extends PartialPerson{
     private boolean isAdmin;
-
-    @Getter
-    @Setter
-    private String authorisation;
 
     @SneakyThrows(NamingException.class)
     public LoggedInUser(SearchResult result) {
