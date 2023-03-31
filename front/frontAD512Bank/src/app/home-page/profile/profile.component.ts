@@ -20,11 +20,16 @@ export class ProfileComponent {
   surname = "Paul";
   initials: string = "";
 
-  constructor(loginService: LoginService, private router: Router) {
+  constructor(private loginService: LoginService, private router: Router) {
     this.status = Status.disconnected;
-    this.name = loginService.userBase.firstName;
-    this.surname = loginService.userBase.lastName;
-    this.initials = this.name.charAt(0) + this.surname.charAt(0);
+    if (this.loginService.getUser() == undefined) {
+      return
+    }
+    this.name = this.loginService.getUser()!.firstName;
+    this.surname = this.loginService.getUser()!.lastName;
+    if (this.name != undefined && this.surname != undefined)
+
+      this.initials = this.name.charAt(0) + this.surname.charAt(0);
   }
 
 
@@ -37,18 +42,34 @@ export class ProfileComponent {
   @HostListener('document:click', ['$event'])
   onDocumentClick(event: MouseEvent) {
     let target: HTMLElement = event.target as HTMLElement;
-    if (target.id !== "connexionButton") {
+    if (target.id !== "connexionButton" && target.className !== "profile-picture" && target.id !== "infoMenu") {
       this.visibility["infoMenu"] = false;
-      this.menuShown = false;
+      this.menuShown = false
+    }
+  }
+
+  ngAfterViewChecked(): void {
+    if (this.loginService.getUser() == undefined || this.loginService.getUser() == null) {
+      this.status = Status.disconnected;
+
+      this.visibility["connexion"] = true;
+    }
+    else {
+      this.status = Status.connected;
+      this.visibility["profilePicture"] = true;
+      this.visibility["connexion"] = false;
+      // this.visibility["infoMenu"] = true;
+      this.name = this.loginService.getUser()!.firstName;
+      this.surname = this.loginService.getUser()!.lastName;
+      if (this.name != undefined && this.surname != undefined)
+
+        this.initials = this.name.charAt(0) + this.surname.charAt(0);
     }
   }
 
   connexionClicked() {
 
     if (this.status == 1) {
-      // go to login page
-      console.log("go to login page");
-
       this.router.navigate(['/login']);
     }
     else {
@@ -60,8 +81,13 @@ export class ProfileComponent {
       }
       this.menuShown = true;
       this.visibility["infoMenu"] = true;
+
     }
 
+  }
+  logout() {
+    this.loginService.logout();
+    this.router.navigate(['/login']);
   }
 }
 

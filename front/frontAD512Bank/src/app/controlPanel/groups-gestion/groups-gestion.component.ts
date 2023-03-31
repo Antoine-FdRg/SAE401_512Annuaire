@@ -7,7 +7,7 @@ import { AdminService } from 'src/app/service/admin.service';
   styleUrls: ['./groups-gestion.component.css']
 })
 export class GroupsGestionComponent {
-  listGroups: any[] = [];
+  listGroups: any[] = []; //TODO : Change type to Group
 
   constructor(private adminService: AdminService) {
     this.adminService.getGroups().subscribe(

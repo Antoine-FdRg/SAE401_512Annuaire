@@ -40,6 +40,7 @@ export class ResultComponent {
   personClicked(person: Person, position: number) {
     this.clickedPosition = position;
     this.opacity = 1;
+    this.searchService.getInfos(person);
   }
 
   developDetails(i: number) {

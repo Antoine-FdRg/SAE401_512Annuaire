@@ -9,37 +9,51 @@ import { Person } from '../person';
 export class LoginService {
 
 
-  userBase: Person = {
-    login: "ma102741",
-    firstName: "Maïstre",
-    lastName: "Antoine",
-    admin: true
-  }
+  userBase: Person | undefined;
   constructor(private http: HttpClient, private router: Router) { }
 
+  getUser(): Person | undefined {
+    // if userbase undefined then search in session storage
+    if (this.userBase == undefined) {
+      var parsed = JSON.parse(sessionStorage.getItem('user') || 'null');
+
+      this.userBase = parsed;
+      if (this.userBase == null) {
+        return undefined
+      }
+      else {
+        return this.userBase;
+      }
+    }
+    else {
+      return this.userBase;
+    }
+  }
+
   connect(login: string, password: string) {
-    const httpOptions: any = {
-      headers: new HttpHeaders({
-        'Access-Control-Allow-Origin': '*'
-      })
-    };
 
-    this.http.post(apiURL + "/auth/login", { username: login, password: password }, httpOptions).subscribe(
+    this.http.post(apiURL + "/auth/login", { username: login, password: password }).subscribe(
       (response) => {
-        console.log(response);
-        this.userBase = {
-          login: "ma102741",
-          firstName: "Maïstre",
-          lastName: "Antoine",
-          admin: true
-        };
+        this.userBase = response as unknown as Person;
+        sessionStorage.setItem('user', JSON.stringify(this.userBase));
         this.router.navigate(['/controlPanel']);
-        console.log(this.userBase);
-
       },
       (error) => {
         console.log(error);
       }
     );
+  }
+
+  logout() {
+    sessionStorage.removeItem('user');
+    this.userBase = undefined;
+    this.router.navigate(['/login']);
+
+    this.http.post(apiURL + "/auth/logout", {}, { withCredentials: true }).subscribe(
+      (response) => {
+        console.log(response);
+      }
+    );
+
   }
 }

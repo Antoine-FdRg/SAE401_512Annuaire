@@ -15,7 +15,9 @@
   id="number-of-results"
   [style.display]="displayNotFound() == 'none' ? 'block' : 'none'"
 >
-  <strong>{{ searchService.lastResults.length }}</strong> résultat(s) trouvés.
+  <strong>{{ searchService.lastResults.length }}</strong> résultat
+  <span *ngIf="searchService.lastResults.length > 1">s</span> trouvé
+  <span *ngIf="searchService.lastResults.length > 1">s</span>.
 </div>
 <section
   id="results-container"
@@ -90,7 +92,10 @@
 
   <div id="person-details">
     <div id="start-text">Cliquez sur un élément pour voir plus de détails</div>
-
+    <h2>Gwendoline</h2>
+    <h2>Moron</h2>
+    <h3>Présidence</h3>
+    <h3>Mail : <span class="mail">gwendoMoron@mail.com</span></h3>
     <div id="text512">
       <div id="seink">5</div>
 
