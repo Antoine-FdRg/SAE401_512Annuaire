@@ -24,7 +24,6 @@ import java.util.List;
  * Controller permettant de gérer les requêtes des administrateurs connectés
  */
 @RestController
-@CrossOrigin
 @RequestMapping("/api/admin")
 public class AdminController {
 
