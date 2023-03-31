@@ -98,4 +98,9 @@ public class ADQuerierMoke implements IAuthentifiedADQuerier, IPublicADQuerier {
     public List<PartialPerson> getStructureInfo(String cn) {
         return null;
     }
+
+    @Override
+    public List<PartialPerson> searchPerson(String search, String filter, String value, int page, int perPage) {
+        return null;
+    }
 }

@@ -213,11 +213,16 @@ public class AdminController {
 //    }
 
 
-//    @GetMapping("/search/person")
-//    public List<PartialPerson> searchPersonAsAdmin(@RequestParam String name, @RequestParam String group, HttpServletRequest request) {
-//        RateLimiterSingleton.INSTANCE.get().tryConsume(request.getRemoteAddr());
-//
-//        return List.of();
-//    }
+    @GetMapping("/search/person")
+    public List<PartialPerson> searchPersonAsAdmin(@CookieValue("token") String token, @RequestParam String name, @RequestParam String filter, @RequestParam String value,
+                                                   @RequestParam(defaultValue = "0") int page, @RequestParam(defaultValue = "15") int perPage, ServerHttpRequest request) {
+        RateLimiterSingleton.INSTANCE.get().tryConsume(String.valueOf(request.getLocalAddress()));
+        try {
+            return connectionManager.getQuerier(token).searchPerson(name, filter, value, page, perPage);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
 
 }

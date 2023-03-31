@@ -47,7 +47,7 @@ public class PublicController {
     @GetMapping("/search/structure")
     public List<PartialStructure> searchStructure(@RequestParam String name,
                                                   @RequestParam(defaultValue = "0") int page,
-                                                  @RequestParam(defaultValue = "25") int perPage, ServerHttpRequest request) {
+                                                  @RequestParam(defaultValue = "15") int perPage, ServerHttpRequest request) {
         RateLimiterSingleton.get().tryConsume(String.valueOf(request.getLocalAddress()));
 
         return querier.searchStructure(name, page, perPage);
