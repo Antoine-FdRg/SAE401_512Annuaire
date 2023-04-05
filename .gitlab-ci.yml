@@ -52,6 +52,7 @@ build:
   image: trion/ng-cli
 
   before_script:
+    - cd front/frontAD512Bank/ || exit 1
     - npm ci
 
   script:
@@ -70,6 +71,8 @@ test:karma:
   stage: test
   image: trion/ng-cli-karma
   allow_failure: false
+  before_script:
+    - cd front/frontAD512Bank/ || exit 1
   script:
     - npm i
     - ng test --progress false --watch false
