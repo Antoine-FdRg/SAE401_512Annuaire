@@ -1,0 +1,28 @@
+name,path,description
+512BankFR,"OU=512BankFR,DC=EQUIPE1B,DC=local",512BankFR
+512Batiment,"OU=512Batiment,OU=512BankFR,DC=EQUIPE1B,DC=local",512Batiment
+512Direction,"OU=512Direction,OU=512Batiment,OU=512BankFR,DC=EQUIPE1B,DC=local",512Direction
+Direction Général,"OU=Direction Général,OU=512Direction,OU=512Batiment,OU=512BankFR,DC=EQUIPE1B,DC=local",Direction Général
+Direction Général Adj,"OU=Direction Général Adj,OU=512Direction,OU=512Batiment,OU=512BankFR,DC=EQUIPE1B,DC=local",Direction Général Adj
+Présidence,"OU=Présidence,OU=512Direction,OU=512Batiment,OU=512BankFR,DC=EQUIPE1B,DC=local",Présidence
+Secrétaire général,"OU=Secrétaire général,OU=512Direction,OU=512Batiment,OU=512BankFR,DC=EQUIPE1B,DC=local",Secrétaire général
+Département Administratif et juridique,"OU=Département Administratif et juridique,OU=512Batiment,OU=512BankFR,DC=EQUIPE1B,DC=local",Département Administratif et juridique
+Direction,"OU=Direction,OU=Département Administratif et juridique,OU=512Batiment,OU=512BankFR,DC=EQUIPE1B,DC=local",Direction
+Secteur Administratif,"OU=Secteur Administratif,OU=Département Administratif et juridique,OU=512Batiment,OU=512BankFR,DC=EQUIPE1B,DC=local",Secteur Administratif
+Secteur Juridique,"OU=Secteur Juridique,OU=Département Administratif et juridique,OU=512Batiment,OU=512BankFR,DC=EQUIPE1B,DC=local",Secteur Juridique
+Département Commercial,"OU=Département Commercial,OU=512Batiment,OU=512BankFR,DC=EQUIPE1B,DC=local",Département Commercial
+Direction,"OU=Direction,OU=Département Commercial,OU=512Batiment,OU=512BankFR,DC=EQUIPE1B,DC=local",Direction
+Secteur marketing,"OU=Secteur marketing,OU=Département Commercial,OU=512Batiment,OU=512BankFR,DC=EQUIPE1B,DC=local",Secteur marketing
+Secteur Produit,"OU=Secteur Produit,OU=Département Commercial,OU=512Batiment,OU=512BankFR,DC=EQUIPE1B,DC=local",Secteur Produit
+Département Finance,"OU=Département Finance,OU=512Batiment,OU=512BankFR,DC=EQUIPE1B,DC=local",Département Finance
+Direction,"OU=Direction,OU=Département Finance,OU=512Batiment,OU=512BankFR,DC=EQUIPE1B,DC=local",Direction
+Secteur Comptabilité,"OU=Secteur Comptabilité,OU=Département Finance,OU=512Batiment,OU=512BankFR,DC=EQUIPE1B,DC=local",Secteur Comptabilité
+Secteur Paie,"OU=Secteur Paie,OU=Département Finance,OU=512Batiment,OU=512BankFR,DC=EQUIPE1B,DC=local",Secteur Paie
+Département Ressources humaines,"OU=Département Ressources humaines,OU=512Batiment,OU=512BankFR,DC=EQUIPE1B,DC=local",Département Ressources humaines
+Direction,"OU=Direction,OU=Département Ressources humaines,OU=512Batiment,OU=512BankFR,DC=EQUIPE1B,DC=local",Direction
+Secteur gestion du personel,"OU=Secteur gestion du personel,OU=Département Ressources humaines,OU=512Batiment,OU=512BankFR,DC=EQUIPE1B,DC=local",Secteur gestion du personel
+Secteur recrutement,"OU=Secteur recrutement,OU=Département Ressources humaines,OU=512Batiment,OU=512BankFR,DC=EQUIPE1B,DC=local",Secteur recrutement
+Département Technique,"OU=Département Technique,OU=512Batiment,OU=512BankFR,DC=EQUIPE1B,DC=local",Département Technique
+Direction,"OU=Direction,OU=Département Technique,OU=512Batiment,OU=512BankFR,DC=EQUIPE1B,DC=local",Direction
+Secteur Logistique,"OU=Secteur Logistique,OU=Département Technique,OU=512Batiment,OU=512BankFR,DC=EQUIPE1B,DC=local",Secteur Logistique
+Secteur R&D,"OU=Secteur R&D,OU=Département Technique,OU=512Batiment,OU=512BankFR,DC=EQUIPE1B,DC=local",Secteur R&D
