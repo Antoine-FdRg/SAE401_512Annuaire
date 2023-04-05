@@ -13,6 +13,7 @@ variables:
 cache:
     paths:
         - .m2/repository
+        - front/frontAD512Back/node_modules
 
 stages:
     - build
@@ -44,5 +45,21 @@ java-deploy:
         - mvn $MAVEN_CLI_OPTS package -DskipTests
 
 # Partie frontend (nodejs)
+.node-base: &node-base
+    image: node:18
+    before_script:
+        - cd front/frontAD512Back || exit 1
 
-# TODO : add frontend build, test and deploy
+node-build:
+    <<: *node-base
+    stage: build
+    script:
+        - npm ci
+        - npm run build
+
+node-test:
+    <<: *node-base
+    stage: test
+    script:
+        - npm ci
+        - npm run test
