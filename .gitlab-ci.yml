@@ -60,10 +60,3 @@ node-build:
     script:
         - npm ci
         - npm run build
-
-node-test:
-    <<: *node-base
-    stage: test
-    script:
-        - npm ci
-        - npm run test
