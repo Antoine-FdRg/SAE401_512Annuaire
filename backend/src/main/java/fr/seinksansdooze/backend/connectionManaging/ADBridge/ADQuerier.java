@@ -52,6 +52,12 @@ public abstract class ADQuerier {
         username = username + "@EQUIPE1B.local";
         env.put(Context.INITIAL_CONTEXT_FACTORY, "com.sun.jndi.ldap.LdapCtxFactory");
         env.put(Context.PROVIDER_URL, AD_URL);
+
+        // Ces deux lignes sont censées éviter que la connexion se reset
+        // Toutes les 120 secondes, la connexion expire et se renouvelle
+        env.put("com.sun.jndi.ldap.connect.pool", "true");
+        env.put("com.sun.jndi.ldap.connect.pool.timeout", "120000");
+
 //        env.put(Context.SECURITY_PROTOCOL, "ssl");
         env.put(Context.SECURITY_AUTHENTICATION, "Simple");
         env.put(Context.SECURITY_PRINCIPAL, username);
