@@ -28,7 +28,7 @@ import { GroupsGestionComponent } from './controlPanel/groups-gestion/groups-ges
     BrowserModule,
     CommonModule,
     AppRoutingModule,
-    HttpClientModule
+    HttpClientModule,
   ],
   providers: [HttpClient],
   bootstrap: [AppComponent]
