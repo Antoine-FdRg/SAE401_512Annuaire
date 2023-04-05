@@ -53,6 +53,14 @@ body {
   border: none;
 }
 
+.white-style{
+  background-color: var(--white-gradient);
+  padding: 25px;
+  color: black;
+  border-radius: 20px;
+  border: none;
+}
+
 .clickable {
   cursor: pointer;
   transition: 0.3s;
@@ -81,6 +89,10 @@ body {
 
 .profile-picture > div {
   font-size: 1.2em;
+}
+
+.blue-shadow{
+  box-shadow: 12px 13px 2px 2px #3D83FF;
 }
 
 /*

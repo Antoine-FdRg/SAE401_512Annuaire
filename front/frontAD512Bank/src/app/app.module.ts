@@ -12,6 +12,7 @@ import { LoginComponent } from './login/login.component';
 import { ControlPanelComponent } from './controlPanel/controlPanel.component';
 import { CommonModule } from '@angular/common';
 import { GroupsGestionComponent } from './controlPanel/groups-gestion/groups-gestion.component';
+import { InfosComponent } from './infos/infos.component';
 
 @NgModule({
   declarations: [
@@ -22,7 +23,8 @@ import { GroupsGestionComponent } from './controlPanel/groups-gestion/groups-ges
     LoginComponent,
     ControlPanelComponent,
     MembersGestionComponent,
-    GroupsGestionComponent
+    GroupsGestionComponent,
+    InfosComponent
   ],
   imports: [
     BrowserModule,
