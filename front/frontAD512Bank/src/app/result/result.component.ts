@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { AfterViewInit, Component } from '@angular/core';
 import { elementAt, first } from 'rxjs';
 import { Person } from '../person';
 import { SearchService } from '../service/search.service';
@@ -16,10 +16,19 @@ export class ResultComponent {
   hideResponsiveDetails = false;
 
   constructor(public searchService: SearchService) {
+
+    //time out 1s to wait for the search service to be updated
+    setTimeout(() => {
+      window.scrollTo(0, 800);
+    }
+      , 300);
   }
-  
-  ngAfterViewInit(): void {
-    window.scrollTo(0, 800);
+
+
+  ngAfterContentChecked(): void {
+    //Called after every check of the component's or directive's content.
+    //Add 'implements AfterContentChecked' to the class.
+    //
   }
 
   displayNotFound(): string {
@@ -39,10 +48,11 @@ export class ResultComponent {
 
     this.clickedPosition = position;
     this.opacity = 1;
+    this.searchService.getInfos(person);
   }
 
-  developDetails(i : number) {
-    if(this.clickedPosition === i){
+  developDetails(i: number) {
+    if (this.clickedPosition === i) {
       return 200;
     }
     return 0;

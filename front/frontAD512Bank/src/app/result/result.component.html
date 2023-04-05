@@ -1,105 +1,86 @@
-<link
-  rel="stylesheet"
-  href="https://fonts.googleapis.com/css2?family=Material+Symbols+Rounded:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200"
-/>
-<link
-  rel="stylesheet"
-  href="https://fonts.googleapis.com/css2?family=Material+Symbols+Rounded:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200"
-/>
+<link rel="stylesheet"
+  href="https://fonts.googleapis.com/css2?family=Material+Symbols+Rounded:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" />
+<link rel="stylesheet"
+  href="https://fonts.googleapis.com/css2?family=Material+Symbols+Rounded:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" />
 
 <section id="no-results" [style.display]="displayNotFound()">
   Oups, nous n'avons pas trouvé de résultats correspondants à votre recherche
 </section>
 
-<div id="number-of-results" [style.display]="displayNotFound()=='none' ? 'block' : 'none'">
-  <strong>{{searchService.lastResults.length}}</strong> résultat(s) trouvés.
+<div id="number-of-results" [style.display]="displayNotFound() == 'none' ? 'block' : 'none'">
+  <strong>{{ searchService.lastResults.length }}</strong> résultat
+  <span *ngIf="searchService.lastResults.length > 1">s</span> trouvé
+  <span *ngIf="searchService.lastResults.length > 1">s</span>.
 </div>
-<section id="results-container" [style.display]="displayNotFound()=='none' ? 'flex' : 'none'">
-  
+<section id="results-container" [style.display]="displayNotFound() == 'none' ? 'flex' : 'none'">
   <section id="person-container">
-    <div
-      class="person-zone"
-      *ngFor="let person of this.searchService.lastResults; let i = index"
-    >
+    <div class="person-zone" *ngFor="let person of this.searchService.lastResults; let i = index">
       <div class="person" (click)="personClicked(person, i)">
-        <div
-        class="position"
-        [class.blue]="
-          person.position == 'Directeur financier' ||
-          person.position == 'Responsable de paie' ||
-          person.position == 'Responsable comptabilité'
-        "
-        [class.orange]="
-          person.position == 'Directeur administratif et juridique' ||
-          person.position == 'Responsable juridique' ||
-          person.position == 'Responsable administration' ||
-          person.position == 'Responsable adjoint administratif' ||
-          person.position == 'Responsable adjoint juridique'
-        "
-        [class.green]="
-          person.position == 'Directeur ressources humaines' ||
-          person.position == 'Responsable gestion du personnel' ||
-          person.position == 'Responsable recrutement'
-        "
-        [class.lightBlue]="
-          person.position == 'Directrice technique' ||
-          person.position == 'Responsable recherche et développement' ||
-          person.position == 'Responsable logistique'
-        "
-        [class.purple]="
-          person.position == 'Directeur commercial' ||
-          person.position == 'Responsable prduit' ||
-          person.position == 'Responsable marketing'
-        "
-        [class.red1]="person.position == 'Présidente'"
-        [class.red2]="person.position == 'Directeur général'"
-        [class.red3]="
-          person.position == 'Directeur général adjoint' ||
-          person.position == 'Secrétaire général' ||
-          person.position == 'Responsable marketing' ||
-          person.position == 'Responsable produit'
-        "
-      >
-        {{ person.position }}
+        <div class="position" [class.blue]="
+            person.position == 'Directeur financier' ||
+            person.position == 'Responsable de paie' ||
+            person.position == 'Responsable comptabilité'
+          " [class.orange]="
+            person.position == 'Directeur administratif et juridique' ||
+            person.position == 'Responsable juridique' ||
+            person.position == 'Responsable administration' ||
+            person.position == 'Responsable adjoint administratif' ||
+            person.position == 'Responsable adjoint juridique'
+          " [class.green]="
+            person.position == 'Directeur ressources humaines' ||
+            person.position == 'Responsable gestion du personnel' ||
+            person.position == 'Responsable recrutement'
+          " [class.lightBlue]="
+            person.position == 'Directrice technique' ||
+            person.position == 'Responsable recherche et développement' ||
+            person.position == 'Responsable logistique'
+          " [class.purple]="
+            person.position == 'Directeur commercial' ||
+            person.position == 'Responsable produit' ||
+            person.position == 'Responsable marketing'
+          " [class.red1]="person.position == 'Présidente'" [class.red2]="person.position == 'Directeur général'"
+          [class.red3]="
+            person.position == 'Directeur général adjoint' ||
+            person.position == 'Secrétaire général' ||
+            person.position == 'Responsable marketing' ||
+            person.position == 'Responsable produit'
+          ">
+          {{ person.position }}
+        </div>
+
+        <div class="names">
+          <div>{{ person.firstName }}</div>
+          <div>{{ person.lastName }}</div>
+        </div>
       </div>
 
       <div class="names">
         <div>{{ person.firstName }}</div>
         <div>{{ person.lastName }}</div>
       </div>
-      </div>
-
-      <div class="responsive-details" [style.height.px]="this.hideResponsiveDetails === true ? 0 : developDetails(i)">
-
-      </div>
     </div>
 
-    <div
-      id="selection-person"
-      [style.display]="selectionState"
-      [style.top.px]="clickedPosition * 120"
-      [style.opacity]="opacity"
-    ></div>
+    <div class="responsive-details" [style.height.px]="this.hideResponsiveDetails === true ? 0 : developDetails(i)">
+
+    </div>
+
+
+    <div id="selection-person" [style.display]="selectionState" [style.top.px]="clickedPosition * 120"
+      [style.opacity]="opacity"></div>
   </section>
 
-  <div id="person-details"
-  >
-    <div id="start-text">
-      Cliquez sur un élément pour voir plus de détails
-    </div>
-
+  <div id="person-details">
+    <div id="start-text">Cliquez sur un élément pour voir plus de détails</div>
+    <h2>Gwendoline</h2>
+    <h2>Moron</h2>
+    <h3>Présidence</h3>
+    <h3>Mail : <span class="mail">gwendoMoron@mail.com</span></h3>
     <div id="text512">
-      <div id="seink">
-        5
-      </div>
+      <div id="seink">5</div>
 
-      <div id="sans">
-        1
-      </div>
+      <div id="sans">1</div>
 
-      <div id="dooze">
-        2
-      </div>
+      <div id="dooze">2</div>
     </div>
   </div>
 </section>
@@ -153,7 +134,7 @@
         "
         [class.purple]="
           person.position == 'Directeur commercial' ||
-          person.position == 'Responsable prduit' ||
+          person.position == 'Responsable produit' ||
           person.position == 'Responsable marketing'
         "
         [class.red1]="person.position == 'Présidente'"
