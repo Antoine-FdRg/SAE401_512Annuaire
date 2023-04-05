@@ -10,12 +10,22 @@ if (!(Get-Command mvn -ErrorAction SilentlyContinue)) {
     exit 1
 }
 
+# Ajouter un argument pour build le frontend
 $BuildFrontend = 0
-if (!(Get-Command npm -ErrorAction SilentlyContinue)) {
-    Write-Warning "npm n'est pas detecte, le frontend ne va pas être build."
-} else {
+if ($args.Length -gt 0) {
+    Write-Output "Un argument ou plus a ete fourni, le front va etre build."
     $BuildFrontend = 1
+
+    if (!(Get-Command npm -ErrorAction SilentlyContinue)) {
+        Write-Error "npm n'est pas detecte, le frontend ne va pas etre build."
+        exit 1
+    }
+
+} else {
+    Write-Output "Aucun argument n'a ete fourni, le front ne va pas etre build."
 }
+Write-Output ""
+
 
 # Build du frontend
 if ($BuildFrontend) {
@@ -24,7 +34,7 @@ if ($BuildFrontend) {
 
     if (!(Test-Path "node_modules")) {
         Write-Output "Le dossier node_modules n'est pas detecte, installation des dependances..."
-        npm i
+        npm install
         Write-Output ""
     }
 
