@@ -7,6 +7,7 @@ import javax.naming.directory.Attribute;
 import javax.naming.directory.SearchResult;
 import java.util.Objects;
 
+
 public class LoggedInUser extends PartialPerson{
     private boolean isAdmin;
 

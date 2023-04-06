@@ -12,6 +12,7 @@ import fr.seinksansdooze.backend.model.response.PartialPerson;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -24,7 +25,6 @@ import java.util.List;
  * Controller permettant de gérer les requêtes des administrateurs connectés
  */
 @RestController
-@CrossOrigin
 @RequestMapping("/api/admin")
 public class AdminController {
 
@@ -36,7 +36,7 @@ public class AdminController {
             @ApiResponse(responseCode = "401", description = "Token invalide")
     })
     @GetMapping("/info/person")
-    public FullPerson personInfo(@CookieValue("token") String token, @RequestParam String cn, ServerHttpRequest request) {
+    public FullPerson personInfo(@RequestHeader(HttpHeaders.AUTHORIZATION) String token, @RequestParam String cn, ServerHttpRequest request) {
         RateLimiterSingleton.get().tryConsume(String.valueOf(request.getLocalAddress()));
 
         try {
@@ -58,7 +58,7 @@ public class AdminController {
             @ApiResponse(responseCode = "404", description = "Structure non trouvée")
     })
     @GetMapping("/info/structure/")
-    public List<PartialPerson> getStructureInfo(@CookieValue("token") String token, @RequestParam String cn, ServerHttpRequest request) {
+    public List<PartialPerson> getStructureInfo(@RequestHeader(HttpHeaders.AUTHORIZATION) String token, @RequestParam String cn, ServerHttpRequest request) {
         RateLimiterSingleton.INSTANCE.get().tryConsume(String.valueOf(request.getLocalAddress()));
 
         try {
@@ -78,7 +78,7 @@ public class AdminController {
             @ApiResponse(responseCode = "401", description = "Token invalide")
     })
     @GetMapping("/group/all")
-    public List<PartialGroup> getAllGroups(@CookieValue("token") String token, ServerHttpRequest request) {
+    public List<PartialGroup> getAllGroups(@RequestHeader(HttpHeaders.AUTHORIZATION) String token, ServerHttpRequest request) {
         RateLimiterSingleton.INSTANCE.get().tryConsume(String.valueOf(request.getLocalAddress()));
 
         try {
@@ -98,7 +98,7 @@ public class AdminController {
             @ApiResponse(responseCode = "409", description = "Erreur lors de la création du groupe")
     })
     @PostMapping("/group/create")
-    public ResponseEntity<String> createGroup(@CookieValue("token") String token, @RequestBody PartialGroup group, ServerHttpRequest request) {
+    public ResponseEntity<String> createGroup(@RequestHeader(HttpHeaders.AUTHORIZATION) String token, @RequestBody PartialGroup group, ServerHttpRequest request) {
         RateLimiterSingleton.INSTANCE.get().tryConsume(String.valueOf(request.getLocalAddress()));
 
         System.out.println("name = " + group.getCn());
@@ -120,7 +120,7 @@ public class AdminController {
             @ApiResponse(responseCode = "401", description = "Token invalide")
     })
     @GetMapping("/group/members/{cn}")
-    public List<PartialPerson> getGroupMembers(@CookieValue("token") String token, @PathVariable String cn, ServerHttpRequest request) {
+    public List<PartialPerson> getGroupMembers(@RequestHeader(HttpHeaders.AUTHORIZATION) String token, @PathVariable String cn, ServerHttpRequest request) {
         RateLimiterSingleton.INSTANCE.get().tryConsume(String.valueOf(request.getLocalAddress()));
 
         try {
@@ -139,7 +139,7 @@ public class AdminController {
             @ApiResponse(responseCode = "401", description = "Token invalide")
     })
     @DeleteMapping("/group/delete/{cn}")
-    public ResponseEntity<String> deleteGroup(@CookieValue("token") String token, @PathVariable String cn, ServerHttpRequest request) {
+    public ResponseEntity<String> deleteGroup(@RequestHeader(HttpHeaders.AUTHORIZATION) String token, @PathVariable String cn, ServerHttpRequest request) {
         RateLimiterSingleton.INSTANCE.get().tryConsume(String.valueOf(request.getLocalAddress()));
 
         try {
@@ -161,7 +161,7 @@ public class AdminController {
             @ApiResponse(responseCode = "406", description = "Erreur lors de l'ajout de l'utilisateur au groupe")
     })
     @PutMapping("/group/addUser")
-    public ResponseEntity<String> addUserToGroup(@CookieValue("token") String token, @RequestBody UserAndGroupPayload payload, ServerHttpRequest request) {
+    public ResponseEntity<String> addUserToGroup(@RequestHeader(HttpHeaders.AUTHORIZATION) String token, @RequestBody UserAndGroupPayload payload, ServerHttpRequest request) {
         RateLimiterSingleton.INSTANCE.get().tryConsume(String.valueOf(request.getLocalAddress()));
 
         boolean isUserAdded;
@@ -183,7 +183,7 @@ public class AdminController {
             @ApiResponse(responseCode = "406", description = "Erreur lors de la suppression de l'utilisateur du groupe")
     })
     @DeleteMapping("/group/removeUser")
-    public ResponseEntity<String> removeUserFromGroup(@CookieValue("token") String token, @RequestBody UserAndGroupPayload payload, ServerHttpRequest request) {
+    public ResponseEntity<String> removeUserFromGroup(@RequestHeader(HttpHeaders.AUTHORIZATION) String token, @RequestBody UserAndGroupPayload payload, ServerHttpRequest request) {
         RateLimiterSingleton.INSTANCE.get().tryConsume(String.valueOf(request.getLocalAddress()));
 
 
@@ -213,11 +213,16 @@ public class AdminController {
 //    }
 
 
-//    @GetMapping("/search/person")
-//    public List<PartialPerson> searchPersonAsAdmin(@RequestParam String name, @RequestParam String group, HttpServletRequest request) {
-//        RateLimiterSingleton.INSTANCE.get().tryConsume(request.getRemoteAddr());
-//
-//        return List.of();
-//    }
+    @GetMapping("/search/person")
+    public List<PartialPerson> searchPersonAsAdmin(@RequestHeader(HttpHeaders.AUTHORIZATION) String token, @RequestParam String name, @RequestParam String filter, @RequestParam String value,
+                                                   @RequestParam(defaultValue = "0") int page, @RequestParam(defaultValue = "15") int perPage, ServerHttpRequest request) {
+        RateLimiterSingleton.INSTANCE.get().tryConsume(String.valueOf(request.getLocalAddress()));
+        try {
+            return connectionManager.getQuerier(token).searchPerson(name, filter, value, page, perPage);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
 
 }

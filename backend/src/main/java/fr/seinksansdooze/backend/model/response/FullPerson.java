@@ -5,7 +5,6 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 
-import javax.naming.directory.SearchControls;
 import javax.naming.directory.SearchResult;
 
 /**
@@ -41,7 +40,7 @@ public class FullPerson extends PartialPerson {
         super(result);
 
         this.login = result.getAttributes().get("sAMAccountName").toString().split(": ")[1];
-        /*FIXME : Tous les objets sont a null ca provoque une erreure, il faut attendre l'implémentation des datas
+        //FIXME : Tous les objets sont a null ca provoque une erreure, il faut attendre l'implémentation des datas
         //TODO: ajouter les attributs manquants dans l'AD
 
         this.email = result.getAttributes().get("mail").toString().split(": ")[1];
@@ -51,6 +50,5 @@ public class FullPerson extends PartialPerson {
         this.managerFullName = result.getAttributes().get("manager").toString().split(",")[0].split("=")[1];
         this.managerCN = result.getAttributes().get("manager").toString().split(": ")[1];
 
- */
     }
 }

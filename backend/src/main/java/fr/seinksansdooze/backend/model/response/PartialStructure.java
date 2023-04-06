@@ -16,6 +16,6 @@ public class PartialStructure {
     private String ou;
 
     public PartialStructure(SearchResult sr) {
-        this.ou = sr.getNameInNamespace().split(",")[0].split("=")[1];
+        this.ou = sr.getNameInNamespace();
     }
 }

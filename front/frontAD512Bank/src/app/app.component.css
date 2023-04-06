@@ -54,6 +54,11 @@ main {
   gap: 15px;
 }
 
-#right-part-header>*{
+#right-part-header > * {
   font-size: 1.4em;
+}
+
+#controlPanel {
+  font-size: 3em;
+  text-align: center;
 }

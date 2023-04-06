@@ -1,5 +1,6 @@
 package fr.seinksansdooze.backend.connectionManaging.ADBridge;
 
+import fr.seinksansdooze.backend.connectionManaging.ADBridge.model.ADFilter;
 import fr.seinksansdooze.backend.connectionManaging.ADBridge.model.ObjectType;
 import fr.seinksansdooze.backend.model.exception.SeinkSansDoozeBackException;
 import fr.seinksansdooze.backend.model.exception.SeinkSansDoozeBadRequest;
@@ -51,6 +52,12 @@ public abstract class ADQuerier {
         username = username + "@EQUIPE1B.local";
         env.put(Context.INITIAL_CONTEXT_FACTORY, "com.sun.jndi.ldap.LdapCtxFactory");
         env.put(Context.PROVIDER_URL, AD_URL);
+
+        // Ces deux lignes sont censées éviter que la connexion se reset
+        // Toutes les 120 secondes, la connexion expire et se renouvelle
+        env.put("com.sun.jndi.ldap.connect.pool", "true");
+        env.put("com.sun.jndi.ldap.connect.pool.timeout", "120000");
+
 //        env.put(Context.SECURITY_PROTOCOL, "ssl");
         env.put(Context.SECURITY_AUTHENTICATION, "Simple");
         env.put(Context.SECURITY_PRINCIPAL, username);
@@ -156,10 +163,31 @@ public abstract class ADQuerier {
     //  api/search/person   api/search/structures   api/admin/group/all
     // recherche une personne ou une structure
     // consulter la liste des groupes
-    // TODO rajouter un paramètre filtrer pour permettre les requetes incluant des filtres
     protected NamingEnumeration<SearchResult> search(ObjectType searchType, String searchValue) {
         searchValue = searchValue.replaceAll("(?<=\\w)(?=\\w)", "*");
         String filter = "(&(objectClass=" + searchType + ")(" + searchType.getNamingAttribute() + "=*" + searchValue + "*))";
+        SearchControls searchControls = new SearchControls();
+        searchControls.setSearchScope(SearchControls.SUBTREE_SCOPE);
+        NamingEnumeration<SearchResult> res;
+        try {
+            res = this.context.search(AD_BASE, filter, searchControls);
+            return res;
+        } catch (NamingException e) {
+//            throw new RuntimeException(e);
+            log.error("Erreur lors de la recherche", e);
+            throw new SeinkSansDoozeBadRequest();
+        }
+    }
+
+    protected NamingEnumeration<SearchResult> search(ObjectType searchType, String searchValue, String rawFilter, String value) {
+        String filterAttribute;
+        try {
+            filterAttribute = ADFilter.valueOf(rawFilter.toUpperCase()).getFilter();
+        } catch (IllegalArgumentException e) {
+            throw new SeinkSansDoozeBadRequest();
+        }
+        searchValue = searchValue.replaceAll("(?<=\\w)(?=\\w)", "*");
+        String filter = "(&(objectClass=" + searchType + ")(" + searchType.getNamingAttribute() + "=*" + searchValue + "*)("+filterAttribute+"=*"+value+"*))";
         SearchControls searchControls = new SearchControls();
         searchControls.setSearchScope(SearchControls.SUBTREE_SCOPE);
         NamingEnumeration<SearchResult> res;
