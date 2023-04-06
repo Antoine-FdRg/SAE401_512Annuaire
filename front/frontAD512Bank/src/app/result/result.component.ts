@@ -9,7 +9,7 @@ import { SearchService } from '../service/search.service';
 })
 export class ResultComponent {
   listPerson: Person[] = [];
-  clickedPosition: number = 0;
+  clickedPosition: number = -1;
   opacity: number = 0;
   i: number = 0;
   selectionState: string = "block";

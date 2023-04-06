@@ -1,16 +1,17 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { GroupsGestionComponent } from './groups-gestion.component';
-
+import { HttpClientTestingModule } from '@angular/common/http/testing';
 describe('GroupsGestionComponent', () => {
   let component: GroupsGestionComponent;
   let fixture: ComponentFixture<GroupsGestionComponent>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ GroupsGestionComponent ]
+      imports: [HttpClientTestingModule],
+      declarations: [GroupsGestionComponent]
     })
-    .compileComponents();
+      .compileComponents();
 
     fixture = TestBed.createComponent(GroupsGestionComponent);
     component = fixture.componentInstance;

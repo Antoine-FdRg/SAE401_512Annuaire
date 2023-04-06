@@ -2,7 +2,7 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import { By } from '@angular/platform-browser';
 import { DebugElement } from '@angular/core';
-
+import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { MembersGestionComponent } from './membersGestion.component';
 
 describe('MembersGestionComponent', () => {
@@ -11,9 +11,11 @@ describe('MembersGestionComponent', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ MembersGestionComponent ]
+      imports: [HttpClientTestingModule],
+
+      declarations: [MembersGestionComponent]
     })
-    .compileComponents();
+      .compileComponents();
   }));
 
   beforeEach(() => {
