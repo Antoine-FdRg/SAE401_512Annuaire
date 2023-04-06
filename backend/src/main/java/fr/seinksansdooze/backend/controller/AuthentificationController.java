@@ -27,8 +27,6 @@ public class AuthentificationController {
 
     ADConnectionManager connectionManager = ADConnectionManagerSingleton.INSTANCE.get();
 
-    //TODO comprendre pq les requete public ne fontyionne plus apres une connexion
-
     @Operation(summary = "Connecte un utilisateur")
     @ApiResponses({
             @ApiResponse(responseCode = "200", description = "Connexion avec succès"),

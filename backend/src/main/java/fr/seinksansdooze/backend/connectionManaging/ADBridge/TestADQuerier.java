@@ -16,8 +16,10 @@ public class TestADQuerier {
 
         IAuthentifiedADQuerier querier = new AuthentifiedADQuerier(id, pwd);
 //        querier.getAllGroups().forEach(System.out::println);
-        System.out.println("Récupération des infos de Thomas");
-        System.out.println(querier.getFullPersonInfo("Gorisse Thomas"));
+//        System.out.println("Récupération des infos de Thomas");
+//        System.out.println(querier.getFullPersonInfo("Gorisse Thomas"));
+//        System.out.println("Création du groupe test");
+//        System.out.println(querier.createGroup("test"));
 //        System.out.println("Ajout de Thomas au groupe test");
 //        System.out.println(querier.addUserToGroup( "Thomas TG. Gorisse", "test"));
 //        System.out.println("Affichage des membres du groupe test");
@@ -26,8 +28,7 @@ public class TestADQuerier {
 //        System.out.println(querier.removeUserFromGroup("Thomas TG. Gorisse", "test"));
 //        System.out.println("Affichage des membres du groupe test");
 //        querier.getGroupMembers("test").forEach(System.out::println);
-//        System.out.println("Récupération des infos de la structure Direction Générale");
-//        querier.searchPerson("Antoine","postalCode","06000",0,15).forEach(System.out::println); //cn, initials, sn, givenName, postalCode, (postalAdress), (manager)
+//        querier.searchPerson("Antoine","title","directeur",0,15).forEach(System.out::println); //streetAddress, title, (postalCode), (postalAdress), (manager)
 
         querier.logout();
 

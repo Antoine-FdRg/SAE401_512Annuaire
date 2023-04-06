@@ -62,12 +62,12 @@ public class PublicADQuerier extends ADQuerier implements IPublicADQuerier {
     /**
      * Méthode répondant à la route GET /api/public/info/person/{cn}
      *
-     * @param cn le cn de la personne recherchée
+     * @param dn le cn de la personne recherchée
      * @return une personne correspondant à la recherche
      */
     //TODO change cn by uuid
-    public PartialPerson getPartialPersonInfo(String cn) {
-        String filter = "(&(objectClass=user)(CN=" + cn + "))";
+    public PartialPerson getPartialPersonInfo(String dn) {
+        String filter = "(&(objectClass=user)(distinguishedName=" + dn + "))";
         SearchControls searchControls = new SearchControls();
         searchControls.setSearchScope(SearchControls.SUBTREE_SCOPE);
         NamingEnumeration<SearchResult> res;

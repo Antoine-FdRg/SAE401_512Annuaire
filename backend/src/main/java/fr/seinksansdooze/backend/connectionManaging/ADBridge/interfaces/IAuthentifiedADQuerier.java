@@ -25,11 +25,13 @@ public interface IAuthentifiedADQuerier {
 
     boolean removeUserFromGroup(String username, String groupName);
 
-    FullPerson getFullPersonInfo(String cn);
+    FullPerson getFullPersonInfo(String dn);
 
     boolean changePassword(String cn, String prevPwd,String newPwd);
 
     List<PartialPerson> getStructureInfo(String cn);
 
     List<PartialPerson> searchPerson(String search, String filter, String value, int page, int perPage);
+
+    List<String> getAllFilters();
 }

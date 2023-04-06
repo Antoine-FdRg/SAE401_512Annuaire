@@ -53,10 +53,10 @@ public class PublicController {
     }
 
     @Operation(summary = "Récupère les informations d'une personne en fonction de son cn")
-    @GetMapping("/info/person/{cn}")
-    public PartialPerson personInfo(@PathVariable String cn, ServerHttpRequest request) {
+    @GetMapping("/info/person/{dn}")
+    public PartialPerson personInfo(@PathVariable String dn, ServerHttpRequest request) {
         RateLimiterSingleton.get().tryConsume(String.valueOf(request.getLocalAddress()));
-        return querier.getPartialPersonInfo(cn);
+        return querier.getPartialPersonInfo(dn);
     }
 
     @Operation(summary = "Récupère les informations d'une structure en fonction de son ou")

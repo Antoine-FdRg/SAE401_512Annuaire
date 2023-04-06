@@ -19,9 +19,8 @@ import javax.naming.directory.SearchResult;
 public class PartialPerson {
     private String firstName;
     private String lastName;
-    private String cn;
-    private String structureOU;
-    private String position;
+    private String dn;
+    private String title;
 
     /**
      * Constructeur à partir d'un résultat de recherche LDAP
@@ -32,16 +31,12 @@ public class PartialPerson {
     public PartialPerson(SearchResult person) {
         this.firstName = person.getAttributes().get("givenName").get().toString();
         this.lastName = person.getAttributes().get("sn").get().toString();
-        this.cn = person.getAttributes().get("cn").get().toString();
-        this.structureOU = person.getAttributes().get("distinguishedName").toString().split(": ")[1];
-//        if(person.getAttributes().get("manager") != null){
-//            System.out.println(person.getAttributes().get("manager").get().toString());
-//        }
-        this.position = this.buildPosition();
+        this.dn = person.getAttributes().get("distinguishedName").toString().split(": ")[1];
+        this.title = person.getAttributes().get("title").get().toString();
     }
 
     private String buildPosition() {
-        String[] ou = this.structureOU.split(",");
+        String[] ou = this.dn.split(",");
         for (int i = 0; i < ou.length; i++) {
             ou[i] = ou[i].split("=")[1];
         }

@@ -1,5 +1,6 @@
 package fr.seinksansdooze.backend.model.response;
 
+import fr.seinksansdooze.backend.model.exception.user.SeinkSansDoozeUserIncomplete;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -22,33 +23,29 @@ public class FullPerson extends PartialPerson {
     private String personalPhone;
     private String professionalPhone;
     private String address;
-    private String managerFullName;
-    private String managerCN;
+    private String managerDN;
 
-    public FullPerson(String firstName, String lastName, String cn, String structureOU, String position, String login, String email, String personalPhone, String professionalPhone, String address, String managerFullName, String managerCN) {
-        super(firstName, lastName, cn, structureOU, position);
+    public FullPerson(String firstName, String lastName, String cn, String dn, String title, String login, String email, String personalPhone, String professionalPhone, String address, String managerFullName, String managerDN) {
+        super(firstName, lastName, dn, title);
         this.login = login;
         this.email = email;
         this.personalPhone = personalPhone;
         this.professionalPhone = professionalPhone;
         this.address = address;
-        this.managerFullName = managerFullName;
-        this.managerCN = managerCN;
+        this.managerDN = managerDN;
     }
 
     public FullPerson(SearchResult result) {
         super(result);
-
-        this.login = result.getAttributes().get("sAMAccountName").toString().split(": ")[1];
-        //FIXME : Tous les objets sont a null ca provoque une erreure, il faut attendre l'implémentation des datas
-        //TODO: ajouter les attributs manquants dans l'AD
-
-        this.email = result.getAttributes().get("mail").toString().split(": ")[1];
-        this.personalPhone = result.getAttributes().get("mobile").toString().split(": ")[1];
-        this.professionalPhone = result.getAttributes().get("telephoneNumber").toString().split(": ")[1];
-        this.address = result.getAttributes().get("streetAddress").toString().split(": ")[1];
-        this.managerFullName = result.getAttributes().get("manager").toString().split(",")[0].split("=")[1];
-        this.managerCN = result.getAttributes().get("manager").toString().split(": ")[1];
-
+        try {
+            this.login = result.getAttributes().get("sAMAccountName").toString().split(": ")[1];
+            this.email = result.getAttributes().get("mail").toString().split(": ")[1];
+            this.personalPhone = result.getAttributes().get("mobile").toString().split(": ")[1];
+            this.professionalPhone = result.getAttributes().get("telephoneNumber").toString().split(": ")[1];
+            this.address = result.getAttributes().get("streetAddress").toString().split(": ")[1];
+            this.managerDN = result.getAttributes().get("manager").toString().split(": ")[1];
+        } catch (NullPointerException e) {
+            throw new SeinkSansDoozeUserIncomplete();
+        }
     }
 }

@@ -1,6 +1,7 @@
 package fr.seinksansdooze.backend.connectionManaging.ADBridge;
 
 import fr.seinksansdooze.backend.connectionManaging.ADBridge.interfaces.IAuthentifiedADQuerier;
+import fr.seinksansdooze.backend.connectionManaging.ADBridge.model.ADFilter;
 import fr.seinksansdooze.backend.connectionManaging.ADBridge.model.ObjectType;
 import fr.seinksansdooze.backend.model.exception.*;
 import fr.seinksansdooze.backend.model.exception.SeinkSansDoozeBadRequest;
@@ -173,8 +174,8 @@ public class AuthentifiedADQuerier extends ADQuerier implements IAuthentifiedADQ
      * @return la liste de tous les groupes de l'annuaire
      */
     @Override
-    public FullPerson getFullPersonInfo(String cn) {
-        String filter = "(&(objectClass=user)(CN=" + cn + "))";
+    public FullPerson getFullPersonInfo(String dn) {
+        String filter = "(&(objectClass=user)(distinguishedName=" + dn + "))";
         SearchControls searchControls = new SearchControls();
         searchControls.setSearchScope(SearchControls.SUBTREE_SCOPE);
         NamingEnumeration<SearchResult> res;
@@ -227,8 +228,13 @@ public class AuthentifiedADQuerier extends ADQuerier implements IAuthentifiedADQ
     }
 
     @Override
+    public List<String> getAllFilters() {
+        return ADFilter.getAllFilters();
+    }
+
+    @Override
     public List<PartialPerson> getStructureInfo(String cn) {
-        //TODO apres avoir ajouter les uid pour chaque object
+        //TODO apres avoir ajouté les uid pour chaque object
         return List.of();
     }
 

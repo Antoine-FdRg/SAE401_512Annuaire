@@ -36,12 +36,12 @@ public class AdminController {
             @ApiResponse(responseCode = "401", description = "Token invalide")
     })
     @GetMapping("/info/person")
-    public FullPerson personInfo(@RequestHeader(HttpHeaders.AUTHORIZATION) String token, @RequestParam String cn, ServerHttpRequest request) {
+    public FullPerson personInfo(@RequestHeader(HttpHeaders.AUTHORIZATION) String token, @RequestParam String dn, ServerHttpRequest request) {
         RateLimiterSingleton.get().tryConsume(String.valueOf(request.getLocalAddress()));
 
         try {
             //TODO @ba101397 bloquer les perm de lectures des attributs que l'on considère comme sensibles pour les utilisateurs non admin
-            return connectionManager.getQuerier(token).getFullPersonInfo(cn);
+            return connectionManager.getQuerier(token).getFullPersonInfo(dn);
         } catch (NamingException e) {
             throw new SeinkSansDoozeBackException(
                     HttpStatus.UNAUTHORIZED,
@@ -122,7 +122,7 @@ public class AdminController {
     @GetMapping("/group/members/{cn}")
     public List<PartialPerson> getGroupMembers(@RequestHeader(HttpHeaders.AUTHORIZATION) String token, @PathVariable String cn, ServerHttpRequest request) {
         RateLimiterSingleton.INSTANCE.get().tryConsume(String.valueOf(request.getLocalAddress()));
-
+        //TODO throw 404 if group not found et pas 401
         try {
             return connectionManager.getQuerier(token).getGroupMembers(cn);
         } catch (NamingException e) {
@@ -219,6 +219,18 @@ public class AdminController {
         RateLimiterSingleton.INSTANCE.get().tryConsume(String.valueOf(request.getLocalAddress()));
         try {
             return connectionManager.getQuerier(token).searchPerson(name, filter, value, page, perPage);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
+
+
+    @GetMapping("/allFilters")
+    public List<String> getAllFilters(@RequestHeader(HttpHeaders.AUTHORIZATION) String token, ServerHttpRequest request) {
+        RateLimiterSingleton.INSTANCE.get().tryConsume(String.valueOf(request.getLocalAddress()));
+        try {
+            return connectionManager.getQuerier(token).getAllFilters();
         } catch (Exception e) {
             e.printStackTrace();
             return null;
