@@ -4,53 +4,164 @@
     </h1>
 
     <section id="infos">
-        
+
         <div id="surname">
             <div class="info-header">
                 <div class="indicator">Nom</div>
-                <span class="material-symbols-outlined">edit</span>
+                <span class="material-symbols-outlined" (click)="modified['surname'] = true">edit</span>
             </div>
-            <div class="information">tempSurname</div>
+
+            <div class="info-group">
+                <div class="information" [style.display]="!modified['surname'] ? 'block' : 'none'">{{user?.lastName}}</div>
+                <div class="modification" [style.display]="modified['surname'] ? 'flex' : 'none'">
+                    <div class="group">
+                        <input required="" type="text" class="input">
+                        <span class="highlight"></span>
+                        <span class="bar"></span>
+                        <label>Nouveau nom</label>
+                    </div>
+
+                    <div class="buttons">
+                        <button class="rollback clickable" (click)="modified['surname']=false">
+                            Annuler
+                        </button>
+                        <button class="commit clickable" (click)="newField(ChangingField.name)">
+                            Valider
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+
         </div>
-        
+
         <div id="login">
             <div class="info-header">
                 <div class="indicator">Login</div>
-                <span class="material-symbols-outlined">edit</span>
+                
             </div>
-            <div class="information">tempLog</div> 
+
+            <div class="info-group">
+                <div class="information">{{user?.login}}</div>
+            </div>
         </div>
 
         <div id="address">
             <div class="info-header">
                 <div class="indicator">Adresse</div>
-                <span class="material-symbols-outlined">edit</span>
+                <span class="material-symbols-outlined" (click)="modified['address'] = true">edit</span>
             </div>
-            <div class="information">tempAddress</div>
+
+            <div class="info-group">
+                <div class="information" [style.display]="!modified['address'] ? 'block' : 'none'">
+                    <blockquote>TODO</blockquote>
+                </div>
+
+                <div class="modification" [style.display]="modified['address'] ? 'flex' : 'none'">
+                    <div class="group">
+                        <input required="" type="text" class="input">
+                        <span class="highlight"></span>
+                        <span class="bar"></span>
+                        <label>Nouvelle adresse</label>
+                    </div>
+
+                    <div class="buttons">
+                        <button class="rollback clickable" (click)="modified['address']=false">
+                            Annuler
+                        </button>
+                        <button class="commit clickable" (click)="newField(ChangingField.address)">
+                            Valider
+                        </button>
+                    </div>
+                </div>
+            </div>
         </div>
-                
+
         <div id="name">
             <div class="info-header">
                 <div class="indicator">Prénom</div>
-                <span class="material-symbols-outlined">edit</span>
+                <span class="material-symbols-outlined" (click)="modified['name'] = true">edit</span>
             </div>
-            <div class="information">tempName</div>
+
+            <div class="info-group">
+                <div class="information" [style.display]="!modified['name'] ? 'block' : 'none'">{{user?.firstName}}</div>
+                <div class="modification" [style.display]="modified['name'] ? 'flex' : 'none'">
+                    <div class="group">
+                        <input required="" type="text" class="input">
+                        <span class="highlight"></span>
+                        <span class="bar"></span>
+                        <label>Nouveau prénom</label>
+                    </div>
+
+                    <div class="buttons">
+                        <button class="rollback clickable" (click)="modified['name']=false">
+                            Annuler
+                        </button>
+                        <button class="commit clickable" (click)="newField(ChangingField.name)">
+                            Valider
+                        </button>
+                    </div>
+                </div>
+            </div>
         </div>
-        
+
         <div id="mail">
             <div class="info-header">
-                <div class="indicator">Email</div>
-                <span class="material-symbols-outlined">edit</span>
+                <div class="indicator">Adresse email personelle</div>
+                <span class="material-symbols-outlined" (click)="modified['mail'] = true">edit</span>
             </div>
-            <div class="information">TempMail</div>
+
+            <div class="info-group">
+                <div class="information" [style.display]="!modified['mail'] ? 'block' : 'none'">{{user?.email}}</div>
+                <div class="modification" [style.display]="modified['mail'] ? 'flex' : 'none'">
+                    <div class="group">
+                        <input required="" type="text" class="input">
+                        <span class="highlight"></span>
+                        <span class="bar"></span>
+                        <label>Nouveau mail</label>
+                    </div>
+
+                    <div class="buttons">
+                        <button class="rollback clickable" (click)="modified['mail']=false">
+                            Annuler
+                        </button>
+                        <button class="commit clickable" (click)="newField(ChangingField.mail)">
+                            Valider
+                        </button>
+                    </div>
+                </div>
+            </div>
+
         </div>
-        
+
         <div id="phone">
             <div class="info-header">
                 <div class="indicator">Numéro de Téléphone</div>
-                <span class="material-symbols-outlined">edit</span>
+                <span class="material-symbols-outlined" (click)="modified['phone'] = true">edit</span>
             </div>
-            <div class="information">tempPhone</div>
+
+            <div class="info-group">
+                <div class="information" [style.display]="!modified['phone'] ? 'block' : 'none'">{{user?.phone}}</div>
+                <div class="modification" [style.display]="modified['phone'] ? 'flex' : 'none'">
+                    <div class="group">
+                        <input required="" type="text" class="input">
+                        <span class="highlight"></span>
+                        <span class="bar"></span>
+                        <label>Nouveau numéro</label>
+                    </div>
+
+                    <div class="buttons">
+                        <button class="rollback clickable" (click)="modified['phone']=false">
+                            Annuler
+                        </button>
+                        <button class="commit clickable" (click)="newField(ChangingField.phone)">
+                            Valider
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+
         </div>
     </section>
 
