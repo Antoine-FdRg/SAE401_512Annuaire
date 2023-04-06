@@ -45,6 +45,9 @@ foreach ($User in $ADUsers) {
                 -ChangePasswordAtLogon $False `
                 -PasswordNeverExpires $True `
                 -CannotChangePassword $False
+
+            Set-ADUser -Identity $User.username -dateDeNaissance $User.dateofbirth
+
             Write-Host "The user $($User.firstname) $($User.lastname) ($($User.username)) was created."
         }
         catch {
