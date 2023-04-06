@@ -85,7 +85,7 @@ public class ADQuerierMoke implements IAuthentifiedADQuerier, IPublicADQuerier {
     }
 
     @Override
-    public FullPerson getFullPersonInfo(String cn) {
+    public FullPerson getFullPersonInfo(String dn) {
         return null;
     }
 
@@ -101,6 +101,11 @@ public class ADQuerierMoke implements IAuthentifiedADQuerier, IPublicADQuerier {
 
     @Override
     public List<PartialPerson> searchPerson(String search, String filter, String value, int page, int perPage) {
+        return null;
+    }
+
+    @Override
+    public List<String> getAllFilters() {
         return null;
     }
 }

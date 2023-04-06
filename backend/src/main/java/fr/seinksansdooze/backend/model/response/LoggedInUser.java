@@ -30,9 +30,8 @@ public class LoggedInUser extends PartialPerson{
         return "LoggedInUser{" +
                 "firstName='" + getFirstName() + '\'' +
                 ", lastName='" + getLastName() + '\'' +
-                ", cn='" + getCn() + '\'' +
-                ", structureOU='" + getStructureOU() + '\'' +
-                ", position='" + getPosition() + '\'' +
+                ", structureOU='" + getDn() + '\'' +
+                ", position='" + getTitle() + '\'' +
                 ", isAdmin=" + isAdmin +
                 '}';
     }
