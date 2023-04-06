@@ -24,6 +24,7 @@
     (à obtenir avec 1ere lettre du prénom et premiere lettre du nom de l'utilisateur)
   */
   --initials: "JP";
+  --shadow-admin: 20px 20px 7px 2px #005699;
 }
 
 body {
