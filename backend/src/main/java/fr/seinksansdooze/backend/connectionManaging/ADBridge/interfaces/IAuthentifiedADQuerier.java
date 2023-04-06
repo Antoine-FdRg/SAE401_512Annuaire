@@ -30,4 +30,6 @@ public interface IAuthentifiedADQuerier {
     boolean changePassword(String cn, String prevPwd,String newPwd);
 
     List<PartialPerson> getStructureInfo(String cn);
+
+    List<PartialPerson> searchPerson(String search, String filter, String value, int page, int perPage);
 }

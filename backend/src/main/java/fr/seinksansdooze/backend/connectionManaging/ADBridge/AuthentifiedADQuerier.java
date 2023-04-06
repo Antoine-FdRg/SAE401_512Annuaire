@@ -11,7 +11,6 @@ import fr.seinksansdooze.backend.model.response.FullPerson;
 import fr.seinksansdooze.backend.model.response.PartialGroup;
 import fr.seinksansdooze.backend.model.response.PartialPerson;
 import jakarta.xml.bind.DatatypeConverter;
-import lombok.val;
 import org.springframework.http.HttpStatus;
 
 import javax.naming.Context;
@@ -183,8 +182,7 @@ public class AuthentifiedADQuerier extends ADQuerier implements IAuthentifiedADQ
             res = this.context.search(AD_BASE, filter, searchControls);
             if (res.hasMore()) {
                 SearchResult currentPerson = res.next();
-                FullPerson person = new FullPerson(currentPerson);
-                return person;
+                return new FullPerson(currentPerson);
             }
             throw new SeinkSansDoozeUserNotFound();
         } catch (NamingException e) {
@@ -223,9 +221,14 @@ public class AuthentifiedADQuerier extends ADQuerier implements IAuthentifiedADQ
         }
     }
 
+    public List<PartialPerson> searchPerson(String search, String filter, String value, int page, int perPage){
+        NamingEnumeration<SearchResult> res = search(ObjectType.PERSON,search,filter,value);
+        return (List<PartialPerson>) unroll(res, page, perPage, PartialPerson.class);
+    }
+
     @Override
     public List<PartialPerson> getStructureInfo(String cn) {
-        //TODO
+        //TODO apres avoir ajouter les uid pour chaque object
         return List.of();
     }
 

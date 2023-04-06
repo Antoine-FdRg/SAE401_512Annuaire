@@ -34,6 +34,9 @@ public class PartialPerson {
         this.lastName = person.getAttributes().get("sn").get().toString();
         this.cn = person.getAttributes().get("cn").get().toString();
         this.structureOU = person.getAttributes().get("distinguishedName").toString().split(": ")[1];
+//        if(person.getAttributes().get("manager") != null){
+//            System.out.println(person.getAttributes().get("manager").get().toString());
+//        }
         this.position = this.buildPosition();
     }
 

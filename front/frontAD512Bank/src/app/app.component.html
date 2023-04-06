@@ -3,10 +3,10 @@
     <img src="../assets/512_bank_officiel.png" alt="512Bank" />
     <div>512 Bank</div>
   </div>
-
+  <div *ngIf="isAdmin()" id="controlPanel">CONTROL PANEL</div>
   <section id="right-part-header">
     <div class="help clickable">Aide</div>
-    <app-profile></app-profile>
+    <app-profile (click)="hideResults()"></app-profile>
   </section>
 </header>
 <main>

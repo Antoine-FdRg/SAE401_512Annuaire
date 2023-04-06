@@ -14,8 +14,8 @@
   padding: 10px;
   border-radius: 19px;
 
-  left: -122px;
-  top: 72px;
+  left: -280%;
+  top: 110%;
   z-index: 2;
 }
 
@@ -65,4 +65,3 @@
   margin-top: 10px;
   margin-bottom: 5px;
 }
-

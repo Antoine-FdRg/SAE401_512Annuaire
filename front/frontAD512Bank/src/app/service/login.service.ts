@@ -1,34 +1,59 @@
+import { Router } from '@angular/router';
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { apiURL } from './apiURL';
+import { Person } from '../person';
 @Injectable({
   providedIn: 'root'
 })
 export class LoginService {
 
 
-  userBase: any = {
-    login: "ma102741",
-    surname: "Maïstre",
-    name: "Antoine",
+  userBase: Person | undefined;
+  constructor(private http: HttpClient, private router: Router) { }
+
+  getUser(): Person | undefined {
+    // if userbase undefined then search in session storage
+    if (this.userBase == undefined) {
+      var parsed = JSON.parse(sessionStorage.getItem('user') || 'null');
+
+      this.userBase = parsed;
+      if (this.userBase == null) {
+        return undefined
+      }
+      else {
+        return this.userBase;
+      }
+    }
+    else {
+      return this.userBase;
+    }
   }
-  constructor(private http: HttpClient) { }
 
   connect(login: string, password: string) {
-    const httpOptions: any = {
-      headers: new HttpHeaders({
-        'Access-Control-Allow-Origin': '*'
-      })
-    };
 
-    this.http.post(apiURL + "/auth/login", { login: login, password: password }, httpOptions).subscribe(
+    this.http.post(apiURL + "/auth/login", { username: login, password: password }).subscribe(
       (response) => {
-        console.log(response);
-        this.userBase = response;
+        this.userBase = response as unknown as Person;
+        sessionStorage.setItem('user', JSON.stringify(this.userBase));
+        this.router.navigate(['/controlPanel']);
       },
       (error) => {
         console.log(error);
       }
     );
+  }
+
+  logout() {
+    sessionStorage.removeItem('user');
+    this.userBase = undefined;
+    this.router.navigate(['/login']);
+
+    this.http.post(apiURL + "/auth/logout", {}, { withCredentials: true }).subscribe(
+      (response) => {
+        console.log(response);
+      }
+    );
+
   }
 }
