@@ -44,14 +44,8 @@ java-deploy:
   script:
     - mvn $MAVEN_CLI_OPTS package -DskipTests
 
-.node-base: &node-base
-    image: node:18
-    before_script:
-        - cd front/frontAD512Bank || exit 1
-    after_script:
-        - cd ../.. || exit 1
-
-build:
+# Partie frontend (nodejs)
+node-build:
   stage: build
   image: trion/ng-cli
   before_script:
@@ -60,7 +54,7 @@ build:
   script:
     - ng build
 
-test:karma:
+node-test:
   stage: test
   image: trion/ng-cli-karma
   allow_failure: false
