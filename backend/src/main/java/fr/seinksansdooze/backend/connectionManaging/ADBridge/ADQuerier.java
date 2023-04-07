@@ -12,6 +12,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 
 import javax.naming.Context;
+import javax.naming.Name;
 import javax.naming.NamingEnumeration;
 import javax.naming.NamingException;
 import javax.naming.directory.*;
@@ -25,7 +26,6 @@ public abstract class ADQuerier {
     protected static final String AD_BASE = "OU=512BankFR,DC=EQUIPE1B,DC=local";
 
     protected DirContext context;
-
 
     protected ADQuerier(String username, String pwd) {
         //rajouter un systeme de session et d'authentification
@@ -61,7 +61,7 @@ public abstract class ADQuerier {
             this.context = new InitialDirContext(env);
             return getLoggedInUser(username);
         } catch (NamingException e) {
-            throw new SeinkSansDoozeBackException(HttpStatus.UNAUTHORIZED, "Mot de passe incorrect");
+            throw new SeinkSansDoozeBackException(HttpStatus.UNAUTHORIZED, "Mot de passe incorrect", e);
         }
     }
 
@@ -152,6 +152,16 @@ public abstract class ADQuerier {
         return items.subList(startIndex, endIndex);
     }
 
+    /**
+     * Effectue des <code>context.search()</code> de façon sécurisée.
+     * Par default ne fait rien mais est
+     *
+     * @see javax.naming.directory.DirContext#search(Name, String, SearchControls)
+     */
+    protected NamingEnumeration<SearchResult> safeSearch(String name, String filter, SearchControls searchControls) throws NamingException {
+        return this.context.search(AD_BASE, filter, searchControls);
+    }
+
 
     /////////////////////////// Méthodes de requete AD ///////////////////////////
 
@@ -165,7 +175,7 @@ public abstract class ADQuerier {
         searchControls.setSearchScope(SearchControls.SUBTREE_SCOPE);
         NamingEnumeration<SearchResult> res;
         try {
-            res = this.context.search(AD_BASE, filter, searchControls);
+            res = safeSearch(AD_BASE, filter, searchControls);
             return res;
         } catch (NamingException e) {
 //            throw new RuntimeException(e);
@@ -182,12 +192,12 @@ public abstract class ADQuerier {
             throw new SeinkSansDoozeBadRequest();
         }
         searchValue = searchValue.replaceAll("(?<=\\w)(?=\\w)", "*");
-        String filter = "(&(objectClass=" + searchType + ")(" + searchType.getNamingAttribute() + "=*" + searchValue + "*)("+filterAttribute+"=*"+value+"*))";
+        String filter = "(&(objectClass=" + searchType + ")(" + searchType.getNamingAttribute() + "=*" + searchValue + "*)(" + filterAttribute + "=*" + value + "*))";
         SearchControls searchControls = new SearchControls();
         searchControls.setSearchScope(SearchControls.SUBTREE_SCOPE);
         NamingEnumeration<SearchResult> res;
         try {
-            res = this.context.search(AD_BASE, filter, searchControls);
+            res = safeSearch(AD_BASE, filter, searchControls);
             return res;
         } catch (NamingException e) {
 //            throw new RuntimeException(e);
@@ -204,7 +214,7 @@ public abstract class ADQuerier {
         searchControls.setSearchScope(SearchControls.SUBTREE_SCOPE);
         NamingEnumeration<SearchResult> res;
         try {
-            res = this.context.search(AD_BASE, filter, searchControls);
+            res = safeSearch(AD_BASE, filter, searchControls);
             return res;
         } catch (NamingException e) {
             throw new SeinkSansDoozeBadRequest();
@@ -222,7 +232,7 @@ public abstract class ADQuerier {
         searchControls.setSearchScope(SearchControls.SUBTREE_SCOPE);
         NamingEnumeration<SearchResult> res;
         try {
-            res = this.context.search(AD_BASE, filter, searchControls);
+            res = safeSearch(AD_BASE, filter, searchControls);
         } catch (NamingException ex) {
             throw new SeinkSansDoozeBadRequest();
         }

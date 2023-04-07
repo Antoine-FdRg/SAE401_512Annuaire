@@ -7,19 +7,25 @@ import fr.seinksansdooze.backend.model.exception.SeinkSansDoozeBadRequest;
 import fr.seinksansdooze.backend.model.exception.user.SeinkSansDoozeUserNotFound;
 import fr.seinksansdooze.backend.model.response.PartialPerson;
 import fr.seinksansdooze.backend.model.response.PartialStructure;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Repository;
 
+import javax.naming.CommunicationException;
 import javax.naming.NamingEnumeration;
 import javax.naming.NamingException;
 import javax.naming.directory.SearchControls;
 import javax.naming.directory.SearchResult;
 import java.util.List;
 
+@Slf4j
 @Repository
 public class PublicADQuerier extends ADQuerier implements IPublicADQuerier {
+
+    private final String username;
+    private final String password;
 
     @Autowired
     public PublicADQuerier(
@@ -27,6 +33,37 @@ public class PublicADQuerier extends ADQuerier implements IPublicADQuerier {
             @Value("${public.password}") String password
     ) {
         super(username, password);
+        this.username = username;
+        this.password = password;
+    }
+
+    /**
+     * Recrée une nouvelle connection à Active Directory si une connection est reset.
+     *
+     * @see ADQuerier#safeSearch(String, String, SearchControls)
+     */
+    @Override
+    protected NamingEnumeration<SearchResult> safeSearch(String name, String filter, SearchControls searchControls) throws NamingException {
+        NamingEnumeration<SearchResult> res;
+
+        try {
+            res = super.safeSearch(name, filter, searchControls);
+        } catch (CommunicationException e) { // La communication a été reset
+            log.info("Recréation du contexte pour le PublicQuerier.");
+
+            try {
+                login(username, password);
+            } catch (SeinkSansDoozeBackException ex) {
+                log.error("Erreur lors de la recréation du contexte", ex.getCause());
+                throw new SeinkSansDoozeBackException(HttpStatus.INTERNAL_SERVER_ERROR,
+                        "Erreur lors de la recréation du contexte",
+                        ex.getCause());
+            }
+
+            res = super.safeSearch(name, filter, searchControls);
+        }
+
+        return res;
     }
 
     /**
@@ -72,7 +109,7 @@ public class PublicADQuerier extends ADQuerier implements IPublicADQuerier {
         searchControls.setSearchScope(SearchControls.SUBTREE_SCOPE);
         NamingEnumeration<SearchResult> res;
         try {
-            res = this.context.search(AD_BASE, filter, searchControls);
+            res = safeSearch(AD_BASE, filter, searchControls);
             if (res.hasMore()) {
                 SearchResult currentPerson = res.next();
                 return new PartialPerson(currentPerson);
@@ -96,12 +133,12 @@ public class PublicADQuerier extends ADQuerier implements IPublicADQuerier {
         searchControls.setSearchScope(SearchControls.SUBTREE_SCOPE);
         NamingEnumeration<SearchResult> res;
         try {
-            res = this.context.search(AD_BASE, filter, searchControls);
+            res = safeSearch(AD_BASE, filter, searchControls);
             if (res.hasMore()) {
                 SearchResult currentStructure = res.next();
                 return new PartialStructure(currentStructure);
             }
-            throw new SeinkSansDoozeBackException(HttpStatus.NOT_FOUND,"La structure n'existe pas");
+            throw new SeinkSansDoozeBackException(HttpStatus.NOT_FOUND, "La structure n'existe pas");
         } catch (NamingException e) {
             throw new SeinkSansDoozeBadRequest();
         }
@@ -114,7 +151,7 @@ public class PublicADQuerier extends ADQuerier implements IPublicADQuerier {
         searchControls.setSearchScope(SearchControls.SUBTREE_SCOPE);
         NamingEnumeration<SearchResult> res;
         try {
-            res = this.context.search(AD_BASE, filter, searchControls);
+            res = safeSearch(AD_BASE, filter, searchControls);
             if (res.hasMore()) {
                 return true;
             }
