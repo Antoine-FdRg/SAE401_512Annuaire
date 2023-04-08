@@ -24,6 +24,7 @@ import java.util.Properties;
 public abstract class ADQuerier {
     private static final String AD_URL = "ldap://10.22.32.2:389/";  //389 (search et createSubcontext) ou 3268 (search only) ou 636 (SSL)
     protected static final String AD_BASE = "OU=512BankFR,DC=EQUIPE1B,DC=local";
+    protected static final String AD_GROUP_BASE = "CN=Users,DC=EQUIPE1B,DC=local";
 
     protected DirContext context;
 
@@ -57,6 +58,7 @@ public abstract class ADQuerier {
         env.put(Context.SECURITY_AUTHENTICATION, "Simple");
         env.put(Context.SECURITY_PRINCIPAL, username);
         env.put(Context.SECURITY_CREDENTIALS, pwd);
+//        env.put(Context.REFERRAL, "follow");
         try {
             this.context = new InitialDirContext(env);
             return getLoggedInUser(username);
@@ -75,19 +77,6 @@ public abstract class ADQuerier {
             return new LoggedInUser(res.next());
         } catch (NamingException e) {
             throw new SeinkSansDoozeUserNotFound();
-        }
-    }
-
-    private boolean isAdminConnected(String username) {
-        SearchControls searchControls = new SearchControls();
-        searchControls.setSearchScope(SearchControls.SUBTREE_SCOPE);
-        String filter = "(&(objectClass=user)(userPrincipalName=" + username + ")(memberOf=CN=Administrateurs,CN=Builtin,DC=EQUIPE1B,DC=local))";
-        NamingEnumeration<SearchResult> res;
-        try {
-            res = this.context.search(AD_BASE, filter, searchControls);
-            return res.hasMore();
-        } catch (NamingException e) {
-            throw new SeinkSansDoozeBadRequest();
         }
     }
 
@@ -158,8 +147,8 @@ public abstract class ADQuerier {
      *
      * @see javax.naming.directory.DirContext#search(Name, String, SearchControls)
      */
-    protected NamingEnumeration<SearchResult> safeSearch(String name, String filter, SearchControls searchControls) throws NamingException {
-        return this.context.search(AD_BASE, filter, searchControls);
+    protected NamingEnumeration<SearchResult> safeSearch(String base, String filter, SearchControls searchControls) throws NamingException {
+        return this.context.search(base, filter, searchControls);
     }
 
 
@@ -209,12 +198,12 @@ public abstract class ADQuerier {
 
     // api/admin/group/all
     public NamingEnumeration<SearchResult> searchAllGroups() {
-        String filter = "(&(objectClass=group))";
+        String filter = "(objectClass=group)";
         SearchControls searchControls = new SearchControls();
         searchControls.setSearchScope(SearchControls.SUBTREE_SCOPE);
         NamingEnumeration<SearchResult> res;
         try {
-            res = safeSearch(AD_BASE, filter, searchControls);
+            res = safeSearch(AD_GROUP_BASE, filter, searchControls);
             return res;
         } catch (NamingException e) {
             throw new SeinkSansDoozeBadRequest();
@@ -232,7 +221,7 @@ public abstract class ADQuerier {
         searchControls.setSearchScope(SearchControls.SUBTREE_SCOPE);
         NamingEnumeration<SearchResult> res;
         try {
-            res = safeSearch(AD_BASE, filter, searchControls);
+            res = safeSearch(AD_GROUP_BASE, filter, searchControls);
         } catch (NamingException ex) {
             throw new SeinkSansDoozeBadRequest();
         }
@@ -241,10 +230,14 @@ public abstract class ADQuerier {
                 Attributes groupAttributs = res.next().getAttributes();
                 Attribute groupMembersName = groupAttributs.get("member");
                 ArrayList<SearchResult> groupMembers = new ArrayList<>();
-                NamingEnumeration<?> membersList = groupMembersName.getAll();
+                NamingEnumeration<?> membersList;
+                try{
+                    membersList = groupMembersName.getAll();
+                }catch (NullPointerException e){
+                    return groupMembers;
+                }
                 while (membersList.hasMore()) {
                     String currentMemberCN = membersList.next().toString();
-                    //TODO s'assurer que le search ne créé pas de bug
                     NamingEnumeration<SearchResult> currentMemberEnum = search(ObjectType.PERSON, currentMemberCN.split(",")[0].split("=")[1]);
                     if (currentMemberEnum.hasMore()) {
                         SearchResult currentMember = currentMemberEnum.next();

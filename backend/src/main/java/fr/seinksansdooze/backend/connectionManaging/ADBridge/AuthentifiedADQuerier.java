@@ -33,13 +33,13 @@ public class AuthentifiedADQuerier extends ADQuerier implements IAuthentifiedADQ
 
     /**
      * Méthode répondant à la route GET /api/admin/group/all
+     *
      * @return la liste de tous les groupes
      */
     @Override
     public ArrayList<PartialGroup> getAllGroups() {
         NamingEnumeration<SearchResult> res = this.searchAllGroups();
         ArrayList<PartialGroup> groups = new ArrayList<>();
-
         try {
             while (res.hasMore()) {
                 SearchResult currentGroup = res.next();
@@ -47,7 +47,7 @@ public class AuthentifiedADQuerier extends ADQuerier implements IAuthentifiedADQ
                 groups.add(group);
             }
             return groups;
-        }catch (NamingException e) {
+        } catch (NamingException e) {
             return groups;
         }
     }
@@ -57,10 +57,10 @@ public class AuthentifiedADQuerier extends ADQuerier implements IAuthentifiedADQ
         String filter = "(&(objectClass=group)(CN=" + groupName + "))";
         SearchControls searchControls = new SearchControls();
         searchControls.setSearchScope(SearchControls.SUBTREE_SCOPE);
-        NamingEnumeration<SearchResult> res;
+        List<PartialGroup> existingGroups = null;
         try {
-            res = this.context.search(AD_BASE, filter, searchControls);
-            if (res.hasMore()) {
+            existingGroups = this.getAllGroups();
+            if (existingGroups.stream().anyMatch(group -> group.getCn().equals(groupName))) {
                 throw new SeinkSansDoozeBackException(HttpStatus.CONFLICT, "Le groupe existe déjà");
             } else {
                 Attributes attributes = new BasicAttributes();
@@ -71,10 +71,11 @@ public class AuthentifiedADQuerier extends ADQuerier implements IAuthentifiedADQ
                 attributes.put("CN", groupName);
                 attributes.put("sAMAccountName", groupName);
                 attributes.put("description", "Groupe créé par l'API");
-                this.context.createSubcontext("CN=" + groupName + ","+ADQuerier.AD_BASE, attributes);
+                this.context.createSubcontext("CN=" + groupName + "," + ADQuerier.AD_GROUP_BASE, attributes);
                 return true;
             }
         } catch (NamingException e) {
+//            throw new RuntimeException(e);
             throw new SeinkSansDoozeBadRequest();
         }
 
@@ -87,9 +88,9 @@ public class AuthentifiedADQuerier extends ADQuerier implements IAuthentifiedADQ
         searchControls.setSearchScope(SearchControls.SUBTREE_SCOPE);
         NamingEnumeration<SearchResult> res;
         try {
-            res = this.context.search(AD_BASE, filter, searchControls);
+            res = this.context.search(AD_GROUP_BASE, filter, searchControls);
             if (res.hasMore()) {
-                this.context.destroySubcontext("CN=" + groupName + ","+ADQuerier.AD_BASE);
+                this.context.destroySubcontext("CN=" + groupName + "," + ADQuerier.AD_GROUP_BASE);
                 return true;
             } else {
                 throw new SeinkSansDoozeGroupNotFound();
@@ -110,52 +111,60 @@ public class AuthentifiedADQuerier extends ADQuerier implements IAuthentifiedADQ
         }
         return members;
     }
+
     @Override
-    public boolean addUserToGroup(String username , String groupName) {
+    public boolean addUserToGroup(String userDN, String groupName) {
         String filter = "(&(objectClass=group)(CN=" + groupName + "))";
         SearchControls searchControls = new SearchControls();
         searchControls.setSearchScope(SearchControls.SUBTREE_SCOPE);
         NamingEnumeration<SearchResult> res;
         try {
-            res = this.context.search(AD_BASE, filter, searchControls);
+            res = this.context.search(AD_GROUP_BASE, filter, searchControls);
             if (res.hasMore()) {
                 ModificationItem[] modificationItems = new ModificationItem[1];
-                String dn = search(ObjectType.PERSON,username).next().getNameInNamespace();
-                modificationItems[0] = new ModificationItem(DirContext.ADD_ATTRIBUTE, new BasicAttribute("member", dn));
-                try{
-                    this.context.modifyAttributes("CN=" + groupName + ","+ADQuerier.AD_BASE, modificationItems);
+                if (this.getFullPersonInfo(userDN) == null) {
+                    throw new SeinkSansDoozeUserNotFound();
+                }
+                modificationItems[0] = new ModificationItem(DirContext.ADD_ATTRIBUTE, new BasicAttribute("member", userDN));
+                try {
+                    this.context.modifyAttributes("CN=" + groupName + "," + ADQuerier.AD_GROUP_BASE, modificationItems);
                     return true;
-                }catch(NamingException e){
+                } catch (NamingException e) {
+                    //TODO throw userAlreadyInGroup
                     throw new SeinkSansDoozeUserNotInGroup();
                 }
             } else {
                 throw new SeinkSansDoozeGroupNotFound();
             }
-        } catch (NamingException e) {
+        } catch (
+                NamingException e) {
             throw new SeinkSansDoozeBadRequest();
 
         }
+
     }
 
     @Override
-    public boolean removeUserFromGroup(String username , String groupName) {
+    public boolean removeUserFromGroup(String dn, String groupName) {
         String filter = "(&(objectClass=group)(CN=" + groupName + "))";
         SearchControls searchControls = new SearchControls();
         searchControls.setSearchScope(SearchControls.SUBTREE_SCOPE);
         NamingEnumeration<SearchResult> res;
 
         try {
-            res = this.context.search(AD_BASE, filter, searchControls);
+            res = this.context.search(AD_GROUP_BASE, filter, searchControls);
 
             if (res.hasMore()) {
                 ModificationItem[] modificationItems = new ModificationItem[1];
-                String dn = search(ObjectType.PERSON,username).next().getNameInNamespace();
-                modificationItems[0] = new ModificationItem(DirContext.REMOVE_ATTRIBUTE, new BasicAttribute("member", dn));
-                try{
-                    this.context.modifyAttributes("CN=" + groupName + ","+ADQuerier.AD_BASE, modificationItems);
-
+                if (this.getFullPersonInfo(dn) == null) {
+                    throw new SeinkSansDoozeUserNotFound();
                 }
-                catch(NamingException e){
+                modificationItems[0] = new ModificationItem(DirContext.REMOVE_ATTRIBUTE, new BasicAttribute("member", dn));
+                try {
+                    this.context.modifyAttributes("CN=" + groupName + "," + ADQuerier.AD_GROUP_BASE, modificationItems);
+
+                } catch (NamingException e) {
+                    //TODO throw autre chose
                     throw new SeinkSansDoozeUserNotInGroup();
                 }
                 return true;
@@ -171,6 +180,7 @@ public class AuthentifiedADQuerier extends ADQuerier implements IAuthentifiedADQ
 
     /**
      * Méthode répondant à la route GET /api/admin/search/person
+     *
      * @return la liste de tous les groupes de l'annuaire
      */
     @Override
@@ -191,7 +201,7 @@ public class AuthentifiedADQuerier extends ADQuerier implements IAuthentifiedADQ
         }
     }
 
-    public boolean changePassword(String cn, String prevPwd,String newPwd){
+    public boolean changePassword(String cn, String prevPwd, String newPwd) {
         String filter = "(&(objectClass=user)(CN=" + cn + "))";
         SearchControls searchControls = new SearchControls();
         searchControls.setSearchScope(SearchControls.SUBTREE_SCOPE);
@@ -208,9 +218,9 @@ public class AuthentifiedADQuerier extends ADQuerier implements IAuthentifiedADQ
 
                 String encodedPwd;
                 try {
-                    encodedPwd = DatatypeConverter.printBase64Binary(('"'+"Jfi8ZH8#k"+'"').getBytes("UTF-16LE"));
+                    encodedPwd = DatatypeConverter.printBase64Binary(('"' + "Jfi8ZH8#k" + '"').getBytes("UTF-16LE"));
                 } catch (UnsupportedEncodingException e) {
-                    throw new SeinkSansDoozeBackException(HttpStatus.NOT_ACCEPTABLE,"Erreur lors de l'encodage du mot de passe");
+                    throw new SeinkSansDoozeBackException(HttpStatus.NOT_ACCEPTABLE, "Erreur lors de l'encodage du mot de passe");
                 }
                 mods[0] = new ModificationItem(DirContext.REPLACE_ATTRIBUTE, new BasicAttribute("unicodePwd", encodedPwd));
                 this.context.modifyAttributes(dn, mods);
@@ -222,8 +232,8 @@ public class AuthentifiedADQuerier extends ADQuerier implements IAuthentifiedADQ
         }
     }
 
-    public List<PartialPerson> searchPerson(String search, String filter, String value, int page, int perPage){
-        NamingEnumeration<SearchResult> res = search(ObjectType.PERSON,search,filter,value);
+    public List<PartialPerson> searchPerson(String search, String filter, String value, int page, int perPage) {
+        NamingEnumeration<SearchResult> res = search(ObjectType.PERSON, search, filter, value);
         return (List<PartialPerson>) unroll(res, page, perPage, PartialPerson.class);
     }
 

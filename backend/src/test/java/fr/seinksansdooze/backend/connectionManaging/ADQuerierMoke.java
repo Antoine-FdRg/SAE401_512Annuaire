@@ -53,11 +53,6 @@ public class ADQuerierMoke implements IAuthentifiedADQuerier, IPublicADQuerier {
         return null;
     }
 
-    @Override
-    public boolean userExists(String username) {
-        return false;
-    }
-
 
     @Override
     public boolean createGroup(String groupName) {
@@ -75,12 +70,12 @@ public class ADQuerierMoke implements IAuthentifiedADQuerier, IPublicADQuerier {
     }
 
     @Override
-    public boolean addUserToGroup(String username , String groupName) {
+    public boolean addUserToGroup(String userDN, String groupName) {
         return false;
     }
 
     @Override
-    public boolean removeUserFromGroup(String username, String groupName) {
+    public boolean removeUserFromGroup(String dn, String groupName) {
         return false;
     }
 

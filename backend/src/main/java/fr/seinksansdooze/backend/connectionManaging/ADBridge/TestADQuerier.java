@@ -13,22 +13,31 @@ public class TestADQuerier {
     private static void testAuthenticatedQuerier() {
         String id = "fadda.antoine";
         String pwd = "@Arnaudisthebest83";
-
         IAuthentifiedADQuerier querier = new AuthentifiedADQuerier(id, pwd);
-//        querier.getAllGroups().forEach(System.out::println);
+        String dn = "CN=Thomas Gorisse,OU=Direction General,OU=512Direction,OU=512Batiment,OU=512BankFR,DC=EQUIPE1B,DC=local";
+        querier.getAllGroups().forEach(System.out::println);
 //        System.out.println("Récupération des infos de Thomas");
-//        System.out.println(querier.getFullPersonInfo("Gorisse Thomas"));
+//        System.out.println(querier.getFullPersonInfo(dn));
 //        System.out.println("Création du groupe test");
 //        System.out.println(querier.createGroup("test"));
+
+
 //        System.out.println("Ajout de Thomas au groupe test");
-//        System.out.println(querier.addUserToGroup( "Thomas TG. Gorisse", "test"));
+//        System.out.println(querier.addUserToGroup( dn, "test"));
+////
 //        System.out.println("Affichage des membres du groupe test");
 //        querier.getGroupMembers("test").forEach(System.out::println);
+//
 //        System.out.println("Suppression de Thomas du groupe test");
-//        System.out.println(querier.removeUserFromGroup("Thomas TG. Gorisse", "test"));
+//        System.out.println(querier.removeUserFromGroup(dn, "test"));
+////
 //        System.out.println("Affichage des membres du groupe test");
 //        querier.getGroupMembers("test").forEach(System.out::println);
-//        querier.searchPerson("Antoine","title","directeur",0,15).forEach(System.out::println); //streetAddress, title, (postalCode), (postalAdress), (manager)
+////
+//        System.out.println("Suppression du groupe test");
+//        System.out.println(querier.deleteGroup("test"));
+
+        querier.searchPerson("Antoine","title","directeur",0,15).forEach(System.out::println); //streetAddress, title, (postalCode), (postalAdress), (manager)
 
         querier.logout();
 
@@ -37,11 +46,14 @@ public class TestADQuerier {
 
     private static void testPublicQuerier(){
         IPublicADQuerier adQuerier = new PublicADQuerier("dummy.query","@Azertyuiop06200");
-
-        adQuerier.searchPerson("antoine", 0, 25).forEach(System.out::println);
-//        adQuerier.searchStructure("direc", 0, 25).forEach(System.out::println);
-//        System.out.println(adQuerier.getPartialPersonInfo("Thomas TG. Gorisse"));
-//        System.out.println(adQuerier.getPartialStructureInfo("OU=Direction Général,OU=512Direction,OU=512Batiment,OU=512BankFR,DC=EQUIPE1B,DC=local"));
+        System.out.println("recherche de Thomas");
+        adQuerier.searchPerson("thomas", 0, 25).forEach(System.out::println);
+        System.out.println("recherche de la direction");
+        adQuerier.searchStructure("direc", 0, 25).forEach(System.out::println);
+        System.out.println("infos de Thomas");
+        System.out.println(adQuerier.getPartialPersonInfo("CN=Thomas Gorisse,OU=Direction General,OU=512Direction,OU=512Batiment,OU=512BankFR,DC=EQUIPE1B,DC=local"));
+        System.out.println("infos de la direction");
+        System.out.println(adQuerier.getPartialStructureInfo("OU=Direction General,OU=512Direction,OU=512Batiment,OU=512BankFR,DC=EQUIPE1B,DC=local"));
 
         ((ADQuerier) adQuerier).logout();
     }

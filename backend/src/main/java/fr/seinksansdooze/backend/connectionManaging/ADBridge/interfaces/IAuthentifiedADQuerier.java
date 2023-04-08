@@ -21,9 +21,9 @@ public interface IAuthentifiedADQuerier {
 
     ArrayList<PartialPerson> getGroupMembers(String groupName);
 
-    boolean addUserToGroup(String username , String groupName);
+    boolean addUserToGroup(String userDN , String groupName);
 
-    boolean removeUserFromGroup(String username, String groupName);
+    boolean removeUserFromGroup(String dn, String groupName);
 
     FullPerson getFullPersonInfo(String dn);
 
