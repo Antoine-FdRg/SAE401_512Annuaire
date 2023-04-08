@@ -1,6 +1,5 @@
 package fr.seinksansdooze.backend.connectionManaging.ADBridge;
 
-import fr.seinksansdooze.backend.connectionManaging.ADBridge.model.ADFilter;
 import fr.seinksansdooze.backend.connectionManaging.ADBridge.model.ObjectType;
 import fr.seinksansdooze.backend.model.exception.SeinkSansDoozeBackException;
 import fr.seinksansdooze.backend.model.exception.SeinkSansDoozeBadRequest;
@@ -176,28 +175,6 @@ public abstract class ADQuerier {
                 throw new SeinkSansDoozeBadRequest();
             }
         }
-
-    protected NamingEnumeration<SearchResult> search(ObjectType searchType, String searchValue, String rawFilter, String value) {
-        String filterAttribute;
-        try {
-            filterAttribute = ADFilter.valueOf(rawFilter.toUpperCase()).getFilter();
-        } catch (IllegalArgumentException e) {
-            throw new SeinkSansDoozeBadRequest();
-        }
-        searchValue = searchValue.replaceAll("(?<=\\w)(?=\\w)", "*");
-        String filter = "(&(objectClass=" + searchType + ")(" + searchType.getNamingAttribute() + "=*" + searchValue + "*)(" + filterAttribute + "=*" + value + "*))";
-        SearchControls searchControls = new SearchControls();
-        searchControls.setSearchScope(SearchControls.SUBTREE_SCOPE);
-        NamingEnumeration<SearchResult> res;
-        try {
-            res = safeSearch(AD_BASE, filter, searchControls);
-            return res;
-        } catch (NamingException e) {
-            log.error("Erreur lors de la recherche", e);
-            throw new SeinkSansDoozeBadRequest();
-        }
-    }
-
 
     // api/admin/group/all
     public NamingEnumeration<SearchResult> searchAllGroups() {

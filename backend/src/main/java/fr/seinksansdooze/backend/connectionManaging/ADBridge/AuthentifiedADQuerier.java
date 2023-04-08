@@ -22,6 +22,7 @@ import javax.naming.directory.*;
 import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 public class AuthentifiedADQuerier extends ADQuerier implements IAuthentifiedADQuerier {
 
@@ -226,9 +227,31 @@ public class AuthentifiedADQuerier extends ADQuerier implements IAuthentifiedADQ
         }
     }
 
-    public List<PartialPerson> searchPerson(String search, String filter, String value, int page, int perPage) {
-        NamingEnumeration<SearchResult> res = search(ObjectType.PERSON, search, filter, value);
-        return (List<PartialPerson>) unroll(res, page, perPage, PartialPerson.class);
+    public List<PartialPerson> searchPerson(String search, String rawFilter, String value, int page, int perPage) {
+        String filterAttribute;
+        try {
+            filterAttribute = ADFilter.valueOf(rawFilter.toUpperCase()).getFilter();
+        } catch (IllegalArgumentException e) {
+            throw new SeinkSansDoozeBadRequest();
+        }
+        //search all person by search
+        NamingEnumeration<SearchResult> res =  this.search(ObjectType.PERSON, search);
+        List<PartialPerson> partialPersons = new ArrayList<>();
+        try{
+            while (res.hasMore()) {
+                SearchResult currentPerson = res.next();
+                PartialPerson partialPerson = new PartialPerson(currentPerson);
+                partialPersons.add(partialPerson);
+            }
+        }catch (NamingException e){
+            throw new SeinkSansDoozeUserNotFound();
+        }
+        //get list of full person
+        List<FullPerson> fullPersonList = partialPersons.stream().map(partialPerson -> this.getFullPersonInfo(partialPerson.getDn())).toList();
+        //filter by filter on full person attribute
+        List<FullPerson> filteredFullPersonList = fullPersonList.stream().filter(fullPerson -> fullPerson.check(filterAttribute,value)).toList();
+        //return list of partial person
+        return filteredFullPersonList.stream().map(FullPerson::toPartialPerson).collect(Collectors.toList());
     }
 
     @Override
