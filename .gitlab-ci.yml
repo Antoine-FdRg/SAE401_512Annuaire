@@ -11,8 +11,9 @@ variables:
     --no-transfer-progress
 
 cache:
-  paths:
-    - .m2/repository
+    paths:
+        - .m2/repository
+        - front/frontAD512Back/node_modules
 
 stages:
   - build
@@ -44,37 +45,21 @@ java-deploy:
     - mvn $MAVEN_CLI_OPTS package -DskipTests
 
 # Partie frontend (nodejs)
-
-# TODO : add frontend build, test and deploy
-build:
+node-build:
   stage: build
-
   image: trion/ng-cli
-
   before_script:
     - cd front/frontAD512Bank/ || exit 1
     - npm ci
-
   script:
     - ng build
 
-  artifacts:
-    expire_in: 1 day
-
-    paths:
-      - dist/
-
-  tags:
-    - dind
-
-test:karma:
+node-test:
   stage: test
   image: trion/ng-cli-karma
   allow_failure: false
   before_script:
     - cd front/frontAD512Bank/ || exit 1
+    - npm ci
   script:
-    - npm i
     - ng test --progress false --watch false
-  tags:
-    - dind
