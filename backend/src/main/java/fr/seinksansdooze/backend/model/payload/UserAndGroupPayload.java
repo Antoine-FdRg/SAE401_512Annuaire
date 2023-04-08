@@ -1,19 +1,19 @@
 package fr.seinksansdooze.backend.model.payload;
 
 public class UserAndGroupPayload {
-    private final String cn;
-    private final String groupName;
+    private final String dn;
+    private final String groupCN;
 
-    public UserAndGroupPayload(String cn, String groupName) {
-        this.cn = cn;
-        this.groupName = groupName;
+    public UserAndGroupPayload(String dn, String groupCN) {
+        this.dn = dn;
+        this.groupCN = groupCN;
     }
 
-    public String getCn() {
-        return cn;
+    public String getDn() {
+        return dn;
     }
 
-    public String getGroupName() {
-        return groupName;
+    public String getGroupCN() {
+        return groupCN;
     }
 }

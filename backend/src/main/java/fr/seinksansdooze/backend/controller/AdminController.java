@@ -40,7 +40,6 @@ public class AdminController {
         RateLimiterSingleton.get().tryConsume(String.valueOf(request.getLocalAddress()));
 
         try {
-            //TODO @ba101397 bloquer les perm de lectures des attributs que l'on considère comme sensibles pour les utilisateurs non admin
             return connectionManager.getQuerier(token).getFullPersonInfo(dn);
         } catch (NamingException e) {
             throw new SeinkSansDoozeBackException(
@@ -138,12 +137,12 @@ public class AdminController {
             @ApiResponse(responseCode = "200", description = "Groupe supprimé"),
             @ApiResponse(responseCode = "401", description = "Token invalide")
     })
-    @DeleteMapping("/group/delete/{cn}")
-    public ResponseEntity<String> deleteGroup(@RequestHeader(HttpHeaders.AUTHORIZATION) String token, @PathVariable String cn, ServerHttpRequest request) {
+    @DeleteMapping("/group/delete")
+    public ResponseEntity<String> deleteGroup(@RequestHeader(HttpHeaders.AUTHORIZATION) String token, @RequestBody PartialGroup group, ServerHttpRequest request) {
         RateLimiterSingleton.INSTANCE.get().tryConsume(String.valueOf(request.getLocalAddress()));
 
         try {
-            connectionManager.getQuerier(token).deleteGroup(cn);
+            connectionManager.getQuerier(token).deleteGroup(group.getCn());
         } catch (NamingException e) {
             throw new SeinkSansDoozeBackException(
                     HttpStatus.UNAUTHORIZED,
@@ -166,7 +165,7 @@ public class AdminController {
 
         boolean isUserAdded;
         try {
-            isUserAdded = connectionManager.getQuerier(token).addUserToGroup(payload.getCn(), payload.getGroupName());
+            isUserAdded = connectionManager.getQuerier(token).addUserToGroup(payload.getDn(), payload.getGroupCN());
         } catch (NamingException e) {
             throw new SeinkSansDoozeBackException(
                     HttpStatus.UNAUTHORIZED,
@@ -189,7 +188,7 @@ public class AdminController {
 
         boolean isUserRemoved;
         try {
-            isUserRemoved = connectionManager.getQuerier(token).removeUserFromGroup(payload.getCn(), payload.getGroupName());
+            isUserRemoved = connectionManager.getQuerier(token).removeUserFromGroup(payload.getDn(), payload.getGroupCN());
         } catch (NamingException e) {
             throw new SeinkSansDoozeBackException(
                     HttpStatus.UNAUTHORIZED,
