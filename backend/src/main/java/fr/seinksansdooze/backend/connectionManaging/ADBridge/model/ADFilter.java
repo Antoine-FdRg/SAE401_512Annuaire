@@ -5,7 +5,8 @@ import java.util.List;
 
 public enum ADFilter {
     TITLE("title"),
-    STREETADDRESS("streetAddress");
+    STREETADDRESS("streetAddress"),
+    MANAGER("manager");
 
     private final String filter;
 

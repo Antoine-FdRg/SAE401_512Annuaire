@@ -177,86 +177,82 @@ public abstract class ADQuerier {
             }
         }
 
-        protected NamingEnumeration<SearchResult> search (ObjectType searchType, String searchValue, String
-        rawFilter, String value){
-            String filterAttribute;
-            try {
-                filterAttribute = ADFilter.valueOf(rawFilter.toUpperCase()).getFilter();
-            } catch (IllegalArgumentException e) {
-                throw new SeinkSansDoozeBadRequest();
-            }
-            searchValue = searchValue.replaceAll("(?<=\\w)(?=\\w)", "*");
-            String filter = "(&(objectClass=" + searchType + ")(" + searchType.getNamingAttribute() + "=*" + searchValue + "*)(" + filterAttribute + "=*" + value + "*))";
-            SearchControls searchControls = new SearchControls();
-            searchControls.setSearchScope(SearchControls.SUBTREE_SCOPE);
-            NamingEnumeration<SearchResult> res;
-            try {
-                res = safeSearch(AD_BASE, filter, searchControls);
-                return res;
-            } catch (NamingException e) {
-                log.error("Erreur lors de la recherche", e);
-                throw new SeinkSansDoozeBadRequest();
-            }
+    protected NamingEnumeration<SearchResult> search(ObjectType searchType, String searchValue, String rawFilter, String value) {
+        String filterAttribute;
+        try {
+            filterAttribute = ADFilter.valueOf(rawFilter.toUpperCase()).getFilter();
+        } catch (IllegalArgumentException e) {
+            throw new SeinkSansDoozeBadRequest();
         }
-
-
-        // api/admin/group/all
-        public NamingEnumeration<SearchResult> searchAllGroups () {
-            String filter = "(objectClass=group)";
-            SearchControls searchControls = new SearchControls();
-            searchControls.setSearchScope(SearchControls.SUBTREE_SCOPE);
-            NamingEnumeration<SearchResult> res;
-            try {
-                res = safeSearch(AD_GROUP_BASE, filter, searchControls);
-                return res;
-            } catch (NamingException e) {
-                throw new SeinkSansDoozeBadRequest();
-            }
-        }
-
-
-        //  api/admin/group/remove/{groupName}/{username}
-
-
-        //  api/admin/group/members/{groupName}
-        public ArrayList<SearchResult> queryGroupMembers (String groupName){
-            String filter = "(&(objectClass=group)(CN=" + groupName + "))";
-            SearchControls searchControls = new SearchControls();
-            searchControls.setSearchScope(SearchControls.SUBTREE_SCOPE);
-            NamingEnumeration<SearchResult> res;
-            try {
-                res = safeSearch(AD_GROUP_BASE, filter, searchControls);
-            } catch (NamingException ex) {
-                throw new SeinkSansDoozeBadRequest();
-            }
-            try {
-                if (res.hasMore()) {
-                    Attributes groupAttributs = res.next().getAttributes();
-                    Attribute groupMembersName = groupAttributs.get("member");
-                    ArrayList<SearchResult> groupMembers = new ArrayList<>();
-                    NamingEnumeration<?> membersList;
-                    try {
-                        membersList = groupMembersName.getAll();
-                    } catch (NullPointerException e) {
-                        return groupMembers;
-                    }
-                    while (membersList.hasMore()) {
-                        String currentMemberCN = membersList.next().toString();
-                        NamingEnumeration<SearchResult> currentMemberEnum = search(ObjectType.PERSON, currentMemberCN.split(",")[0].split("=")[1]);
-                        if (currentMemberEnum.hasMore()) {
-                            SearchResult currentMember = currentMemberEnum.next();
-                            groupMembers.add(currentMember);
-                        }
-                    }
-                    return groupMembers;
-
-                } else {
-                    throw new SeinkSansDoozeGroupNotFound();
-                }
-
-
-            } catch (NamingException ex) {
-                throw new SeinkSansDoozeGroupNotFound();
-            }
+        searchValue = searchValue.replaceAll("(?<=\\w)(?=\\w)", "*");
+        String filter = "(&(objectClass=" + searchType + ")(" + searchType.getNamingAttribute() + "=*" + searchValue + "*)(" + filterAttribute + "=*" + value + "*))";
+        SearchControls searchControls = new SearchControls();
+        searchControls.setSearchScope(SearchControls.SUBTREE_SCOPE);
+        NamingEnumeration<SearchResult> res;
+        try {
+            res = safeSearch(AD_BASE, filter, searchControls);
+            return res;
+        } catch (NamingException e) {
+            log.error("Erreur lors de la recherche", e);
+            throw new SeinkSansDoozeBadRequest();
         }
     }
+
+
+    // api/admin/group/all
+    public NamingEnumeration<SearchResult> searchAllGroups() {
+        String filter = "(objectClass=group)";
+        SearchControls searchControls = new SearchControls();
+        searchControls.setSearchScope(SearchControls.SUBTREE_SCOPE);
+        NamingEnumeration<SearchResult> res;
+        try {
+            res = safeSearch(AD_GROUP_BASE, filter, searchControls);
+            return res;
+        } catch (NamingException e) {
+            throw new SeinkSansDoozeBadRequest();
+        }
+    }
+
+
+    //  api/admin/group/remove/{groupName}/{username}
+
+
+    //  api/admin/group/members/{groupName}
+    public ArrayList<SearchResult> queryGroupMembers(String groupName) {
+        String filter = "(&(objectClass=group)(CN=" + groupName + "))";
+        SearchControls searchControls = new SearchControls();
+        searchControls.setSearchScope(SearchControls.SUBTREE_SCOPE);
+        NamingEnumeration<SearchResult> res;
+        try {
+            res = safeSearch(AD_GROUP_BASE, filter, searchControls);
+        } catch (NamingException ex) {
+            throw new SeinkSansDoozeBadRequest();
+        }
+        try {
+            if (res.hasMore()) {
+                Attributes groupAttributs = res.next().getAttributes();
+                Attribute groupMembersName = groupAttributs.get("member");
+                ArrayList<SearchResult> groupMembers = new ArrayList<>();
+                NamingEnumeration<?> membersList;
+                try {
+                    membersList = groupMembersName.getAll();
+                } catch (NullPointerException e) {
+                    return groupMembers;
+                }
+                while (membersList.hasMore()) {
+                    String currentMemberCN = membersList.next().toString();
+                    NamingEnumeration<SearchResult> currentMemberEnum = search(ObjectType.PERSON, currentMemberCN.split(",")[0].split("=")[1]);
+                    if (currentMemberEnum.hasMore()) {
+                        SearchResult currentMember = currentMemberEnum.next();
+                        groupMembers.add(currentMember);
+                    }
+                }
+                return groupMembers;
+            } else {
+                throw new SeinkSansDoozeGroupNotFound();
+            }
+        } catch (NamingException ex) {
+            throw new SeinkSansDoozeGroupNotFound();
+        }
+    }
+}
