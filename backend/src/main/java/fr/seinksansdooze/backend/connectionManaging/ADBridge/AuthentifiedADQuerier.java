@@ -6,6 +6,7 @@ import fr.seinksansdooze.backend.connectionManaging.ADBridge.model.ObjectType;
 import fr.seinksansdooze.backend.model.exception.*;
 import fr.seinksansdooze.backend.model.exception.SeinkSansDoozeBadRequest;
 import fr.seinksansdooze.backend.model.exception.group.SeinkSansDoozeGroupNotFound;
+import fr.seinksansdooze.backend.model.exception.user.SeinkSansDoozeUserAlreadyInGroup;
 import fr.seinksansdooze.backend.model.exception.user.SeinkSansDoozeUserNotFound;
 import fr.seinksansdooze.backend.model.exception.user.SeinkSansDoozeUserNotInGroup;
 import fr.seinksansdooze.backend.model.response.FullPerson;
@@ -54,10 +55,9 @@ public class AuthentifiedADQuerier extends ADQuerier implements IAuthentifiedADQ
 
     @Override
     public boolean createGroup(String groupName) {
-        String filter = "(&(objectClass=group)(CN=" + groupName + "))";
         SearchControls searchControls = new SearchControls();
         searchControls.setSearchScope(SearchControls.SUBTREE_SCOPE);
-        List<PartialGroup> existingGroups = null;
+        List<PartialGroup> existingGroups;
         try {
             existingGroups = this.getAllGroups();
             if (existingGroups.stream().anyMatch(group -> group.getCn().equals(groupName))) {
@@ -130,8 +130,7 @@ public class AuthentifiedADQuerier extends ADQuerier implements IAuthentifiedADQ
                     this.context.modifyAttributes("CN=" + groupName + "," + ADQuerier.AD_GROUP_BASE, modificationItems);
                     return true;
                 } catch (NamingException e) {
-                    //TODO throw userAlreadyInGroup
-                    throw new SeinkSansDoozeUserNotInGroup();
+                    throw new SeinkSansDoozeUserAlreadyInGroup();
                 }
             } else {
                 throw new SeinkSansDoozeGroupNotFound();
@@ -153,7 +152,6 @@ public class AuthentifiedADQuerier extends ADQuerier implements IAuthentifiedADQ
 
         try {
             res = this.context.search(AD_GROUP_BASE, filter, searchControls);
-
             if (res.hasMore()) {
                 ModificationItem[] modificationItems = new ModificationItem[1];
                 if (this.getFullPersonInfo(dn) == null) {
@@ -162,18 +160,14 @@ public class AuthentifiedADQuerier extends ADQuerier implements IAuthentifiedADQ
                 modificationItems[0] = new ModificationItem(DirContext.REMOVE_ATTRIBUTE, new BasicAttribute("member", dn));
                 try {
                     this.context.modifyAttributes("CN=" + groupName + "," + ADQuerier.AD_GROUP_BASE, modificationItems);
-
                 } catch (NamingException e) {
-                    //TODO throw autre chose
                     throw new SeinkSansDoozeUserNotInGroup();
                 }
                 return true;
             } else {
                 throw new SeinkSansDoozeGroupNotFound();
-
             }
         } catch (NamingException e) {
-
             throw new SeinkSansDoozeBadRequest();
         }
     }
