@@ -15,9 +15,9 @@ public class TestADQuerier {
         String pwd = "@Arnaudisthebest83";
         IAuthentifiedADQuerier querier = new AuthentifiedADQuerier(id, pwd);
         String dn = "CN=Thomas Gorisse,OU=Direction General,OU=512Direction,OU=512Batiment,OU=512BankFR,DC=EQUIPE1B,DC=local";
-        querier.getAllGroups().forEach(System.out::println);
-//        System.out.println("Récupération des infos de Thomas");
-//        System.out.println(querier.getFullPersonInfo(dn));
+//        querier.getAllGroups().forEach(System.out::println);
+        System.out.println("Récupération des infos de Thomas");
+        System.out.println(querier.getFullPersonInfo(dn));
 //        System.out.println("Création du groupe test");
 //        System.out.println(querier.createGroup("test"));
 
@@ -37,7 +37,7 @@ public class TestADQuerier {
 //        System.out.println("Suppression du groupe test");
 //        System.out.println(querier.deleteGroup("test"));
 
-        querier.searchPerson("Antoine","title","directeur",0,15).forEach(System.out::println); //streetAddress, title, (postalCode), (postalAdress), (manager)
+//        querier.searchPerson("Antoine","title","directeur",0,15).forEach(System.out::println); //streetAddress, title, (postalCode), (postalAdress), (manager)
 
         querier.logout();
 

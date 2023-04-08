@@ -102,7 +102,6 @@ public class PublicADQuerier extends ADQuerier implements IPublicADQuerier {
      * @param dn le cn de la personne recherchée
      * @return une personne correspondant à la recherche
      */
-    //TODO change cn by uuid
     public PartialPerson getPartialPersonInfo(String dn) {
         String filter = "(&(objectClass=user)(distinguishedName=" + dn + "))";
         SearchControls searchControls = new SearchControls();
