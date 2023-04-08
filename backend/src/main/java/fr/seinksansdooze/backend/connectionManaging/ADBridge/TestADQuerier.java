@@ -5,9 +5,9 @@ import fr.seinksansdooze.backend.connectionManaging.ADBridge.interfaces.IPublicA
 public class TestADQuerier {
 
     public static void main(String[] args) {
-//        testPublicQuerier();
+        testPublicQuerier();
         System.out.println("====================================");
-        testAuthenticatedQuerier();
+//        testAuthenticatedQuerier();
     }
 
     private static void testAuthenticatedQuerier() {
@@ -46,14 +46,14 @@ public class TestADQuerier {
 
     private static void testPublicQuerier(){
         IPublicADQuerier adQuerier = new PublicADQuerier("dummy.query","@Azertyuiop06200");
-        System.out.println("recherche de Thomas");
-        adQuerier.searchPerson("thomas", 0, 25).forEach(System.out::println);
-        System.out.println("recherche de la direction");
-        adQuerier.searchStructure("direc", 0, 25).forEach(System.out::println);
-        System.out.println("infos de Thomas");
-        System.out.println(adQuerier.getPartialPersonInfo("CN=Thomas Gorisse,OU=Direction General,OU=512Direction,OU=512Batiment,OU=512BankFR,DC=EQUIPE1B,DC=local"));
-        System.out.println("infos de la direction");
-        System.out.println(adQuerier.getPartialStructureInfo("OU=Direction General,OU=512Direction,OU=512Batiment,OU=512BankFR,DC=EQUIPE1B,DC=local"));
+        System.out.println("recherche de tout le monde");
+        adQuerier.searchPerson("*", 1, 5).forEach(System.out::println);
+//        System.out.println("recherche de la direction");
+//        adQuerier.searchStructure("direc", 0, 25).forEach(System.out::println);
+//        System.out.println("infos de Thomas");
+//        System.out.println(adQuerier.getPartialPersonInfo("CN=Thomas Gorisse,OU=Direction General,OU=512Direction,OU=512Batiment,OU=512BankFR,DC=EQUIPE1B,DC=local"));
+//        System.out.println("infos de la direction");
+//        System.out.println(adQuerier.getPartialStructureInfo("OU=Direction General,OU=512Direction,OU=512Batiment,OU=512BankFR,DC=EQUIPE1B,DC=local"));
 
         ((ADQuerier) adQuerier).logout();
     }
