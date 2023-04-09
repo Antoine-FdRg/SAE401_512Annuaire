@@ -30,7 +30,6 @@ public abstract class ADQuerier {
     protected DirContext context;
 
     protected ADQuerier(String username, String pwd) {
-        //rajouter un systeme de session et d'authentification
         boolean connected = this.login(username, pwd) != null;
         if (!connected) {
             throw new SeinkSansDoozeBackException(HttpStatus.NOT_ACCEPTABLE, "Impossible de se connecter à l'annuaire Active Directory");

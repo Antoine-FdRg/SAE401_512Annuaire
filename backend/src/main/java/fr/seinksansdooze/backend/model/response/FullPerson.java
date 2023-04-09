@@ -22,11 +22,11 @@ import java.time.LocalDate;
 public class FullPerson extends PartialPerson {
     private String login;
     private String email;
-    private String personalPhone;
-    private String professionalPhone;
-    private String address;
+    private String personalPhone; //mobile
+    private String professionalPhone; //telephoneNumber
+    private String address; //streetAddress
     private LocalDate dateOfBirth;
-    private String managerDN;
+    private String managerDN; //manager
 
     public FullPerson(String firstName, String lastName, String cn, String dn, String title, String login, String email, String personalPhone, String professionalPhone, String dateOfBirth, String address, String managerFullName, String managerDN) {
         super(firstName, lastName, dn, title);

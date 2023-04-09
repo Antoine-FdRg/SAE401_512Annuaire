@@ -103,4 +103,9 @@ public class ADQuerierMoke implements IAuthentifiedADQuerier, IPublicADQuerier {
     public List<String> getAllFilters() {
         return null;
     }
+
+    @Override
+    public void modifyAttribute(String attribute, String value) {
+
+    }
 }

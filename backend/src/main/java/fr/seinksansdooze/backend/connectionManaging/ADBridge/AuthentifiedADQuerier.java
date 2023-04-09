@@ -33,6 +33,14 @@ public class AuthentifiedADQuerier extends ADQuerier implements IAuthentifiedADQ
     public AuthentifiedADQuerier() {
     }
 
+    private LoggedInUser loggedInUser;
+
+    @Override
+    public LoggedInUser login(String username, String pwd) {
+        this.loggedInUser = super.login(username, pwd);
+        return this.loggedInUser;
+    }
+
     /**
      * Méthode répondant à la route GET /api/admin/group/all
      *
@@ -257,6 +265,33 @@ public class AuthentifiedADQuerier extends ADQuerier implements IAuthentifiedADQ
     @Override
     public List<String> getAllFilters() {
         return ADFilter.getAllFilters();
+    }
+
+    @Override
+    public void modifyAttribute(String attribute, String value) {
+        String filter = "(&(objectClass=user)(distinguishedName=" + this.loggedInUser.getDn() + "))";
+        SearchControls searchControls = new SearchControls();
+        searchControls.setSearchScope(SearchControls.SUBTREE_SCOPE);
+        NamingEnumeration<SearchResult> res;
+        try {
+            res = this.context.search(AD_BASE, filter, searchControls);
+            if (res.hasMore()) {
+                SearchResult currentPerson = res.next();
+                ModificationItem[] modificationItems = new ModificationItem[1];
+                modificationItems[0] = new ModificationItem(DirContext.REPLACE_ATTRIBUTE, new BasicAttribute(attribute, value));
+                System.out.println(currentPerson.getNameInNamespace());
+                System.out.println(modificationItems[0]);
+                try {
+                    this.context.modifyAttributes(currentPerson.getNameInNamespace(), modificationItems);
+                } catch (NamingException e) {
+                    throw new SeinkSansDoozeBadRequest();
+                }
+            } else {
+                throw new SeinkSansDoozeUserNotFound();
+            }
+        } catch (NamingException e) {
+            throw new SeinkSansDoozeBadRequest();
+        }
     }
 
     @Override

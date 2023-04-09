@@ -6,9 +6,9 @@ import fr.seinksansdooze.backend.connectionManaging.ADBridge.interfaces.IPublicA
 public class TestADQuerier {
 
     public static void main(String[] args) {
-        testPublicQuerier();
+//        testPublicQuerier();
         System.out.println("====================================");
-//        testAuthenticatedQuerier();
+        testAuthenticatedQuerier();
     }
 
     private static void testAuthenticatedQuerier() {
@@ -18,7 +18,12 @@ public class TestADQuerier {
         String dn = "CN=Thomas Gorisse,OU=Direction General,OU=512Direction,OU=512Batiment,OU=512BankFR,DC=EQUIPE1B,DC=local";
         String structureDn ="OU=Secteur Comptabilite,OU=Departement Finance,OU=512Batiment,OU=512BankFR,DC=EQUIPE1B,DC=local";
 
-        System.out.println(querier.getStructureInfo(structureDn));
+        System.out.println(querier.getFullPersonInfo("CN=Antoine Fadda Rodriguez,OU=Secretaire general,OU=512Direction,OU=512Batiment,OU=512BankFR,DC=EQUIPE1B,DC=local"));
+        querier.modifyAttribute("streetAddress","22 rue de la Chapelle");
+        querier.modifyAttribute("mobile","0696969696");
+        querier.modifyAttribute("telephoneNumber","01234567890");
+        System.out.println(querier.getFullPersonInfo("CN=Antoine Fadda Rodriguez,OU=Secretaire general,OU=512Direction,OU=512Batiment,OU=512BankFR,DC=EQUIPE1B,DC=local"));
+        //        System.out.println(querier.getStructureInfo(structureDn));
 //        querier.getAllGroups().forEach(System.out::println);
 //        System.out.println("Récupération des infos de Thomas");
 //        System.out.println(querier.getFullPersonInfo("CN=Antoine Fadda Rodriguez,OU=Secretaire general,OU=512Direction,OU=512Batiment,OU=512BankFR,DC=EQUIPE1B,DC=local"));
@@ -43,7 +48,7 @@ public class TestADQuerier {
 
 //        querier.searchPerson("Antoine","dayOfBirth","15",0,15).forEach(System.out::println); //streetAddress, title, manager
 //        querier.searchPerson("Antoine","monthOfBirth","1",0,15).forEach(System.out::println); //streetAddress, title, manager
-        querier.searchPerson("Antoine","yearOfBirth","198",0,15).forEach(System.out::println); //streetAddress, title, manager
+//        querier.searchPerson("Antoine","yearOfBirth","198",0,15).forEach(System.out::println); //streetAddress, title, manager
         querier.logout();
 
 
@@ -52,7 +57,7 @@ public class TestADQuerier {
     private static void testPublicQuerier(){
         IPublicADQuerier adQuerier = new PublicADQuerier("dummy.query","@Azertyuiop06200");
 //        System.out.println("recherche de Antoines");
-        adQuerier.searchPerson("mm", 0, 15).forEach(System.out::println);
+        adQuerier.searchPerson("antoine", 0, 15).forEach(System.out::println);
 //        System.out.println("recherche de la direction");
 //        adQuerier.searchStructure("direc", 0, 25).forEach(System.out::println);
 //        System.out.println("infos de Thomas");

@@ -31,4 +31,6 @@ public interface IAuthentifiedADQuerier {
     List<PartialPerson> searchPerson(String search, String filter, String value, int page, int perPage);
 
     List<String> getAllFilters();
+
+    void modifyAttribute(String attribute, String value);
 }
