@@ -156,22 +156,22 @@ public abstract class ADQuerier {
     protected NamingEnumeration<SearchResult> search(ObjectType searchType, String searchValue) {
         String filter;
         if (searchValue.equals("*") || searchValue.equals("")) {
-            filter = "objectClass=" + searchType;
+            filter = "(&(objectClass=" + searchType + ")(!(cn=Dummy Query)))";
         } else {
             searchValue = searchValue.replaceAll("(?<=\\w)(?=\\w)", "*");
-            filter = "(&(objectClass=" + searchType + ")(" + searchType.getNamingAttribute() + "=*" + searchValue + "*))";
+            filter = "(&(objectClass=" + searchType + ")(" + searchType.getNamingAttribute() + "=*" + searchValue + "*)(!(cn=Dummy Query)))";
         }
-            SearchControls searchControls = new SearchControls();
-            searchControls.setSearchScope(SearchControls.SUBTREE_SCOPE);
-            NamingEnumeration<SearchResult> res;
-            try {
-                res = safeSearch(AD_BASE, filter, searchControls);
-                return res;
-            } catch (NamingException e) {
-                log.error("Erreur lors de la recherche", e);
-                throw new SeinkSansDoozeBadRequest();
-            }
+        SearchControls searchControls = new SearchControls();
+        searchControls.setSearchScope(SearchControls.SUBTREE_SCOPE);
+        NamingEnumeration<SearchResult> res;
+        try {
+            res = safeSearch(AD_BASE, filter, searchControls);
+            return res;
+        } catch (NamingException e) {
+            log.error("Erreur lors de la recherche", e);
+            throw new SeinkSansDoozeBadRequest();
         }
+    }
 
     // api/admin/group/all
     public NamingEnumeration<SearchResult> searchAllGroups() {
@@ -232,7 +232,7 @@ public abstract class ADQuerier {
 
 
     private NamingEnumeration<SearchResult> getStructureChildren(ObjectType type, String structureDN) {
-        String filter = "objectClass="+type;
+        String filter = "objectClass=" + type;
         SearchControls searchControls = new SearchControls();
         searchControls.setSearchScope(SearchControls.ONELEVEL_SCOPE);
         NamingEnumeration<SearchResult> res;
