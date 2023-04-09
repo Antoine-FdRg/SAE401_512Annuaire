@@ -1,7 +1,15 @@
 <div id="sheet" class="blue-shadow white-style">
-    <h1 id="title">
-        Mes informations
-    </h1>
+    <div id="header">
+        <!-- empty div for layout -->
+        <div></div>
+        <h1 id="title">
+            Mes informations
+        </h1>
+    
+        <span id="close-infos" class="material-symbols-outlined" routerLink="/home">
+            close
+        </span>
+    </div>
 
     <section id="infos">
 
@@ -12,7 +20,8 @@
             </div>
 
             <div class="info-group">
-                <div class="information" [style.display]="!modified['surname'] ? 'block' : 'none'">{{user?.lastName}}</div>
+                <div class="information" [style.display]="!modified['surname'] ? 'block' : 'none'">{{user?.lastName}}
+                </div>
                 <div class="modification" [style.display]="modified['surname'] ? 'flex' : 'none'">
                     <div class="group">
                         <input required="" type="text" class="input">
@@ -38,7 +47,7 @@
         <div id="login">
             <div class="info-header">
                 <div class="indicator">Login</div>
-                
+
             </div>
 
             <div class="info-group">
@@ -84,7 +93,8 @@
             </div>
 
             <div class="info-group">
-                <div class="information" [style.display]="!modified['name'] ? 'block' : 'none'">{{user?.firstName}}</div>
+                <div class="information" [style.display]="!modified['name'] ? 'block' : 'none'">{{user?.firstName}}
+                </div>
                 <div class="modification" [style.display]="modified['name'] ? 'flex' : 'none'">
                     <div class="group">
                         <input required="" type="text" class="input">

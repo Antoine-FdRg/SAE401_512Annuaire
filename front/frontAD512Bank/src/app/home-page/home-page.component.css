@@ -112,6 +112,10 @@ input:focus {
   cursor: pointer;
 }
 
+.absoluteImages {
+  pointer-events: none;
+}
+
 .absoluteImages img,
 .absoluteImages svg {
   position: absolute;
