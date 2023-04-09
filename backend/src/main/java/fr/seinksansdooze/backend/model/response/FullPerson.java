@@ -64,6 +64,9 @@ public class FullPerson extends PartialPerson {
             case "title" -> this.normalize(this.getTitle().toLowerCase()).contains(value.toLowerCase());
             case "address" -> this.normalize(this.getAddress().toLowerCase()).contains(value.toLowerCase());
             case "managerDN" -> this.normalize(this.getManagerDN().toLowerCase()).contains(value.toLowerCase());
+            case "dayOfBirth" -> (""+this.getDateOfBirth().getDayOfMonth()).contains(value);
+            case "monthOfBirth" -> (""+this.getDateOfBirth().getMonthValue()).contains(value);
+            case "yearOfBirth" -> (""+this.getDateOfBirth().getYear()).contains(value);
             default -> false;
         };
     }

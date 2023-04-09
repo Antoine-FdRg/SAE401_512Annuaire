@@ -6,7 +6,11 @@ import java.util.List;
 public enum ADFilter {
     TITLE("title"),
     ADDRESS("address"),
-    MANAGER("managerDN");
+    MANAGER("managerDN"),
+    DAYOFBIRTH("dayOfBirth"),
+    MONTHOFBIRTH("monthOfBirth"),
+    YEAROFBIRTH("yearOfBirth");
+
 
     private final String filter;
 

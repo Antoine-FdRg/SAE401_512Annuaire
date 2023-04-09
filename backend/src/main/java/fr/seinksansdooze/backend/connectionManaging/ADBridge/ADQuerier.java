@@ -52,12 +52,10 @@ public abstract class ADQuerier {
         username = username + "@EQUIPE1B.local";
         env.put(Context.INITIAL_CONTEXT_FACTORY, "com.sun.jndi.ldap.LdapCtxFactory");
         env.put(Context.PROVIDER_URL, AD_URL);
-
 //        env.put(Context.SECURITY_PROTOCOL, "ssl");
         env.put(Context.SECURITY_AUTHENTICATION, "Simple");
         env.put(Context.SECURITY_PRINCIPAL, username);
         env.put(Context.SECURITY_CREDENTIALS, pwd);
-//        env.put(Context.REFERRAL, "follow");
         try {
             this.context = new InitialDirContext(env);
             return getLoggedInUser(username);
@@ -85,6 +83,7 @@ public abstract class ADQuerier {
      * @return true si la déconnexion a réussi, false sinon
      */
     public boolean logout() {
+        //todo utiliser la valeur de retour
         try {
             this.context.close();
             return true;

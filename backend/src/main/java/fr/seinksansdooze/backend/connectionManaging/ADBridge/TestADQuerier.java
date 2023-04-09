@@ -38,9 +38,9 @@ public class TestADQuerier {
 //        System.out.println("Suppression du groupe test");
 //        System.out.println(querier.deleteGroup("test"));
 
-        querier.searchPerson("Antoine","manager","gwendo",0,15).forEach(System.out::println); //streetAddress, title, manager
-        querier.searchPerson("Antoine","address","22",0,15).forEach(System.out::println); //streetAddress, title, manager
-        querier.searchPerson("Antoine","title","secretaire",0,15).forEach(System.out::println); //streetAddress, title, manager
+        querier.searchPerson("Antoine","dayOfBirth","15",0,15).forEach(System.out::println); //streetAddress, title, manager
+        querier.searchPerson("Antoine","monthOfBirth","1",0,15).forEach(System.out::println); //streetAddress, title, manager
+        querier.searchPerson("Antoine","yearOfBirth","198",0,15).forEach(System.out::println); //streetAddress, title, manager
         querier.logout();
 
 
