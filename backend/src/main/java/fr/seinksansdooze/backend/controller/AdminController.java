@@ -99,7 +99,6 @@ public class AdminController {
     @PostMapping("/group/create")
     public ResponseEntity<String> createGroup(@RequestHeader(HttpHeaders.AUTHORIZATION) String token, @RequestBody PartialGroup group, ServerHttpRequest request) {
         RateLimiterSingleton.INSTANCE.get().tryConsume(String.valueOf(request.getLocalAddress()));
-        //todo utiliser le DN plutôt que le CN
         System.out.println("name = " + group.getCn());
         boolean isGroupCreated;
         try {
