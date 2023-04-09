@@ -99,7 +99,7 @@ public class AdminController {
     @PostMapping("/group/create")
     public ResponseEntity<String> createGroup(@RequestHeader(HttpHeaders.AUTHORIZATION) String token, @RequestBody PartialGroup group, ServerHttpRequest request) {
         RateLimiterSingleton.INSTANCE.get().tryConsume(String.valueOf(request.getLocalAddress()));
-
+        //todo utiliser le DN plutôt que le CN
         System.out.println("name = " + group.getCn());
         boolean isGroupCreated;
         try {
@@ -121,7 +121,6 @@ public class AdminController {
     @GetMapping("/group/members/{cn}")
     public List<PartialPerson> getGroupMembers(@RequestHeader(HttpHeaders.AUTHORIZATION) String token, @PathVariable String cn, ServerHttpRequest request) {
         RateLimiterSingleton.INSTANCE.get().tryConsume(String.valueOf(request.getLocalAddress()));
-        //TODO throw 404 if group not found et pas 401
         try {
             return connectionManager.getQuerier(token).getGroupMembers(cn);
         } catch (NamingException e) {

@@ -81,14 +81,10 @@ public abstract class ADQuerier {
 
     /**
      * Méthode répondant à la route /api/auth/logout en déconnectant l'utilisateur de l'annuaire Active Directory
-     *
-     * @return true si la déconnexion a réussi, false sinon
      */
-    public boolean logout() {
-        //todo utiliser la valeur de retour
+    public void logout() {
         try {
             this.context.close();
-            return true;
         } catch (NamingException e) {
             throw new SeinkSansDoozeBackException(HttpStatus.INTERNAL_SERVER_ERROR, "Erreur lors de la déconnexion");
         }

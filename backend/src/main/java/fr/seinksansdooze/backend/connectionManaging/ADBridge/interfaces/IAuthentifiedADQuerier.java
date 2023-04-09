@@ -8,7 +8,7 @@ import java.util.List;
 public interface IAuthentifiedADQuerier {
     LoggedInUser login(String username, String pwd);
 
-    boolean logout();
+    void logout();
 
     ArrayList<PartialGroup> getAllGroups();
 

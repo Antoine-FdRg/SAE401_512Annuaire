@@ -24,8 +24,8 @@ public class ADQuerierMoke implements IAuthentifiedADQuerier, IPublicADQuerier {
     }
 
     @Override
-    public boolean logout() {
-        return false;
+    public void logout() {
+
     }
 
     @Override

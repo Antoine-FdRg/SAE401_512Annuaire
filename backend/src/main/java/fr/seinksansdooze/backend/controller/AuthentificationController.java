@@ -62,12 +62,12 @@ public class AuthentificationController {
             @ApiResponse(responseCode = "200", description = "Déconnexion faite avec succès : la session n'existe plus")
     })
     @PostMapping("/logout")
-    public String logout(@RequestHeader(HttpHeaders.AUTHORIZATION) String token, ServerHttpRequest request) {
+    public void logout(@RequestHeader(HttpHeaders.AUTHORIZATION) String token, ServerHttpRequest request) {
         RateLimiterSingleton.INSTANCE.get().tryConsume(String.valueOf(request.getLocalAddress()));
 
         connectionManager.removeConnection(token);
 
-        return "Déconnexion avec succès";
+//        return "Déconnexion avec succès";
     }
 
     @Operation(summary = "Renvoie le token passé en autorisation")
