@@ -90,7 +90,7 @@ public class ADQuerierMoke implements IAuthentifiedADQuerier, IPublicADQuerier {
     }
 
     @Override
-    public List<PartialPerson> getStructureInfo(String cn) {
+    public FullStructure getStructureInfo(String dn) {
         return null;
     }
 

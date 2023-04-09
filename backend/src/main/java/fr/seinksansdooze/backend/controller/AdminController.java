@@ -7,6 +7,7 @@ import fr.seinksansdooze.backend.connectionManaging.rateLimit.RateLimiterSinglet
 import fr.seinksansdooze.backend.model.exception.SeinkSansDoozeBackException;
 import fr.seinksansdooze.backend.model.payload.UserAndGroupPayload;
 import fr.seinksansdooze.backend.model.response.FullPerson;
+import fr.seinksansdooze.backend.model.response.FullStructure;
 import fr.seinksansdooze.backend.model.response.PartialGroup;
 import fr.seinksansdooze.backend.model.response.PartialPerson;
 import io.swagger.v3.oas.annotations.Operation;
@@ -56,12 +57,12 @@ public class AdminController {
             @ApiResponse(responseCode = "401", description = "Token invalide"),
             @ApiResponse(responseCode = "404", description = "Structure non trouvée")
     })
-    @GetMapping("/info/structure/")
-    public List<PartialPerson> getStructureInfo(@RequestHeader(HttpHeaders.AUTHORIZATION) String token, @RequestParam String cn, ServerHttpRequest request) {
+    @GetMapping("/info/structure/{dn}")
+    public FullStructure getStructureInfo(@RequestHeader(HttpHeaders.AUTHORIZATION) String token, @PathVariable String dn, ServerHttpRequest request) {
         RateLimiterSingleton.INSTANCE.get().tryConsume(String.valueOf(request.getLocalAddress()));
 
         try {
-            return connectionManager.getQuerier(token).getStructureInfo(cn);
+            return connectionManager.getQuerier(token).getStructureInfo(dn);
         } catch (NamingException e) {
             throw new SeinkSansDoozeBackException(
                     HttpStatus.UNAUTHORIZED,
@@ -70,7 +71,6 @@ public class AdminController {
         }
     }
 
-    // TODO : implémenter la verification correctement
     @Operation(summary = "Renvoie la liste de tout les groupes")
     @ApiResponses({
             @ApiResponse(responseCode = "200", description = "Recherche réussie"),
@@ -197,20 +197,6 @@ public class AdminController {
         }
         return isUserRemoved ? new ResponseEntity<>("Utilisateur supprimé du groupe avec succès.", HttpStatus.OK) : new ResponseEntity<>("Erreur lors de la suppression de l'utilisateur du groupe.", HttpStatus.NOT_ACCEPTABLE);
     }
-
-
-//    @GetMapping("/info/person/{cn}")
-//    public PartialPerson personInfo(@PathVariable String cn) {
-//        // TODO: 3/12/2023 vrai verification (voir todo d'au dessus)
-////       return connectionManager.getQuerier("Test token").getFullPersonInfo(cn);
-//        try{
-//            return connectionManager.getQuerier("Test token").getFullPersonInfo(cn);
-//        } catch (Exception e) {
-//            e.printStackTrace();
-//            return null;
-//        }
-//    }
-
 
     @GetMapping("/search/person")
     public List<PartialPerson> searchPersonAsAdmin(@RequestHeader(HttpHeaders.AUTHORIZATION) String token, @RequestParam String name, @RequestParam String filter, @RequestParam String value,

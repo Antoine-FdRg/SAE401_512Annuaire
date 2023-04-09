@@ -6,12 +6,11 @@ import fr.seinksansdooze.backend.connectionManaging.ADBridge.model.ObjectType;
 import fr.seinksansdooze.backend.model.exception.*;
 import fr.seinksansdooze.backend.model.exception.SeinkSansDoozeBadRequest;
 import fr.seinksansdooze.backend.model.exception.group.SeinkSansDoozeGroupNotFound;
+import fr.seinksansdooze.backend.model.exception.structure.SeinkSansDoozeStructureNotFound;
 import fr.seinksansdooze.backend.model.exception.user.SeinkSansDoozeUserAlreadyInGroup;
 import fr.seinksansdooze.backend.model.exception.user.SeinkSansDoozeUserNotFound;
 import fr.seinksansdooze.backend.model.exception.user.SeinkSansDoozeUserNotInGroup;
-import fr.seinksansdooze.backend.model.response.FullPerson;
-import fr.seinksansdooze.backend.model.response.PartialGroup;
-import fr.seinksansdooze.backend.model.response.PartialPerson;
+import fr.seinksansdooze.backend.model.response.*;
 import jakarta.xml.bind.DatatypeConverter;
 import org.springframework.http.HttpStatus;
 
@@ -22,6 +21,7 @@ import javax.naming.directory.*;
 import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 import java.util.stream.Collectors;
 
 public class AuthentifiedADQuerier extends ADQuerier implements IAuthentifiedADQuerier {
@@ -260,9 +260,25 @@ public class AuthentifiedADQuerier extends ADQuerier implements IAuthentifiedADQ
     }
 
     @Override
-    public List<PartialPerson> getStructureInfo(String cn) {
-        //TODO apres avoir ajouté les uid pour chaque object
-        return List.of();
+    public FullStructure getStructureInfo(String dn) {
+        String filter = "(&(objectClass="+ObjectType.STRUCTURE+")(distinguishedName=" + dn + "))";
+        SearchControls searchControls = new SearchControls();
+        searchControls.setSearchScope(SearchControls.SUBTREE_SCOPE);
+        NamingEnumeration<SearchResult> res;
+        String fsDN = "";
+        try {
+            res = this.context.search(AD_BASE, filter, searchControls);
+            if (res.hasMore()) {
+                SearchResult sr = res.next();
+                fsDN = sr.getAttributes().get("distinguishedName").get().toString();
+            }
+        } catch (NamingException e) {
+            throw new SeinkSansDoozeStructureNotFound();
+        }
+        assert !Objects.equals(fsDN, "");
+        List<PartialPerson> fsMembers = this.getStructureMember(fsDN);
+        List<PartialStructure> fsSubStructures = this.getStructureSubStructures(fsDN);
+        return new FullStructure(fsDN,fsSubStructures,fsMembers);
     }
 
 }

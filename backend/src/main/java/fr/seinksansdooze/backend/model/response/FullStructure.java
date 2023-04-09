@@ -16,10 +16,21 @@ import java.util.List;
 @AllArgsConstructor
 @NoArgsConstructor
 public class FullStructure extends PartialStructure {
-    private List<FullStructure> children;
+    private List<PartialStructure> subStructures;
+    private List<PartialPerson> members;
 
-    public FullStructure(String ou, List<FullStructure> children) {
-        super(ou);
-        this.children = children;
+    public FullStructure(String result, List<PartialStructure> subStructures, List<PartialPerson> members) {
+        super(result);
+        this.subStructures = subStructures;
+        this.members = members;
+    }
+
+    @Override
+    public String toString() {
+        return "FullStructure{" +
+                "dn=" + this.getDn() +
+                ", subStructures=" + subStructures +
+                ", members=" + members +
+                "} ";
     }
 }

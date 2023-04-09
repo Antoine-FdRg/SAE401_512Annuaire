@@ -6,6 +6,8 @@ import fr.seinksansdooze.backend.model.exception.SeinkSansDoozeBadRequest;
 import fr.seinksansdooze.backend.model.exception.group.SeinkSansDoozeGroupNotFound;
 import fr.seinksansdooze.backend.model.exception.user.SeinkSansDoozeUserNotFound;
 import fr.seinksansdooze.backend.model.response.LoggedInUser;
+import fr.seinksansdooze.backend.model.response.PartialPerson;
+import fr.seinksansdooze.backend.model.response.PartialStructure;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
@@ -230,5 +232,49 @@ public abstract class ADQuerier {
         } catch (NamingException ex) {
             throw new SeinkSansDoozeGroupNotFound();
         }
+    }
+
+
+    private NamingEnumeration<SearchResult> getStructureChildren(ObjectType type, String structureDN) {
+        String filter = "objectClass="+type;
+        SearchControls searchControls = new SearchControls();
+        searchControls.setSearchScope(SearchControls.ONELEVEL_SCOPE);
+        NamingEnumeration<SearchResult> res;
+        try {
+            res = safeSearch(structureDN, filter, searchControls);
+        } catch (NamingException e) {
+            throw new SeinkSansDoozeBadRequest();
+        }
+        return res;
+    }
+
+    protected List<PartialPerson> getStructureMember(String structureDN) {
+        NamingEnumeration<SearchResult> res = getStructureChildren(ObjectType.PERSON, structureDN);
+        List<PartialPerson> members = new ArrayList<>();
+        try {
+            while (res.hasMore()) {
+                SearchResult currentMember = res.next();
+                PartialPerson member = new PartialPerson(currentMember);
+                members.add(member);
+            }
+        } catch (NamingException e) {
+            throw new SeinkSansDoozeBadRequest();
+        }
+        return members;
+    }
+
+    protected List<PartialStructure> getStructureSubStructures(String structureDN) {
+        NamingEnumeration<SearchResult> res = getStructureChildren(ObjectType.STRUCTURE, structureDN);
+        List<PartialStructure> children = new ArrayList<>();
+        try {
+            while (res.hasMore()) {
+                SearchResult currentChild = res.next();
+                PartialStructure child = new PartialStructure(currentChild);
+                children.add(child);
+            }
+        } catch (NamingException e) {
+            throw new SeinkSansDoozeBadRequest();
+        }
+        return children;
     }
 }

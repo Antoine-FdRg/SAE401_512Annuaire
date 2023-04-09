@@ -1,9 +1,6 @@
 package fr.seinksansdooze.backend.connectionManaging.ADBridge.interfaces;
 
-import fr.seinksansdooze.backend.model.response.FullPerson;
-import fr.seinksansdooze.backend.model.response.LoggedInUser;
-import fr.seinksansdooze.backend.model.response.PartialGroup;
-import fr.seinksansdooze.backend.model.response.PartialPerson;
+import fr.seinksansdooze.backend.model.response.*;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -29,7 +26,7 @@ public interface IAuthentifiedADQuerier {
 
     boolean changePassword(String cn, String prevPwd,String newPwd);
 
-    List<PartialPerson> getStructureInfo(String cn);
+    FullStructure getStructureInfo(String dn);
 
     List<PartialPerson> searchPerson(String search, String filter, String value, int page, int perPage);
 
