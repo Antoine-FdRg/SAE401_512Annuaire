@@ -48,10 +48,8 @@ public class AuthentificationController {
                     "La connexion à échouée. Veuillez verifier votre identifiant ainsi que votre mot de passe."
             );
         }
-
         String token = (String) userAndToken[1];
         LoggedInUser connectedUser = (LoggedInUser) userAndToken[0];
-
         return ResponseEntity.ok()
                 .header(HttpHeaders.AUTHORIZATION, token)
                 .body(connectedUser);
@@ -59,15 +57,14 @@ public class AuthentificationController {
 
     @Operation(summary = "Déconnecte un utilisateur")
     @ApiResponses({
-            @ApiResponse(responseCode = "200", description = "Déconnexion faite avec succès : la session n'existe plus")
+            @ApiResponse(responseCode = "200", description = "Déconnexion faite avec succès : la session n'existe plus."),
+            @ApiResponse(responseCode = "500", description = "Erreur interne du serveur lors de la déconnexion.")
     })
     @PostMapping("/logout")
-    public void logout(@RequestHeader(HttpHeaders.AUTHORIZATION) String token, ServerHttpRequest request) {
+    public ResponseEntity<String> logout(@RequestHeader(HttpHeaders.AUTHORIZATION) String token, ServerHttpRequest request) {
         RateLimiterSingleton.INSTANCE.get().tryConsume(String.valueOf(request.getLocalAddress()));
-
         connectionManager.removeConnection(token);
-
-//        return "Déconnexion avec succès";
+        return ResponseEntity.ok().build();
     }
 
     @Operation(summary = "Renvoie le token passé en autorisation")

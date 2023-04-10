@@ -52,17 +52,17 @@ public class PublicController {
         return querier.searchStructure(name, page, perPage);
     }
 
-    @Operation(summary = "Récupère les informations d'une personne en fonction de son cn")
-    @GetMapping("/info/person/{dn}")
-    public PartialPerson personInfo(@PathVariable String dn, ServerHttpRequest request) {
-        RateLimiterSingleton.get().tryConsume(String.valueOf(request.getLocalAddress()));
-        return querier.getPartialPersonInfo(dn);
-    }
-
-    @Operation(summary = "Récupère les informations d'une structure en fonction de son ou")
-    @GetMapping("/info/structure/{ou}")
-    public PartialStructure structureInfo(@PathVariable String ou, ServerHttpRequest request) {
-        RateLimiterSingleton.get().tryConsume(String.valueOf(request.getLocalAddress()));
-        return querier.getPartialStructureInfo(ou);
-    }
+//    @Operation(summary = "Récupère les informations d'une personne en fonction de son cn")
+//    @GetMapping("/info/person/{dn}")
+//    public PartialPerson personInfo(@PathVariable String dn, ServerHttpRequest request) {
+//        RateLimiterSingleton.get().tryConsume(String.valueOf(request.getLocalAddress()));
+//        return querier.getPartialPersonInfo(dn);
+//    }
+//
+//    @Operation(summary = "Récupère les informations d'une structure en fonction de son ou")
+//    @GetMapping("/info/structure/{ou}")
+//    public PartialStructure structureInfo(@PathVariable String ou, ServerHttpRequest request) {
+//        RateLimiterSingleton.get().tryConsume(String.valueOf(request.getLocalAddress()));
+//        return querier.getPartialStructureInfo(ou);
+//    }
 }

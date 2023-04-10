@@ -7,6 +7,7 @@ import fr.seinksansdooze.backend.model.exception.SeinkSansDoozeBackException;
 import fr.seinksansdooze.backend.model.payload.ModifAttribPayload;
 import fr.seinksansdooze.backend.model.response.FullPerson;
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
@@ -39,10 +40,6 @@ public class MemberController {
 //            throw new SeinkSansDoozeBackException(
 //                    HttpStatus.NOT_ACCEPTABLE,
 //                    "Token introuvable");
-//        }
-//        return ResponseEntity.ok().build();
-//    }
-
     /**
      * Permet de modifier un attribut d'un utilisateur
      * @param token le token de l'utilisateur
@@ -52,8 +49,10 @@ public class MemberController {
      */
     @Operation(summary = "Permet de modifier un attribut d'un utilisateur")
     @ApiResponses(value = {
-            @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "200", description = "Attribut modifié"),
-            @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "401", description = "Erreur de connexion, la session a peut être expirée, veuillez vous reconnecter.")
+            @ApiResponse(responseCode = "200", description = "Attribut modifié avec succés."),
+            @ApiResponse(responseCode = "400", description = "L'attribut ou la valeur n'est pas valide."),
+            @ApiResponse(responseCode = "401", description = "Erreur de connexion, la session a peut être expirée, veuillez vous reconnecter."),
+            @ApiResponse(responseCode = "404", description = "L'utilisateur n'existe pas.")
     })
     @PutMapping("/modify")
     public ResponseEntity<String> modifyAttribute(@RequestHeader(HttpHeaders.AUTHORIZATION) String token, @RequestBody ModifAttribPayload payload, ServerHttpRequest request){
@@ -70,6 +69,12 @@ public class MemberController {
     }
 
     @Operation(summary = "Permet d'obtenir les informations personnelles d'un utilisateur")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Informations personnelles récupérées avec succés."),
+            @ApiResponse(responseCode = "400", description = "Erreur de formulation de la requête."),
+            @ApiResponse(responseCode = "401", description = "Erreur de connexion, la session a peut être expirée, veuillez vous reconnecter."),
+            @ApiResponse(responseCode = "404", description = "L'utilisateur n'existe pas.")
+    })
     @GetMapping("/getInfo")
     public FullPerson getInfo(@RequestHeader(HttpHeaders.AUTHORIZATION) String token, ServerHttpRequest request){
         RateLimiterSingleton.get().tryConsume(String.valueOf(request.getLocalAddress()));
