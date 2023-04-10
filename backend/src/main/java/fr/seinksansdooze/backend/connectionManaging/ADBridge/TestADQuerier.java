@@ -2,6 +2,7 @@ package fr.seinksansdooze.backend.connectionManaging.ADBridge;
 
 import fr.seinksansdooze.backend.connectionManaging.ADBridge.interfaces.IAuthentifiedADQuerier;
 import fr.seinksansdooze.backend.connectionManaging.ADBridge.interfaces.IPublicADQuerier;
+import fr.seinksansdooze.backend.model.payload.NewPersonPayload;
 
 public class TestADQuerier {
 
@@ -16,13 +17,19 @@ public class TestADQuerier {
         String pwd = "@Arnaudisthebest83";
         IAuthentifiedADQuerier querier = new AuthentifiedADQuerier(id, pwd);
         String dn = "CN=Thomas Gorisse,OU=Direction General,OU=512Direction,OU=512Batiment,OU=512BankFR,DC=EQUIPE1B,DC=local";
-        String structureDn ="OU=Secteur Comptabilite,OU=Departement Finance,OU=512Batiment,OU=512BankFR,DC=EQUIPE1B,DC=local";
+        String structureDn = "OU=Secteur Comptabilite,OU=Departement Finance,OU=512Batiment,OU=512BankFR,DC=EQUIPE1B,DC=local";
 
-        System.out.println(querier.getFullPersonInfo("CN=Antoine Fadda Rodriguez,OU=Secretaire general,OU=512Direction,OU=512Batiment,OU=512BankFR,DC=EQUIPE1B,DC=local"));
-        querier.modifyAttribute("streetAddress","22 rue de la Chapelle");
-        querier.modifyAttribute("mobile","0696969696");
-        querier.modifyAttribute("telephoneNumber","01234567890");
-        System.out.println(querier.getFullPersonInfo("CN=Antoine Fadda Rodriguez,OU=Secretaire general,OU=512Direction,OU=512Batiment,OU=512BankFR,DC=EQUIPE1B,DC=local"));
+        System.out.println(querier.getFullPersonInfo(dn));
+        NewPersonPayload person = new NewPersonPayload("Donald","Trump",structureDn,"Employé","0611911911","01234567890","19610101","Tour a son nom","CN=Bernard Roger,OU=Secteur Comptabilite,OU=Departement Finance,OU=512Batiment,OU=512BankFR,DC=EQUIPE1B,DC=local");
+//        querier.createPerson(person);
+//        System.out.println(querier.getFullPersonInfo("CN=Donald Trump,OU=Secteur Comptabilite,OU=Departement Finance,OU=512Batiment,OU=512BankFR,DC=EQUIPE1B,DC=local"));
+        querier.deletePerson("CN=Donald Trump,OU=Secteur Comptabilite,OU=Departement Finance,OU=512Batiment,OU=512BankFR,DC=EQUIPE1B,DC=local");
+//        System.out.println(querier.getFullPersonInfo("CN=Donald Trump,OU=Secteur Comptabilite,OU=Departement Finance,OU=512Batiment,OU=512BankFR,DC=EQUIPE1B,DC=local"));
+
+        //        querier.modifyAttribute("streetAddress","22 rue de la Chapelle");
+//        querier.modifyAttribute("mobile","0696969696");
+//        querier.modifyAttribute("telephoneNumber","01234567890");
+//        System.out.println(querier.getFullPersonInfo("CN=Antoine Fadda Rodriguez,OU=Secretaire general,OU=512Direction,OU=512Batiment,OU=512BankFR,DC=EQUIPE1B,DC=local"));
         //        System.out.println(querier.getStructureInfo(structureDn));
 //        querier.getAllGroups().forEach(System.out::println);
 //        System.out.println("Récupération des infos de Thomas");
@@ -54,8 +61,8 @@ public class TestADQuerier {
 
     }
 
-    private static void testPublicQuerier(){
-        IPublicADQuerier adQuerier = new PublicADQuerier("dummy.query","@Azertyuiop06200");
+    private static void testPublicQuerier() {
+        IPublicADQuerier adQuerier = new PublicADQuerier("dummy.query", "@Azertyuiop06200");
 //        System.out.println("recherche de Antoines");
         adQuerier.searchPerson("antoine", 0, 15).forEach(System.out::println);
 //        System.out.println("recherche de la direction");

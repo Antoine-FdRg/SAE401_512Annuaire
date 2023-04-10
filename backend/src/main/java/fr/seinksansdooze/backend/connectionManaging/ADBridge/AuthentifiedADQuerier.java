@@ -7,14 +7,17 @@ import fr.seinksansdooze.backend.model.exception.*;
 import fr.seinksansdooze.backend.model.exception.SeinkSansDoozeBadRequest;
 import fr.seinksansdooze.backend.model.exception.group.SeinkSansDoozeGroupNotFound;
 import fr.seinksansdooze.backend.model.exception.structure.SeinkSansDoozeStructureNotFound;
+import fr.seinksansdooze.backend.model.exception.user.SeinkSansDoozeUserAlreadyExists;
 import fr.seinksansdooze.backend.model.exception.user.SeinkSansDoozeUserAlreadyInGroup;
 import fr.seinksansdooze.backend.model.exception.user.SeinkSansDoozeUserNotFound;
 import fr.seinksansdooze.backend.model.exception.user.SeinkSansDoozeUserNotInGroup;
+import fr.seinksansdooze.backend.model.payload.NewPersonPayload;
 import fr.seinksansdooze.backend.model.response.*;
 import jakarta.xml.bind.DatatypeConverter;
 import org.springframework.http.HttpStatus;
 
 import javax.naming.Context;
+import javax.naming.NameAlreadyBoundException;
 import javax.naming.NamingEnumeration;
 import javax.naming.NamingException;
 import javax.naming.directory.*;
@@ -39,6 +42,48 @@ public class AuthentifiedADQuerier extends ADQuerier implements IAuthentifiedADQ
     public LoggedInUser login(String username, String pwd) {
         this.loggedInUser = super.login(username, pwd);
         return this.loggedInUser;
+    }
+
+    @Override
+    public void createPerson(NewPersonPayload person) {
+        Attributes attributes = new BasicAttributes();
+        Attribute objectClass = new BasicAttribute("objectClass");
+        objectClass.add("top");
+        objectClass.add("person");
+        objectClass.add("organizationalPerson");
+        objectClass.add("user");
+        attributes.put(objectClass);
+        attributes.put("givenName", person.getFirstName());
+        attributes.put("sn", person.getLastName());
+        attributes.put("title", person.getTitle());
+
+        attributes.put("sAMAccountName", person.getLastName().split(" ")[0].toLowerCase() + "." + person.getFirstName().toLowerCase());
+        attributes.put("mail", person.getLastName().split(" ")[0].toLowerCase() + "." + person.getFirstName().toLowerCase() + "@equipe1B.local");
+        attributes.put("mobile", person.getPersonalPhone());
+        attributes.put("telephoneNumber", person.getProfessionalPhone());
+        attributes.put("streetAddress", person.getAddress());
+        attributes.put("dateDeNaissance", person.getDateOfBirth());
+        attributes.put("manager", person.getManagerDN());
+        try {
+            this.context.createSubcontext("CN=" + person.getFirstName() + " " + person.getLastName() + "," + person.getStructureDN(), attributes);
+        } catch (NameAlreadyBoundException e) {
+            throw new SeinkSansDoozeUserAlreadyExists();
+        } catch (NamingException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    @Override
+    public void deletePerson(String dn) {
+        if(Objects.isNull(dn) || !dn.contains("CN="))
+            throw new SeinkSansDoozeBadRequest();
+        if(this.getFullPersonInfo(dn).getClass() != FullPerson.class)
+            throw new SeinkSansDoozeUserNotFound();
+        try {
+            this.context.destroySubcontext(dn);
+        } catch (NamingException e) {
+            throw new SeinkSansDoozeUserNotFound();
+        }
     }
 
     /**
@@ -243,21 +288,21 @@ public class AuthentifiedADQuerier extends ADQuerier implements IAuthentifiedADQ
             throw new SeinkSansDoozeBadRequest();
         }
         //search all person by search
-        NamingEnumeration<SearchResult> res =  this.search(ObjectType.PERSON, search);
+        NamingEnumeration<SearchResult> res = this.search(ObjectType.PERSON, search);
         List<PartialPerson> partialPersons = new ArrayList<>();
-        try{
+        try {
             while (res.hasMore()) {
                 SearchResult currentPerson = res.next();
                 PartialPerson partialPerson = new PartialPerson(currentPerson);
                 partialPersons.add(partialPerson);
             }
-        }catch (NamingException e){
+        } catch (NamingException e) {
             throw new SeinkSansDoozeUserNotFound();
         }
         //get list of full person
         List<FullPerson> fullPersonList = partialPersons.stream().map(partialPerson -> this.getFullPersonInfo(partialPerson.getDn())).toList();
         //filter by filter on full person attribute
-        List<FullPerson> filteredFullPersonList = fullPersonList.stream().filter(fullPerson -> fullPerson.check(filterAttribute,value)).toList();
+        List<FullPerson> filteredFullPersonList = fullPersonList.stream().filter(fullPerson -> fullPerson.check(filterAttribute, value)).toList();
         //return list of partial person
         return filteredFullPersonList.stream().map(FullPerson::toPartialPerson).collect(Collectors.toList());
     }
@@ -296,7 +341,7 @@ public class AuthentifiedADQuerier extends ADQuerier implements IAuthentifiedADQ
 
     @Override
     public FullStructure getStructureInfo(String dn) {
-        String filter = "(&(objectClass="+ObjectType.STRUCTURE+")(distinguishedName=" + dn + "))";
+        String filter = "(&(objectClass=" + ObjectType.STRUCTURE + ")(distinguishedName=" + dn + "))";
         SearchControls searchControls = new SearchControls();
         searchControls.setSearchScope(SearchControls.SUBTREE_SCOPE);
         NamingEnumeration<SearchResult> res;
@@ -313,7 +358,7 @@ public class AuthentifiedADQuerier extends ADQuerier implements IAuthentifiedADQ
         assert !Objects.equals(fsDN, "");
         List<PartialPerson> fsMembers = this.getStructureMember(fsDN);
         List<PartialStructure> fsSubStructures = this.getStructureSubStructures(fsDN);
-        return new FullStructure(fsDN,fsSubStructures,fsMembers);
+        return new FullStructure(fsDN, fsSubStructures, fsMembers);
     }
 
 }

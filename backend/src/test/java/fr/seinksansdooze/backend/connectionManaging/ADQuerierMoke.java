@@ -2,6 +2,7 @@ package fr.seinksansdooze.backend.connectionManaging;
 
 import fr.seinksansdooze.backend.connectionManaging.ADBridge.interfaces.IAuthentifiedADQuerier;
 import fr.seinksansdooze.backend.connectionManaging.ADBridge.interfaces.IPublicADQuerier;
+import fr.seinksansdooze.backend.model.payload.NewPersonPayload;
 import fr.seinksansdooze.backend.model.response.*;
 
 import java.util.ArrayList;
@@ -25,6 +26,16 @@ public class ADQuerierMoke implements IAuthentifiedADQuerier, IPublicADQuerier {
 
     @Override
     public void logout() {
+
+    }
+
+    @Override
+    public void createPerson(NewPersonPayload person) {
+
+    }
+
+    @Override
+    public void deletePerson(String dn) {
 
     }
 

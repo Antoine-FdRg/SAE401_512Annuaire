@@ -28,7 +28,7 @@ public class FullPerson extends PartialPerson {
     private LocalDate dateOfBirth;
     private String managerDN; //manager
 
-    public FullPerson(String firstName, String lastName, String cn, String dn, String title, String login, String email, String personalPhone, String professionalPhone, String dateOfBirth, String address, String managerFullName, String managerDN) {
+    public FullPerson(String firstName, String lastName, String dn, String title, String login, String email, String personalPhone, String professionalPhone, String dateOfBirth, String address, String managerDN) {
         super(firstName, lastName, dn, title);
         this.login = login;
         this.email = email;
@@ -51,7 +51,8 @@ public class FullPerson extends PartialPerson {
             this.dateOfBirth = LocalDate.parse(dateOfBirth.substring(0, 4) + "-" + dateOfBirth.substring(4, 6) + "-" + dateOfBirth.substring(6, 8));
             this.managerDN = result.getAttributes().get("manager").toString().split(": ")[1];
         } catch (NullPointerException e) {
-            throw new SeinkSansDoozeUserIncomplete();
+//            throw new RuntimeException(e);
+                        throw new SeinkSansDoozeUserIncomplete();
         }
     }
 

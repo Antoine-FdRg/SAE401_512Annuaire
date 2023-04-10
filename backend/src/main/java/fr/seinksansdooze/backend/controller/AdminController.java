@@ -5,6 +5,7 @@ import fr.seinksansdooze.backend.connectionManaging.ADConnectionManager;
 import fr.seinksansdooze.backend.connectionManaging.ADConnectionManagerSingleton;
 import fr.seinksansdooze.backend.connectionManaging.rateLimit.RateLimiterSingleton;
 import fr.seinksansdooze.backend.model.exception.SeinkSansDoozeBackException;
+import fr.seinksansdooze.backend.model.payload.NewPersonPayload;
 import fr.seinksansdooze.backend.model.payload.UserAndGroupPayload;
 import fr.seinksansdooze.backend.model.response.FullPerson;
 import fr.seinksansdooze.backend.model.response.FullStructure;
@@ -70,6 +71,48 @@ public class AdminController {
             );
         }
     }
+
+    @Operation(summary = "Créer un utilisateur")
+    @ApiResponses({
+            @ApiResponse(responseCode = "200", description = "Utilisateur créé"),
+            @ApiResponse(responseCode = "401", description = "Token invalide"),
+            @ApiResponse(responseCode = "409", description = "Erreur lors de la création de l'utilisateur")
+    })
+    @PutMapping("/member/create")
+    public ResponseEntity<String> createUser(@RequestHeader(HttpHeaders.AUTHORIZATION) String token, @RequestBody NewPersonPayload payload, ServerHttpRequest request) {
+        RateLimiterSingleton.INSTANCE.get().tryConsume(String.valueOf(request.getLocalAddress()));
+
+        try {
+            connectionManager.getQuerier(token).createPerson(payload);
+        } catch (NamingException e) {
+            throw new SeinkSansDoozeBackException(
+                    HttpStatus.UNAUTHORIZED,
+                    "Erreur de connexion, la session a peut être expirée, veuillez vous reconnecter."
+            );
+        }
+        return new ResponseEntity<>("Utilisateur créé avec succès.", HttpStatus.OK);
+    }
+
+    @Operation(summary = "Supprimer un utilisateur")
+    @ApiResponses({
+            @ApiResponse(responseCode = "200", description = "Utilisateur supprimé"),
+            @ApiResponse(responseCode = "401", description = "Token invalide"),
+            @ApiResponse(responseCode = "409", description = "Erreur lors de la suppression de l'utilisateur")
+    })
+    @DeleteMapping("/member/delete")
+    public ResponseEntity<String> deleteUser(@RequestHeader(HttpHeaders.AUTHORIZATION) String token, @RequestParam String dn, ServerHttpRequest request) {
+        RateLimiterSingleton.INSTANCE.get().tryConsume(String.valueOf(request.getLocalAddress()));
+        try {
+            connectionManager.getQuerier(token).deletePerson(dn);
+        } catch (NamingException e) {
+            throw new SeinkSansDoozeBackException(
+                    HttpStatus.UNAUTHORIZED,
+                    "Erreur de connexion, la session a peut être expirée, veuillez vous reconnecter."
+            );
+        }
+        return new ResponseEntity<>("Utilisateur supprimé avec succès.", HttpStatus.OK);
+    }
+
 
     @Operation(summary = "Renvoie la liste de tout les groupes")
     @ApiResponses({
