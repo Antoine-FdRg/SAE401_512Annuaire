@@ -29,7 +29,7 @@ export class SearchService {
   getInfos(person: Person) {
     console.log(person);
 
-    this.http.get(apiURL + "/admin/info/person?cn=" + person.cn).subscribe(
+    this.http.get(apiURL + "/public/info/person/" + person.dn).subscribe(
       (response) => {
         console.log(response);
       }

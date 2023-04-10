@@ -31,11 +31,19 @@ export class LoginService {
   }
 
   connect(login: string, password: string) {
+    // add Access-Control-Allow-Headers: *
+    var headers = new HttpHeaders();
+    headers = headers.append('Access-Control-Allow-Headers', '*');
 
-    this.http.post(apiURL + "/auth/login", { username: login, password: password }).subscribe(
+
+    this.http.post(apiURL + "/auth/login", { username: login, password: password }, { observe: "response", headers: headers }).subscribe(
       (response) => {
         this.userBase = response as unknown as Person;
         sessionStorage.setItem('user', JSON.stringify(this.userBase));
+        // store the token Autorisation which is in header in session storage
+        sessionStorage.setItem('token', response.headers.get('Authorization') || '');
+        console.log(response);
+
         this.router.navigate(['/controlPanel']);
       },
       (error) => {
