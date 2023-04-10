@@ -8,9 +8,8 @@
 </section>
 
 <div id="number-of-results" [style.display]="displayNotFound() == 'none' ? 'block' : 'none'">
-  <strong>{{ searchService.lastResults.length }}</strong> résultat
-  <span *ngIf="searchService.lastResults.length > 1">s</span> trouvé
-  <span *ngIf="searchService.lastResults.length > 1">s</span>.
+  <strong>{{ searchService.lastResults.length }}</strong>
+  résultat(s) trouvé(s)
 </div>
 <section id="results-container" [style.display]="displayNotFound() == 'none' ? 'flex' : 'none'">
   <section id="person-container">

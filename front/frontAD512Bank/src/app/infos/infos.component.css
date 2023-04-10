@@ -1,4 +1,5 @@
 #sheet {
+    margin-top: 50px !important;
     width: 80%;
     margin: 0 auto;
     display: flex;
@@ -8,6 +9,21 @@
 
     /* justify-content: center; */
     align-items: center;
+}
+
+#header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    width: 100%;
+}
+
+#header *{
+    min-width: 38px;
+}
+
+#close-infos:hover {
+    background-color: var(--orange512);
 }
 
 #title {
@@ -48,6 +64,9 @@
     padding: 7px;
     border-radius: 10px;
     transition: 0.3s;
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }
 
 .material-symbols-outlined:hover {
@@ -128,6 +147,8 @@
     align-items: center;
     flex-direction: column;
     gap: 25px;
+    position: relative;
+    top: 15px;
 }
 
 .buttons {
