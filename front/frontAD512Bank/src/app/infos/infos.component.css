@@ -2,7 +2,6 @@
     margin-top: 50px !important;
     width: 80%;
     margin: 0 auto;
-    margin-bottom: 60px;
     display: flex;
     flex-direction: column;
     min-height: fit-content;
@@ -68,7 +67,6 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    user-select: none;
 }
 
 .material-symbols-outlined:hover {

@@ -17,15 +17,6 @@ export class InfosComponent {
     "phone"   : false,
   };
 
-  fields = {
-    "address" : true,
-    "name"    : true,
-    "mail"    : true,
-    "surname" : true,
-    "phone"   : true,
-    "login"   : true,
-  }
-
   ChangingField = ChangingField;
   user : Person | undefined;
 
