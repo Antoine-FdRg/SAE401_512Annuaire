@@ -119,4 +119,9 @@ public class ADQuerierMoke implements IAuthentifiedADQuerier, IPublicADQuerier {
     public void modifyAttribute(String attribute, String value) {
 
     }
+
+    @Override
+    public FullPerson getInfo() {
+        return null;
+    }
 }

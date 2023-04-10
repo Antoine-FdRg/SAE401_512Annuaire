@@ -5,6 +5,9 @@ import fr.seinksansdooze.backend.connectionManaging.ADConnectionManagerSingleton
 import fr.seinksansdooze.backend.connectionManaging.rateLimit.RateLimiterSingleton;
 import fr.seinksansdooze.backend.model.exception.SeinkSansDoozeBackException;
 import fr.seinksansdooze.backend.model.payload.ModifAttribPayload;
+import fr.seinksansdooze.backend.model.response.FullPerson;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -47,6 +50,11 @@ public class MemberController {
      * @param request la requête
      * @return 200 OK ou une erreur
      */
+    @Operation(summary = "Permet de modifier un attribut d'un utilisateur")
+    @ApiResponses(value = {
+            @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "200", description = "Attribut modifié"),
+            @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "401", description = "Erreur de connexion, la session a peut être expirée, veuillez vous reconnecter.")
+    })
     @PutMapping("/modify")
     public ResponseEntity<String> modifyAttribute(@RequestHeader(HttpHeaders.AUTHORIZATION) String token, @RequestBody ModifAttribPayload payload, ServerHttpRequest request){
         RateLimiterSingleton.get().tryConsume(String.valueOf(request.getLocalAddress()));
@@ -60,4 +68,19 @@ public class MemberController {
         }
         return ResponseEntity.ok().build();
     }
+
+    @Operation(summary = "Permet d'obtenir les informations personnelles d'un utilisateur")
+    @GetMapping("/getInfo")
+    public FullPerson getInfo(@RequestHeader(HttpHeaders.AUTHORIZATION) String token, ServerHttpRequest request){
+        RateLimiterSingleton.get().tryConsume(String.valueOf(request.getLocalAddress()));
+        try {
+            return connectionManager.getQuerier(token).getInfo();
+        } catch (NamingException e) {
+            throw new SeinkSansDoozeBackException(
+                    HttpStatus.UNAUTHORIZED,
+                    "Erreur de connexion, la session a peut être expirée, veuillez vous reconnecter."
+            );
+        }
+    }
+
  }

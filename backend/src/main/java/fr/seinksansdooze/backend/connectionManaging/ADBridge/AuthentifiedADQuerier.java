@@ -340,6 +340,11 @@ public class AuthentifiedADQuerier extends ADQuerier implements IAuthentifiedADQ
     }
 
     @Override
+    public FullPerson getInfo() {
+        return this.getFullPersonInfo(this.loggedInUser.getDn());
+    }
+
+    @Override
     public FullStructure getStructureInfo(String dn) {
         String filter = "(&(objectClass=" + ObjectType.STRUCTURE + ")(distinguishedName=" + dn + "))";
         SearchControls searchControls = new SearchControls();

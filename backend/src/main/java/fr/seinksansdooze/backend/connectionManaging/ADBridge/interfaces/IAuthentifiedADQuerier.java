@@ -39,4 +39,6 @@ public interface IAuthentifiedADQuerier {
     List<String> getAllFilters();
 
     void modifyAttribute(String attribute, String value);
+
+    FullPerson getInfo();
 }
