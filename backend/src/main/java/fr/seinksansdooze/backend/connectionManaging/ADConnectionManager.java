@@ -56,6 +56,7 @@ public class ADConnectionManager {
         LoggedInUser connectedUser = querier.login(username, password);
         if (connectedUser!=null) {
             String token = this.tokenGenerator.generateNewToken();
+            connectedUser.setToken(token);
             ADConnection connection = new ADConnection();
             connection.setQuerier(querier);
             this.connections.put(token, connection);
