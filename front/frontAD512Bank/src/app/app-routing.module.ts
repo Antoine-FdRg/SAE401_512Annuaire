@@ -13,24 +13,24 @@ const routes: Routes = [
     redirectTo: '/home',
     pathMatch: 'full',
   },
-  { path: 'home', component: HomePageComponent },
+  { path: 'home', component: HomePageComponent, },
   {
     path: 'login',
-    component: LoginComponent
+    component: LoginComponent,
   },
   {
     path: 'controlPanel',
-    component: ControlPanelComponent,
+    component: ControlPanelComponent
   },
   {
     path: 'controlPanel/members',
     component: MembersGestionComponent,
   }, {
     path: 'controlPanel/groups',
-    component: GroupsGestionComponent
+    component: GroupsGestionComponent,
   }, {
     path: 'infos',
-    component: InfosComponent
+    component: InfosComponent,
   }
 ];
 

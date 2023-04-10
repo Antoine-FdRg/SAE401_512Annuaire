@@ -13,13 +13,17 @@ export class HttpRequestInterceptor implements HttpInterceptor {
   constructor() { }
 
   intercept(request: HttpRequest<unknown>, next: HttpHandler): Observable<HttpEvent<unknown>> {
-    const token = localStorage.getItem("token");
+    const token = sessionStorage.getItem("token");
+    console.log("token: " + token);
+
     if (token) {
       request = request.clone({
         setHeaders: {
           Authorization: token
         }
       });
+      console.log(request);
+
     }
     return next.handle(request);
   }
