@@ -12,8 +12,7 @@
     </div>
 
     <section id="infos">
-
-        <div id="surname">
+        <div id="surname" *ngIf="fields['surname']">
             <div class="info-header">
                 <div class="indicator">Nom</div>
                 <span class="material-symbols-outlined" (click)="modified['surname'] = true">edit</span>
@@ -44,7 +43,7 @@
 
         </div>
 
-        <div id="login">
+        <div id="login" *ngIf="fields['login']">
             <div class="info-header">
                 <div class="indicator">Login</div>
 
@@ -55,7 +54,7 @@
             </div>
         </div>
 
-        <div id="address">
+        <div id="address" *ngIf="fields['address']">
             <div class="info-header">
                 <div class="indicator">Adresse</div>
                 <span class="material-symbols-outlined" (click)="modified['address'] = true">edit</span>
@@ -86,7 +85,7 @@
             </div>
         </div>
 
-        <div id="name">
+        <div id="name" *ngIf="fields['name']">
             <div class="info-header">
                 <div class="indicator">Prénom</div>
                 <span class="material-symbols-outlined" (click)="modified['name'] = true">edit</span>
@@ -115,7 +114,7 @@
             </div>
         </div>
 
-        <div id="mail">
+        <div id="mail" *ngIf="fields['mail']">
             <div class="info-header">
                 <div class="indicator">Adresse email personelle</div>
                 <span class="material-symbols-outlined" (click)="modified['mail'] = true">edit</span>
@@ -144,7 +143,7 @@
 
         </div>
 
-        <div id="phone">
+        <div id="phone" *ngIf="fields['phone']">
             <div class="info-header">
                 <div class="indicator">Numéro de Téléphone</div>
                 <span class="material-symbols-outlined" (click)="modified['phone'] = true">edit</span>
@@ -173,6 +172,7 @@
 
 
         </div>
+        
     </section>
 
 </div>
