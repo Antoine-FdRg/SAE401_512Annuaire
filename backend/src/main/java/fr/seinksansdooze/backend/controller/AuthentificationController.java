@@ -27,7 +27,7 @@ public class AuthentificationController {
 
     ADConnectionManager connectionManager = ADConnectionManagerSingleton.INSTANCE.get();
 
-    @Operation(summary = "Connecte un utilisateur")
+    @Operation(summary = "Connecte un utilisateur te retourne les informations de l'utilisateur connecté aisni qu'un token")
     @ApiResponses({
             @ApiResponse(responseCode = "200", description = "Connexion avec succès"),
             @ApiResponse(responseCode = "400", description = "Requête malformée, vérifiez que le payload contient bien" +

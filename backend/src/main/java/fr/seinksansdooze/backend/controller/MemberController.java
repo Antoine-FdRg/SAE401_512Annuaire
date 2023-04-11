@@ -29,11 +29,7 @@ public class MemberController {
 //    public ResponseEntity changePassword(@RequestHeader(HttpHeaders.AUTHORIZATION) String token, @RequestBody String cn, @RequestBody String oldPassword, @RequestBody String newPassword, ServerHttpRequest request){
 //        RateLimiterSingleton.get().tryConsume(String.valueOf(request.getLocalAddress()));
 //
-//        if(!new TokenSanitizer().valideToken(token)){
-//            throw new SeinkSansDoozeBackException(
-//                    HttpStatus.NOT_ACCEPTABLE,
-//                    "Token invalide");
-//        }
+//
 //        try {
 //            connectionManager.getQuerier(token).changePassword(cn, oldPassword, newPassword);
 //        } catch (NamingException e) {

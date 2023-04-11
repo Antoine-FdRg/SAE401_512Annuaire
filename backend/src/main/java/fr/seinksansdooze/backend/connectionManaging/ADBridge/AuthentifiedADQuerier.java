@@ -69,7 +69,7 @@ public class AuthentifiedADQuerier extends ADQuerier implements IAuthentifiedADQ
         } catch (NameAlreadyBoundException e) {
             throw new SeinkSansDoozeUserAlreadyExists();
         } catch (NamingException e) {
-            throw new RuntimeException(e);
+            throw new SeinkSansDoozeBadRequest();
         }
     }
 
@@ -115,7 +115,7 @@ public class AuthentifiedADQuerier extends ADQuerier implements IAuthentifiedADQ
         try {
             existingGroups = this.getAllGroups();
             if (existingGroups.stream().anyMatch(group -> group.getCn().equals(groupName))) {
-                throw new SeinkSansDoozeBackException(HttpStatus.CONFLICT, "Le groupe existe déjà");
+                throw new SeinkSansDoozeBackException(HttpStatus.CONFLICT, "Le groupe existe déjà.");
             } else {
                 Attributes attributes = new BasicAttributes();
                 Attribute objectClass = new BasicAttribute("objectClass");
@@ -129,7 +129,6 @@ public class AuthentifiedADQuerier extends ADQuerier implements IAuthentifiedADQ
                 return true;
             }
         } catch (NamingException e) {
-//            throw new RuntimeException(e);
             throw new SeinkSansDoozeBadRequest();
         }
 
