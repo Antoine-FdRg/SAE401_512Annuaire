@@ -31,11 +31,19 @@ export class LoginService {
   }
 
   connect(login: string, password: string) {
+    // add Access-Control-Allow-Headers: *
+    var headers = new HttpHeaders();
+    headers = headers.append('Access-Control-Allow-Headers', '*');
+
 
     this.http.post(apiURL + "/auth/login", { username: login, password: password }).subscribe(
-      (response) => {
-        this.userBase = response as unknown as Person;
+      (response: any) => {
+        this.userBase = { firstName: response.firstName, lastName: response.lastName, login: response.login, email: response.email, dn: response.dn };
         sessionStorage.setItem('user', JSON.stringify(this.userBase));
+        // store the token Autorisation which is in header in session storage
+        sessionStorage.setItem('token', response.token);
+        console.log(response);
+
         this.router.navigate(['/controlPanel']);
       },
       (error) => {
@@ -45,13 +53,13 @@ export class LoginService {
   }
 
   logout() {
-    sessionStorage.removeItem('user');
-    this.userBase = undefined;
-    this.router.navigate(['/login']);
-
-    this.http.post(apiURL + "/auth/logout", {}, { withCredentials: true }).subscribe(
+    this.http.post(apiURL + "/auth/logout", {}).subscribe(
       (response) => {
         console.log(response);
+        sessionStorage.removeItem('user');
+        sessionStorage.removeItem('token');
+        this.userBase = undefined;
+        this.router.navigate(['/login']);
       }
     );
 

@@ -1,10 +1,16 @@
-import { Router } from '@angular/router';
+import { Router, RouterOutlet } from '@angular/router';
 import { LoginService } from './service/login.service';
 import { SearchService } from './service/search.service';
 import { Component } from '@angular/core';
+import { fader } from './route-animations';
 
 @Component({
   selector: 'app-root',
+  animations: [ // <-- add your animations here
+    fader,
+    // slider,
+    // transformer,
+  ],
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.css']
 })
@@ -24,6 +30,10 @@ export class AppComponent {
       return true;
     }
     return false;
+  }
+  prepareRoute(outlet: RouterOutlet) {
+
+    return outlet && outlet.activatedRouteData;
   }
 
 }

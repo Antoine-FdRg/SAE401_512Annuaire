@@ -7,5 +7,5 @@ export interface Person {
   tutor?: string;
   email?: string;
   admin?: boolean;
-  cn?: string;
+  dn?: string;
 }

@@ -5,11 +5,14 @@
   </div>
   <div *ngIf="isAdmin()" id="controlPanel">CONTROL PANEL</div>
   <section id="right-part-header">
-    <div class="help clickable">Aide</div>
+    <div routerLink="/controlPanel" class="help clickable">Control Panel</div>
     <app-profile (click)="hideResults()"></app-profile>
   </section>
 </header>
 <main>
-  <router-outlet></router-outlet>
+  <div [@routeAnimations]="prepareRoute(outlet)">
+    <router-outlet #outlet="outlet"></router-outlet>
+  </div>
   <app-result *ngIf="showResults()"></app-result>
+
 </main>

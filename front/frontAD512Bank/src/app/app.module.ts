@@ -1,5 +1,5 @@
 import { MembersGestionComponent } from './controlPanel/membersGestion/membersGestion.component';
-import { HttpClient, HttpClientModule, HttpHandler } from '@angular/common/http';
+import { HTTP_INTERCEPTORS, HttpClient, HttpClientModule, HttpHandler } from '@angular/common/http';
 import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 
@@ -13,7 +13,8 @@ import { ControlPanelComponent } from './controlPanel/controlPanel.component';
 import { CommonModule } from '@angular/common';
 import { GroupsGestionComponent } from './controlPanel/groups-gestion/groups-gestion.component';
 import { InfosComponent } from './infos/infos.component';
-
+import { HttpRequestInterceptor } from './http.interceptor';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 @NgModule({
   declarations: [
     AppComponent,
@@ -27,12 +28,16 @@ import { InfosComponent } from './infos/infos.component';
     InfosComponent
   ],
   imports: [
+    BrowserAnimationsModule,
     BrowserModule,
     CommonModule,
     AppRoutingModule,
     HttpClientModule,
   ],
-  providers: [HttpClient],
+  providers: [HttpClient,
+    {
+      provide: HTTP_INTERCEPTORS, useClass: HttpRequestInterceptor, multi: true
+    }],
   bootstrap: [AppComponent]
 })
 export class AppModule { }
