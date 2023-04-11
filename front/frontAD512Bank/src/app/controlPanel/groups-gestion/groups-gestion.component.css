@@ -10,6 +10,8 @@
 .mainContainer ul {
   width: 70%;
   height: 80%;
+  overflow-y: scroll;
+  padding: 0em 2em;
 }
 .mainContainer ul li {
   list-style: none;
@@ -24,37 +26,33 @@
   background-color: var(--person512);
   box-shadow: var(--shadow-admin);
   height: 20%;
+  margin-bottom: 2em;
   border-radius: 20px;
 }
 
-#addMember {
-  height: auto;
+#headerLi {
   color: var(--white-text);
-  background-color: var(--blue512);
-  justify-content: center;
+  background-color: unset;
+  justify-content: space-around;
   font-size: 1.8em;
-  padding: 10px 0px;
+  /* width: fit-content !important; */
+  box-shadow: unset;
+}
+#headerLi div {
+  background-color: var(--blue512);
   box-shadow: 6px 10px 20px rgba(0, 0, 0, 0.25),
     inset -20px 20px 41px rgba(74, 102, 230, 0.51);
+  padding: 10px 10px;
+  font-size: 1.2em;
   border-radius: 20px;
-  margin-bottom: 2em;
-}
-.name {
-  width: 100%;
-  height: 30%;
-  display: flex;
-  align-items: flex-end;
-  justify-content: flex-start;
-  /* margin-bottom: 1em; */
-  font-size: 1.5em;
-}
-
-.leftPart {
-  width: 50%;
-  height: 100%;
+  width: fit-content;
 }
 .logos {
   width: 25%;
   display: flex;
   justify-content: space-around;
+}
+
+.role {
+  font-size: 1.5em;
 }
