@@ -65,4 +65,9 @@
   gap: 22px;
   margin-top: 10px;
   margin-bottom: 5px;
+
+  border-radius: 15px;
+  background-color: var(--blue512);
+  padding-top: 7px;
+  padding-bottom: 7px;
 }

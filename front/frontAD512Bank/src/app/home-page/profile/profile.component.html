@@ -18,9 +18,9 @@
         </div>
       </div>
 
-      <div id="informations" (click)="this.loginService.updateUser()" routerLink="/infos">Plus d'informations</div>
+      <div id="informations" class="clickable" (click)="this.loginService.updateUser()" routerLink="/infos">Plus d'informations</div>
 
-      <div id="deconnexion" (click)="logout()" class="clickable">
+      <div id="deconnexion" class="clickable" (click)="logout()" class="clickable">
         <span class="material-symbols-outlined"> logout </span>
 
         <span> Déconnexion </span>
