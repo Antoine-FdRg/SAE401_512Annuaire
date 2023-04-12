@@ -21,9 +21,7 @@ export class AppComponent {
     return this.searchService.resultShowing;
   }
 
-  public hideResults(): void {
-    this.searchService.resultShowing = false;
-  }
+
   public isAdmin(): boolean {
     const url = this.router.url;
     if (url === '/controlPanel') {

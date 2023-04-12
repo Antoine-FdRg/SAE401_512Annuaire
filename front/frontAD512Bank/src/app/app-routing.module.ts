@@ -7,6 +7,7 @@ import { RouterModule, Routes } from '@angular/router';
 import { HomePageComponent } from './home-page/home-page.component';
 import { ResultComponent } from './result/result.component';
 import { InfosComponent } from './infos/infos.component';
+import { AuthGuard } from './auth.guard';
 const routes: Routes = [
   {
     path: '',
@@ -20,17 +21,21 @@ const routes: Routes = [
   },
   {
     path: 'controlPanel',
-    component: ControlPanelComponent
+    component: ControlPanelComponent,
+    canActivate: [AuthGuard]
   },
   {
     path: 'controlPanel/members',
     component: MembersGestionComponent,
+    canActivate: [AuthGuard]
   }, {
     path: 'controlPanel/groups',
     component: GroupsGestionComponent,
+    canActivate: [AuthGuard],
   }, {
     path: 'infos',
     component: InfosComponent,
+    canActivate: [AuthGuard],
   }
 ];
 
