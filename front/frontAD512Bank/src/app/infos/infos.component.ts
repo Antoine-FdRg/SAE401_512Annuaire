@@ -24,6 +24,7 @@ export class InfosComponent {
   user : Person | undefined;
 
   constructor(public modifyservice : ModifyService, public loginService : LoginService){
+    loginService.updateUser();
     this.user = loginService.user;
   }
 
