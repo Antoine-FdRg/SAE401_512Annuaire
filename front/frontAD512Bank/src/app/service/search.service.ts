@@ -18,24 +18,36 @@ export class SearchService {
   lastResults: Person[] = [];
   lastQuery: string = "";
 
+  structureResult:string[]=[];
+
   constructor(private http: HttpClient) { }
+  searchHouse(search:string)
+  {
 
-  search(search: string, isAdmin: any, filters:string,value:string) {
+    this.http.get(apiURL + "/public/search/structure", { params: { name: search, page: this.actualPage, perPage: 15 } }).subscribe((data)=>{
+      this.lastQuery = search;
+      this.resultShowing = true;
+      this.structureResult=data as [];
 
-    if(isAdmin && filters!="" && value!="")
+    });
+  }
+  search(search: string, isAdmin: any, filters:string,values:string) {
+
+    if(isAdmin && filters!="" && values!="")
     {
-      console.log(filters + " " + value);
-
-      this.http.get(apiURL + "/admin/search/person", { params: { name: search, value:value, page: this.actualPage, perPage: 15, filter: filters } }).subscribe((data)=>{
-        console.log(data);
-
-      })
+      this.http.get(apiURL + "/admin/search/person", { params: { name: search,filter : filters, value: values,page :this.actualPage,perPage: 15 } }).subscribe((data)=>{
+          this.lastQuery = search;
+          this.resultShowing = true;
+          this.lastResults = data as Person[];
+          this.defaultSorting = this.lastResults.slice();
+          this.sort(this.sortingValue);
+          this.sortingValue = "rang";
+      });
     }else {
 
       this.http.get(apiURL + "/public/search/person", { params: { name: search, page: this.actualPage, perPage: 15 } }).subscribe(
         (response) => {
           this.lastQuery = search;
-
           this.resultShowing = true;
           this.lastResults = response as Person[];
           this.defaultSorting = this.lastResults.slice();

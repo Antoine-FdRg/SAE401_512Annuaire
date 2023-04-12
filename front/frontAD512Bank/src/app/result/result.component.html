@@ -3,6 +3,12 @@
 <link rel="stylesheet"
   href="https://fonts.googleapis.com/css2?family=Material+Symbols+Rounded:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" />
 
+  <div class="person-zone" *ngFor="let struct of this.searchService.structureResult">
+    <div>
+      {{struct}}
+    </div>
+  </div>
+
 <section id="no-results" [style.display]="displayNotFound()">
   Oups, nous n'avons pas trouvé de résultats correspondants à votre recherche
 </section>
@@ -62,6 +68,7 @@
       </div>
 
     </div>
+
     <div class="person" id="loadMoreResults"><button (click)="this.searchService.getMorePage()">Charger Plus de
         résultats</button></div>
 

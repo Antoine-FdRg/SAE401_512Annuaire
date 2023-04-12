@@ -35,6 +35,7 @@ export class ResultComponent {
 
 
   displayNotFound(): string {
+
     if (this.searchService.lastResults.length === 0) {
       return "flex";
     }
