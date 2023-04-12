@@ -15,12 +15,14 @@ export class SearchService {
   sortingValue: string = "rang";
   actualPage: number = 0;
   lastResults: Person[] = [];
+  lastQuery: string = "";
 
   constructor(private http: HttpClient) { }
 
   search(search: string) {
     this.http.get(apiURL + "/public/search/person", { params: { name: search, page: this.actualPage, perPage: 15 } }).subscribe(
       (response) => {
+        this.lastQuery = search;
         this.resultShowing = true;
         this.lastResults = response as Person[];
         this.defaultSorting = this.lastResults.slice();
@@ -32,7 +34,7 @@ export class SearchService {
 
   getMorePage() {
     this.actualPage++;
-    this.http.get(apiURL + "/public/search/person", { params: { name: "", page: this.actualPage, perPage: 15 } }).subscribe(
+    this.http.get(apiURL + "/public/search/person", { params: { name: this.lastQuery, page: this.actualPage, perPage: 15 } }).subscribe(
       (response) => {
         // console.log(response);
         this.resultShowing = true;
