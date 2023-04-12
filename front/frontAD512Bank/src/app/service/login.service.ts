@@ -66,32 +66,19 @@ export class LoginService {
   }
 
   updateUser() {
-    console.log("UPDATING");
-    
     this.http.get(apiURL + "/member/getInfo", {}).subscribe(
       (response : any) => {
-        console.log("UPDATE ANSWER RECIEVED : ");
-        
-        // this.userBase = { 
-        //   firstName: response.firstName, 
-        //   lastName: response.lastName, 
-        //   login: response.login, 
-        //   email: response.email, 
-        //   address : response.address,
-        //   personalPhone : response.personalPhone,
-        //   dn: response.dn, 
-        //   admin: response.admin };
-        
-        // console.log(response);
+        console.log(response);
         this.user.firstName = response.firstName;
         this.user.lastName = response.lastName;
         this.user.login = response.login;
         this.user.email = response.email;
         this.user.address = response.address;
         this.user.personalPhone = response.personalPhone;
+        this.user.professionalPhone = response.professionalPhone;
         this.user.dn = response.dn;
         this.user.admin = response.admin;
-        
+        this.user.birthDate = response.dateOfBirth;
       }
     );
   }

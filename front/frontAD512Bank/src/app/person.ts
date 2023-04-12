@@ -11,5 +11,6 @@ export interface Person {
   personalPhone?: string;
   professionalPhone?: string;
   address?: string;
+  birthDate?: string;
 }
 
