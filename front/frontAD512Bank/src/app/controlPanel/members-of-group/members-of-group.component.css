@@ -27,6 +27,8 @@ li{
   border-radius: 50px;
   font-size: 1.3em;
   justify-content: space-between;
+  box-shadow: var(--shadow-admin);
+
 }
 
 
@@ -45,9 +47,4 @@ li{
 .content{
   font-size: 2.3em;
   text-align: center;
-}
-.back{
-  position:absolute;
-  top: 85vh;
-
 }
