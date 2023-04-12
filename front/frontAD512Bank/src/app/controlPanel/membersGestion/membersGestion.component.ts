@@ -23,7 +23,7 @@ export class MembersGestionComponent implements OnInit {
         "lastName": "Caldwell",
         "email": "test",
         "login": "test",
-        "position": "Directeur Commercial",
+        "title": "Directeur Commercial",
       }
     )
     console.log('====================================');
