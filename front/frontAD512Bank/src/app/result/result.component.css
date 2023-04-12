@@ -178,11 +178,13 @@
   border-radius: 20px;
   padding-top: 100px;
   width: 535px;
-  min-height: 1000px;
+  max-height: 1000px;
   display: flex;
   flex-direction: column;
   justify-content: flex-start;
   gap: 160px;
+  position: sticky;
+  top: 10px;
   align-items: center;
 }
 
@@ -332,10 +334,28 @@ button:active {
   -moz-transition: box-shadow 0.2s ease-in;
   transition: box-shadow 0.2s ease-in;
 }
-.sortButton{
+.sortButton {
   display: flex;
   text-align: center;
   align-self: center;
   justify-content: center;
 }
 
+.italic {
+  font-style: italic;
+}
+h2 {
+  font-size: 30px;
+  font-weight: 500;
+}
+.moreInfos {
+  font-size: 1.2em;
+}
+.moreInfos h3,
+.moreInfos h4 {
+  font-weight: 400;
+}
+
+.moreInfos span {
+  font-weight: 500;
+}
