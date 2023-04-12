@@ -298,6 +298,7 @@ public class AuthentifiedADQuerier extends ADQuerier implements IAuthentifiedADQ
         } catch (NamingException e) {
             throw new SeinkSansDoozeUserNotFound();
         }
+        partialPersons.forEach(System.out::println);
         //get list of full person
         List<FullPerson> fullPersonList = partialPersons.stream().map(partialPerson -> this.getFullPersonInfo(partialPerson.getDn())).toList();
         //filter by filter on full person attribute

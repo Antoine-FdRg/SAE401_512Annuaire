@@ -251,9 +251,11 @@ public class AdminController {
         RateLimiterSingleton.INSTANCE.get().tryConsume(String.valueOf(request.getLocalAddress()));
         try {
             return ADConnectionManagerSingleton.INSTANCE.get().getQuerier(token).searchPerson(name, filter, value, page, perPage);
-        } catch (Exception e) {
-            e.printStackTrace();
-            return null;
+        } catch (NamingException e) {
+            throw new SeinkSansDoozeBackException(
+                    HttpStatus.UNAUTHORIZED,
+                    "Erreur de connexion, la session a peut être expirée, veuillez vous reconnecter."
+            );
         }
     }
 

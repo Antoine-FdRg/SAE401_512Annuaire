@@ -19,11 +19,11 @@ public class TestADQuerier {
         String dn = "CN=Thomas Gorisse,OU=Direction General,OU=512Direction,OU=512Batiment,OU=512BankFR,DC=EQUIPE1B,DC=local";
         String structureDn = "OU=Secteur Comptabilite,OU=Departement Finance,OU=512Batiment,OU=512BankFR,DC=EQUIPE1B,DC=local";
 
-        System.out.println(querier.getFullPersonInfo(dn));
-        NewPersonPayload person = new NewPersonPayload("Donald","Trump",structureDn,"Employé","0611911911","01234567890","19610101","Tour a son nom","CN=Bernard Roger,OU=Secteur Comptabilite,OU=Departement Finance,OU=512Batiment,OU=512BankFR,DC=EQUIPE1B,DC=local");
+//        System.out.println(querier.getFullPersonInfo(dn));
+//        NewPersonPayload person = new NewPersonPayload("Donald","Trump",structureDn,"Employé","0611911911","01234567890","19610101","Tour a son nom","CN=Bernard Roger,OU=Secteur Comptabilite,OU=Departement Finance,OU=512Batiment,OU=512BankFR,DC=EQUIPE1B,DC=local");
 //        querier.createPerson(person);
 //        System.out.println(querier.getFullPersonInfo("CN=Donald Trump,OU=Secteur Comptabilite,OU=Departement Finance,OU=512Batiment,OU=512BankFR,DC=EQUIPE1B,DC=local"));
-        querier.deletePerson("CN=Donald Trump,OU=Secteur Comptabilite,OU=Departement Finance,OU=512Batiment,OU=512BankFR,DC=EQUIPE1B,DC=local");
+//        querier.deletePerson("CN=Donald Trump,OU=Secteur Comptabilite,OU=Departement Finance,OU=512Batiment,OU=512BankFR,DC=EQUIPE1B,DC=local");
 //        System.out.println(querier.getFullPersonInfo("CN=Donald Trump,OU=Secteur Comptabilite,OU=Departement Finance,OU=512Batiment,OU=512BankFR,DC=EQUIPE1B,DC=local"));
 
         //        querier.modifyAttribute("streetAddress","22 rue de la Chapelle");
@@ -31,7 +31,7 @@ public class TestADQuerier {
 //        querier.modifyAttribute("telephoneNumber","01234567890");
 //        System.out.println(querier.getFullPersonInfo("CN=Antoine Fadda Rodriguez,OU=Secretaire general,OU=512Direction,OU=512Batiment,OU=512BankFR,DC=EQUIPE1B,DC=local"));
         //        System.out.println(querier.getStructureInfo(structureDn));
-//        querier.getAllGroups().forEach(System.out::println);
+        querier.getAllGroups().forEach(System.out::println);
 //        System.out.println("Récupération des infos de Thomas");
 //        System.out.println(querier.getFullPersonInfo("CN=Antoine Fadda Rodriguez,OU=Secretaire general,OU=512Direction,OU=512Batiment,OU=512BankFR,DC=EQUIPE1B,DC=local"));
 //        System.out.println("Création du groupe test");
@@ -53,7 +53,7 @@ public class TestADQuerier {
 //        System.out.println("Suppression du groupe test");
 //        System.out.println(querier.deleteGroup("test"));
 
-//        querier.searchPerson("Antoine","dayOfBirth","15",0,15).forEach(System.out::println); //streetAddress, title, manager
+        querier.searchPerson("Antoine","dayOfBirth","15",0,15).forEach(System.out::println); //streetAddress, title, manager
 //        querier.searchPerson("Antoine","monthOfBirth","1",0,15).forEach(System.out::println); //streetAddress, title, manager
 //        querier.searchPerson("Antoine","yearOfBirth","198",0,15).forEach(System.out::println); //streetAddress, title, manager
         querier.logout();
