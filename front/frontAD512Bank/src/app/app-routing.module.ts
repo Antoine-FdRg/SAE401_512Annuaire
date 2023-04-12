@@ -37,14 +37,15 @@ const routes: Routes = [
   }, {
     path: 'infos',
     component: InfosComponent,
-    canActivate: [AuthGuard],
   },
   {
-    path : 'controlPanel/groups/addGroup',
-    component : AddGroupComponent
-  },{
+    path: 'controlPanel/groups/addGroup',
+    component: AddGroupComponent,
+    canActivate: [AuthGuard],
+  }, {
     path: 'controlPanel/groups/members',
     component: MembersOfGroupComponent,
+    canActivate: [AuthGuard],
   }
 ];
 
