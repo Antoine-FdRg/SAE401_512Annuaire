@@ -19,17 +19,11 @@ export class SearchService {
       (response) => {
         this.resultShowing = true;
         this.lastResults = response as Person[];
-        console.log(this.lastResults);
       }
     );
   }
   getMorePage() {
-    console.log(this.actualPage);
-
-
     this.actualPage++;
-    console.log(this.actualPage);
-
     this.http.get(apiURL + "/public/search/person", { params: { name: "", page: this.actualPage, perPage: 15 } }).subscribe(
       (response) => {
         // console.log(response);
@@ -41,8 +35,6 @@ export class SearchService {
   }
 
   getInfos(person: Person) {
-    console.log(person);
-
     this.http.get(apiURL + "/public/info/person/" + person.dn).subscribe(
       (response) => {
         console.log(response);

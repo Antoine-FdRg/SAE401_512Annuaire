@@ -44,7 +44,7 @@ export class LoginService {
         sessionStorage.setItem('token', response.token);
         console.log(response);
 
-        this.router.navigate(['/controlPanel']);
+        this.router.navigate(['/home']);
       },
       (error) => {
         console.log(error);
@@ -55,7 +55,6 @@ export class LoginService {
   logout() {
     this.http.post(apiURL + "/auth/logout", {}).subscribe(
       (response) => {
-        console.log(response);
         sessionStorage.removeItem('user');
         sessionStorage.removeItem('token');
         this.userBase = undefined;

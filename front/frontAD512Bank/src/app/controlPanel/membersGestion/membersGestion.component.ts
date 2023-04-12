@@ -14,7 +14,6 @@ export class MembersGestionComponent implements OnInit {
     this.adminService.getMembers().subscribe(
       (response) => {
         this.listMembers = response as Person[];
-        console.log(this.listMembers);
       }
     );
     this.listMembers.push(
@@ -26,9 +25,6 @@ export class MembersGestionComponent implements OnInit {
         "title": "Directeur Commercial",
       }
     )
-    console.log('====================================');
-    console.log(this.listMembers);
-    console.log('====================================');
   }
 
   ngOnInit() {

@@ -258,6 +258,7 @@
   align-items: center;
   width: 100%;
 }
+
 button {
   position: relative;
   padding: 10px 20px;
@@ -278,7 +279,7 @@ button {
 
 button:hover {
   background: var(--blue512);
-  box-shadow: 0 0 30px 5px rgba(0, 142, 236, 0.815);
+  box-shadow: 0 0 30px 5px #4dabff;
   -webkit-transition: all 0.2s ease-out;
   -moz-transition: all 0.2s ease-out;
   transition: all 0.2s ease-out;

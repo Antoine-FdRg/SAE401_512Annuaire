@@ -11,8 +11,8 @@ import { elementAt } from 'rxjs';
 })
 export class HomePageComponent {
 
-  public branches ?= this.getFilters();
-  constructor(private searchService: SearchService,private adminService: AdminService, public loginService: LoginService) {
+  public branches?= this.getFilters();
+  constructor(private searchService: SearchService, private adminService: AdminService, public loginService: LoginService) {
 
   }
 
@@ -41,11 +41,13 @@ export class HomePageComponent {
   showResults() {
     this.searchService.resultShowing = true;
   }
-  getFilters() : any
-  {
-    this.adminService.getFilters().subscribe((data)=>{
-      this.branches=data;
-      this.branches.splice(0,0,"Filtres");
+  showResult() {
+    return this.searchService.resultShowing;
+  }
+  getFilters(): any {
+    this.adminService.getFilters().subscribe((data) => {
+      this.branches = data;
+      this.branches.splice(0, 0, "Filtres");
     })
   }
 }

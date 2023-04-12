@@ -13,7 +13,6 @@ export class GroupsGestionComponent {
     this.adminService.getGroups().subscribe(
       (response) => {
         this.listGroups = response as [];
-        console.log(this.listGroups);
       }
     );
   }
