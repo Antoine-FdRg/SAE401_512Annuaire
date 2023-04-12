@@ -17,7 +17,6 @@ export class SearchService {
   search(search: string) {
     this.http.get(apiURL + "/public/search/person", { params: { name: search, page: 1, perPage: 15 } }).subscribe(
       (response) => {
-        // console.log(response);
         this.resultShowing = true;
         this.lastResults = response as Person[];
         console.log(this.lastResults);

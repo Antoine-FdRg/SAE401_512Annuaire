@@ -99,7 +99,7 @@
       <input type="text" name="search" id="search" />
       <button class="clickable" (click)="showResults(); ">Rechercher</button>
     </div>
-    <div id="filters">
+    <div *ngIf="this.loginService.getUser()!.admin" id="filters">
       <select #selector name="branch" id="branchSelector">
         <option *ngFor="let branch of branches" value="{{ branch }}">
           {{ branch }}
@@ -108,7 +108,7 @@
     </div>
   </form>
 
-  
+
 
   <div class="absoluteImages">
     <img
