@@ -41,6 +41,8 @@ export class SearchService {
     );
   }
 
+
+
   getInfos(person: Person) {
     console.log(person);
 

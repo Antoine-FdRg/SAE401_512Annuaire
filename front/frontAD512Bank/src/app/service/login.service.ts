@@ -10,9 +10,15 @@ export class LoginService {
 
 
   userBase: Person | undefined;
+  public user : Person = {
+    firstName: '',
+    lastName: '',
+    login: ''
+  };
   constructor(private http: HttpClient, private router: Router) { }
 
-  getUser(): Person | undefined {
+
+  getUserAndCheck(): Person | undefined {
     // if userbase undefined then search in session storage
     if (this.userBase == undefined) {
       var parsed = JSON.parse(sessionStorage.getItem('user') || 'null');
@@ -35,19 +41,57 @@ export class LoginService {
     var headers = new HttpHeaders();
     headers = headers.append('Access-Control-Allow-Headers', '*');
 
-
     this.http.post(apiURL + "/auth/login", { username: login, password: password }).subscribe(
       (response: any) => {
-        this.userBase = { firstName: response.firstName, lastName: response.lastName, login: response.login, email: response.email, dn: response.dn, admin: response.admin };
+        this.userBase = { 
+          firstName: response.firstName, 
+          lastName: response.lastName, 
+          login: response.login, 
+          email: response.email, 
+          dn: response.dn, 
+          admin: response.admin };
+
         sessionStorage.setItem('user', JSON.stringify(this.userBase));
         // store the token Autorisation which is in header in session storage
         sessionStorage.setItem('token', response.token);
         console.log(response);
 
+        this.updateUser();
         this.router.navigate(['/controlPanel']);
       },
       (error) => {
         console.log(error);
+      }
+    );
+  }
+
+  updateUser() {
+    console.log("UPDATING");
+    
+    this.http.get(apiURL + "/member/getInfo", {}).subscribe(
+      (response : any) => {
+        console.log("UPDATE ANSWER RECIEVED : ");
+        
+        // this.userBase = { 
+        //   firstName: response.firstName, 
+        //   lastName: response.lastName, 
+        //   login: response.login, 
+        //   email: response.email, 
+        //   address : response.address,
+        //   personalPhone : response.personalPhone,
+        //   dn: response.dn, 
+        //   admin: response.admin };
+        
+        // console.log(response);
+        this.user.firstName = response.firstName;
+        this.user.lastName = response.lastName;
+        this.user.login = response.login;
+        this.user.email = response.email;
+        this.user.address = response.address;
+        this.user.personalPhone = response.personalPhone;
+        this.user.dn = response.dn;
+        this.user.admin = response.admin;
+        
       }
     );
   }
