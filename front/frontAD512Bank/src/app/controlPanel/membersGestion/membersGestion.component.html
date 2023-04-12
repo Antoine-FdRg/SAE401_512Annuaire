@@ -1,6 +1,8 @@
 <div class="mainContainer">
   <ul>
-    <li id="addMember">Ajouter un membre</li>
+    <li
+      (click)="toggleShowCreatePopup()"
+      id="addMember" >Ajouter un membre</li>
     <li *ngFor="let member of listMembers">
       <div class="leftPart">
         <div class="role">{{ member.position }}</div>
@@ -41,8 +43,8 @@
             fill="#323232"
           />
         </svg>
-
         <svg
+          (click)="toggleShowPopup()"
           width="60"
           height="60"
           viewBox="0 0 60 60"
@@ -57,4 +59,7 @@
       </div>
     </li>
   </ul>
+  <app-create-user-form *ngIf="showCreatePopup"  ></app-create-user-form>
+  <app-sudo-popup *ngIf="showPopup" (showPopup)="toggleShowPopup()"></app-sudo-popup>
+
 </div>

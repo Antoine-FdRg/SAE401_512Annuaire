@@ -15,6 +15,8 @@ import { GroupsGestionComponent } from './controlPanel/groups-gestion/groups-ges
 import { InfosComponent } from './infos/infos.component';
 import { HttpRequestInterceptor } from './http.interceptor';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { SudoPopupComponent } from './controlPanel/sudo-popup/sudo-popup.component';
+import { CreateUserFormComponent } from './controlPanel/groups-gestion/create-user-form/create-user-form.component';
 @NgModule({
   declarations: [
     AppComponent,
@@ -25,7 +27,9 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
     ControlPanelComponent,
     MembersGestionComponent,
     GroupsGestionComponent,
-    InfosComponent
+    InfosComponent,
+    SudoPopupComponent,
+    CreateUserFormComponent
   ],
   imports: [
     BrowserAnimationsModule,
