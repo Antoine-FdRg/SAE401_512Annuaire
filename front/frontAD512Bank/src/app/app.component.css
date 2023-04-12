@@ -47,6 +47,7 @@ main > div {
   padding: 0px 37px;
   gap: 10px;
   font-size: 1.4em;
+  height: 64px;
 }
 
 main {
@@ -60,6 +61,7 @@ main {
 
 #right-part-header {
   display: flex;
+  flex-wrap: wrap;
   gap: 15px;
 }
 

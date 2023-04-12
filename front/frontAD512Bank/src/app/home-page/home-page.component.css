@@ -38,9 +38,9 @@
 
 .dropdownChoice {
   position: absolute;
-  left: 2%;
+  left: 10px;
+  top: 12px;
   display: flex;
-  top: 17%;
 }
 
 #arrow {
@@ -99,7 +99,7 @@ input:focus {
 }
 
 #search {
-  width: 71%;
+  width: 100%;
   padding-left: 120px;
   height: 70px;
 }
@@ -109,6 +109,7 @@ input:focus {
   flex-direction: row;
   justify-content: center;
   align-items: center;
+  height: 70px;
   padding: 0 31px;
   gap: 10px;
   background: #ffa21b;
@@ -259,5 +260,11 @@ input:focus {
   .titles, #searchSection {
     margin-left: auto;
     margin-right: auto;
+  }
+}
+
+@media (max-width: 680px) {
+  .inputs {
+    flex-direction: column;
   }
 }
