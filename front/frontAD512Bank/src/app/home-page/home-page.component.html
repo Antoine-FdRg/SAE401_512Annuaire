@@ -50,7 +50,7 @@
       <input type="text" name="search" id="search" />
       <button class="clickable" (click)="showResults(); ">Rechercher</button>
     </div>
-    <div *ngIf="this.loginService.getUser()!.admin" id="filters">
+    <div *ngIf="this.loginService.getUser()?.admin" id="filters">
       <select #selector name="branch" id="branchSelector">
         <option value="" selected disabled hidden>Filtrer</option>
         <option *ngFor="let branch of branches" value="{{ branch }}">

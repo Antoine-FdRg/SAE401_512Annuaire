@@ -4,6 +4,7 @@ import { Injectable } from '@angular/core';
 import { apiURL } from './apiURL';
 import { Person } from '../person';
 import { ResultComponent } from '../result/result.component';
+import { PersonAdmin } from '../person-admin';
 
 @Injectable({
   providedIn: 'root'
@@ -22,7 +23,7 @@ export class SearchService {
       (response) => {
         this.resultShowing = true;
         this.lastResults = response as Person[];
-        this.defaultSorting=this.lastResults.slice();
+        this.defaultSorting = this.lastResults.slice();
         this.sort(this.sortingValue);
       }
     );
@@ -40,32 +41,29 @@ export class SearchService {
   }
 
   getInfos(person: Person) {
-    this.http.get(apiURL + "/public/info/person/" + person.dn).subscribe(
-      (response) => {
-        console.log(response);
-      }
-    );
+    if (!person) return;
+    if (!person.dn) return;
+    let dn: string = person.dn;
+
+    return this.http.get<PersonAdmin>(apiURL + "/admin/info/person", { params: { dn: dn } });
   }
 
-  sort(e:string)
-  {
-    this.sortingValue=e;
-    if(e=="nom")
-      {
-        this.lastResults.sort((a:Person,b:Person)=>{
-          if (a.lastName < b.lastName) {
-            return -1;
-          }
-          if (a.lastName > b.lastName) {
-            return 1;
-          }
-          return 0;
-        });
-      }
-    else if(e=="prenom")
-    {
+  sort(e: string) {
+    this.sortingValue = e;
+    if (e == "nom") {
+      this.lastResults.sort((a: Person, b: Person) => {
+        if (a.lastName < b.lastName) {
+          return -1;
+        }
+        if (a.lastName > b.lastName) {
+          return 1;
+        }
+        return 0;
+      });
+    }
+    else if (e == "prenom") {
 
-      this.lastResults.sort((a:Person,b:Person)=>{
+      this.lastResults.sort((a: Person, b: Person) => {
         if (a.firstName < b.firstName) {
           return -1;
         }
@@ -75,9 +73,8 @@ export class SearchService {
         return 0;
       });
     }
-    else if(e=="rang")
-    {
-      this.lastResults=this.defaultSorting.slice();
+    else if (e == "rang") {
+      this.lastResults = this.defaultSorting.slice();
       console.log(this.defaultSorting);
 
     }

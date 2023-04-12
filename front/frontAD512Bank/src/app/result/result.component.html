@@ -11,7 +11,7 @@
   <strong>{{ searchService.lastResults.length }}</strong>
   résultat(s) trouvé(s)
 </div>
-<div class="sortButton" [style.display]="displayNotFound() == 'none' ? 'flex' : 'none'" >
+<div class="sortButton" [style.display]="displayNotFound() == 'none' ? 'flex' : 'none'">
   <select class="selector" [formControl]="this.form">
     <option value="" selected disabled hidden>Trier par</option>
     <option value="rang">Trier par rang</option>
@@ -75,12 +75,22 @@
   </section>
 
   <div id="person-details">
-    <div id="start-text" *ngIf="this.clickedPosition==-1">Cliquez sur un élément pour voir plus de détails</div>
-    <div>
-      <h2>Gwendoline</h2>
-      <h2>Moron</h2>
-      <h3>Présidence</h3>
-      <h3>Mail : <span class="mail">gwendoMoron@mail.com</span></h3>
+    <div id="start-text"><span *ngIf="this.loginService.getUser()?.admin&&this.clickedPosition==-1">Cliquez sur
+        un élément</span> <span *ngIf="!this.loginService.getUser()?.admin">Connectez vous avec un compte
+        administrateur</span>
+      <span *ngIf="this.clickedPosition==-1"> pour voir plus de détails</span>
+    </div>
+    <div class="moreInfos" *ngIf="this.loginService.getUser()?.admin&&this.personInfoClicked.dn!=''">
+
+      <h2>{{this.personInfoClicked.firstName}}</h2>
+      <h2>{{this.personInfoClicked.lastName}}</h2>
+      <h4 class="italic">{{this.personInfoClicked.login}}</h4>
+      <h3>{{this.personInfoClicked.title}}</h3>
+      <h3>Mail : <span class="mail">{{this.personInfoClicked.email}}</span></h3>
+      <h3>Téléphone (perso) : <span class="phone">{{this.personInfoClicked.personalPhone}}</span></h3>
+      <h3>Téléphone (pro) : <span class="phone">{{this.personInfoClicked.professionalPhone}}</span></h3>
+      <h3>Habite au <span>{{this.personInfoClicked.address}}</span></h3>
+      <h3>Né(e) le <span>{{this.personInfoClicked.dateOfBirth.split("-").reverse().join("-")}}</span></h3>
     </div>
     <div id="text512">
       <div id="seink">5</div>
@@ -91,107 +101,3 @@
     </div>
   </div>
 </section>
-
-<!-- <section id="sheetsContainer">
-    <section class="sheet" *ngFor="let person of listPerson">
-        <div class="topInfos">
-            <div class="names">
-                <div class="name">
-                    {{person.name}}
-                </div>
-                <div class="surname">
-                    {{person.surname}}
-                </div>
-            </div>
-<section id="sheetsContainer">
-  <section class="sheet" *ngFor="let person of listPerson">
-    <div class="topInfos">
-      <div class="names">
-        <div class="name">
-          {{ person.firstName }}
-        </div>
-        <div class="surname">
-          {{ person.lastName }}
-        </div>
-      </div>
-
-      <div
-        class="position"
-        [class.blue]="
-          person.title == 'Directeur financier' ||
-          person.title == 'Responsable de paie' ||
-          person.title == 'Responsable comptabilité'
-        "
-        [class.orange]="
-          person.title == 'Directeur administratif et juridique' ||
-          person.title == 'Responsable juridique' ||
-          person.title == 'Responsable administration' ||
-          person.title == 'Responsable adjoint administratif' ||
-          person.title == 'Responsable adjoint juridique'
-        "
-        [class.green]="
-          person.title == 'Directeur ressources humaines' ||
-          person.title == 'Responsable gestion du personnel' ||
-          person.title == 'Responsable recrutement'
-        "
-        [class.lightBlue]="
-          person.title == 'Directrice technique' ||
-          person.title == 'Responsable recherche et développement' ||
-          person.title == 'Responsable logistique'
-        "
-        [class.purple]="
-          person.title == 'Directeur commercial' ||
-          person.title == 'Responsable produit' ||
-          person.title == 'Responsable marketing'
-        "
-        [class.red1]="person.title == 'Présidente'"
-        [class.red2]="person.title == 'Directeur général'"
-        [class.red3]="
-          person.title == 'Directeur général adjoint' ||
-          person.title == 'Secrétaire général' ||
-          person.title == 'Responsable marketing' ||
-          person.title == 'Responsable produit'
-        "
-      >
-        {{ person.title }}
-      </div>
-
-      <div class="contacts">
-        <div class="phone">
-          <span class="material-symbols-rounded infoIcon"> call </span>
-          <span>
-            {{ person.phone }}
-          </span>
-        </div>
-
-        <div class="email">
-          <span class="material-symbols-rounded infoIcon"> mail </span>
-
-          <span>
-            {{ person.email }}
-          </span>
-        </div>
-      </div>
-    </div>
-
-    <div class="separator"></div>
-
-    <div class="bottomInfos">
-      <div class="login">
-        <div class="entete">login</div>
-        <div class="infoContent">
-          {{ person.login }}
-        </div>
-      </div>
-
-            <div class="tutor">
-                <div class="entete">
-                    responsable
-                </div>
-                <div class="infoContent">
-                    {{person.tutor}}
-                </div>
-            </div>
-        </div>
-    </section>
-</section> -->
