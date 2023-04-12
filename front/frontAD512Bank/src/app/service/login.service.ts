@@ -12,6 +12,8 @@ export class LoginService {
   userBase: Person | undefined;
   constructor(private http: HttpClient, private router: Router) { }
 
+
+
   getUser(): Person | undefined {
     // if userbase undefined then search in session storage
     if (this.userBase == undefined) {
@@ -42,8 +44,6 @@ export class LoginService {
         sessionStorage.setItem('user', JSON.stringify(this.userBase));
         // store the token Autorisation which is in header in session storage
         sessionStorage.setItem('token', response.token);
-        console.log(response);
-
         this.router.navigate(['/home']);
       },
       (error) => {
