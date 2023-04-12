@@ -40,13 +40,13 @@ export class HomePageComponent {
   showResults() {
     this.searchService.resultShowing = true;
   }
-  getFilters() : any
-  {
-    this.adminService.getFilters().subscribe((data)=>{
-      console.log(data);
-
-      this.branches=data;
-
+  showResult() {
+    return this.searchService.resultShowing;
+  }
+  getFilters(): any {
+    this.adminService.getFilters().subscribe((data) => {
+      this.branches = data;
+      this.branches.splice(0, 0, "Filtres");
     })
   }
 }
