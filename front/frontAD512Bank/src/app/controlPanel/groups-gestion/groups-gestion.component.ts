@@ -13,11 +13,25 @@ export class GroupsGestionComponent {
     this.adminService.getGroups().subscribe(
       (response) => {
         this.listGroups = response as [];
+
+
       }
     );
   }
 
   deleteGroup(groupCN: string) {
 
+  }
+  getGroupMembers(groupCN: string)
+  {
+    this.adminService.getMembersOfGroup(groupCN).subscribe((data)=>{
+      console.log(data);
+    });
+  }
+  sort()
+  {
+    this.listGroups.sort((a,b)=>{
+      return 1;
+  });
   }
 }

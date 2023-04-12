@@ -27,6 +27,7 @@ export class SearchService {
       }
     );
   }
+
   getMorePage() {
     this.actualPage++;
     this.http.get(apiURL + "/public/search/person", { params: { name: "", page: this.actualPage, perPage: 15 } }).subscribe(
