@@ -10,8 +10,11 @@ import { ResultComponent } from '../result/result.component';
 })
 export class SearchService {
   resultShowing: boolean = false;
+  defaultSorting: Person[] = [];
+  sortingValue: string = "rang";
   actualPage: number = 0;
   lastResults: Person[] = [];
+
   constructor(private http: HttpClient) { }
 
   search(search: string) {
@@ -19,6 +22,8 @@ export class SearchService {
       (response) => {
         this.resultShowing = true;
         this.lastResults = response as Person[];
+        this.defaultSorting=this.lastResults.slice();
+        this.sort(this.sortingValue);
       }
     );
   }
@@ -44,6 +49,7 @@ export class SearchService {
 
   sort(e:string)
   {
+    this.sortingValue=e;
     if(e=="nom")
       {
         this.lastResults.sort((a:Person,b:Person)=>{
@@ -56,25 +62,24 @@ export class SearchService {
           return 0;
         });
       }
-      if(e=="prenom")
-      {
+    else if(e=="prenom")
+    {
 
-        this.lastResults.sort((a:Person,b:Person)=>{
-          if (a.firstName < b.firstName) {
-            return -1;
-          }
-          if (a.firstName > b.firstName) {
-            return 1;
-          }
-          return 0;
-        });
-      }
-      if(e=="rang")
-      {
+      this.lastResults.sort((a:Person,b:Person)=>{
+        if (a.firstName < b.firstName) {
+          return -1;
+        }
+        if (a.firstName > b.firstName) {
+          return 1;
+        }
+        return 0;
+      });
+    }
+    else if(e=="rang")
+    {
+      this.lastResults=this.defaultSorting.slice();
+      console.log(this.defaultSorting);
 
-
-
-
-      }
+    }
   }
 }

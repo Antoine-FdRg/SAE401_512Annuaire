@@ -11,11 +11,12 @@
   <strong>{{ searchService.lastResults.length }}</strong>
   résultat(s) trouvé(s)
 </div>
-<div [style.display]="displayNotFound() == 'none' ? 'flex' : 'none'" >
-  <select [formControl]="this.form">
+<div class="sortButton" [style.display]="displayNotFound() == 'none' ? 'flex' : 'none'" >
+  <select class="selector" [formControl]="this.form">
+    <option value="" selected disabled hidden>Trier par</option>
+    <option value="rang">Trier par rang</option>
     <option value="nom">Trier par nom</option>
     <option value="prenom">Trier par prenom</option>
-    <option value="rang">Trier par rang</option>
   </select>
 </div>
 <section id="results-container" [style.display]="displayNotFound() == 'none' ? 'flex' : 'none'">

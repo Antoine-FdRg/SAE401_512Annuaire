@@ -46,7 +46,6 @@ export class HomePageComponent {
   getFilters(): any {
     this.adminService.getFilters().subscribe((data) => {
       this.branches = data;
-      this.branches.splice(0, 0, "Filtres");
     })
   }
 }
