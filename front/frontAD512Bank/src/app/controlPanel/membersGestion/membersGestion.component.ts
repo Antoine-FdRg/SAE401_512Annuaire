@@ -1,5 +1,5 @@
-import { Person } from './../../person';
-import { AdminService } from './../../service/admin.service';
+import {Person} from './../../person';
+import {AdminService} from './../../service/admin.service';
 import {Component, OnInit, ViewChild} from '@angular/core';
 import {SudoPopupComponent} from "../sudo-popup/sudo-popup.component";
 
@@ -12,9 +12,12 @@ export class MembersGestionComponent implements OnInit {
   @ViewChild(SudoPopupComponent) child: any;
 
   listMembers: Person[] = [];
-  showPopup: boolean = false;
+  showSudoPopup: boolean = false;
   showCreatePopup: boolean = false;
-  showAlert: boolean = false;
+  showAlertPopup: boolean = false;
+
+  dnOfCurrentSelectedItem: string = "";
+
   constructor(private adminService: AdminService) {
     this.adminService.getMembers().subscribe(
       (response) => {
@@ -39,14 +42,32 @@ export class MembersGestionComponent implements OnInit {
 
   }
 
-  toggleShowPopup() {
-    this.showPopup = !this.showPopup;
+  toggleShowSudoPopup() {
+    this.showSudoPopup = !this.showSudoPopup;
   }
-  toogleShowAlert() {
-    this.showAlert = !this.showAlert;
+
+  toggleShowAlert() {
+    this.showAlertPopup = !this.showAlertPopup;
   }
 
   toggleShowCreatePopup() {
     this.showCreatePopup = !this.showCreatePopup;
+  }
+
+  openPopUp(option: string, itemDN: string) {
+    this.dnOfCurrentSelectedItem = itemDN;
+    if (option === "create") {
+      this.toggleShowCreatePopup();
+    } else if (option === "delete") {
+      this.toggleShowSudoPopup();
+    }
+  }
+
+  afterValidateOperation() {
+    this.adminService.deleteUser(this.dnOfCurrentSelectedItem).subscribe(
+      (response) => {
+        console.log(response);
+        this.toggleShowSudoPopup()
+      });
   }
 }

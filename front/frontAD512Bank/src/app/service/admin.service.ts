@@ -43,4 +43,14 @@ export class AdminService {
     };
     return this.http.delete(apiURL + "/admin/group/delete", options);
   }
+
+  deleteUser(dn:string){
+    console.log("delete user : " + dn);
+    const options = {
+      headers: new HttpHeaders({
+        'Content-Type': 'application/json',
+      })
+    };
+    return this.http.delete(apiURL + "/admin/member/delete?dn="+dn, options);
+  }
 }

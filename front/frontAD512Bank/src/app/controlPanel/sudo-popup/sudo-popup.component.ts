@@ -13,6 +13,8 @@ export class SudoPopupComponent {
   @Output() showPopup: EventEmitter<boolean> = new EventEmitter<boolean>();
   @Output() alertPopup: EventEmitter<boolean> = new EventEmitter<boolean>();
 
+  @Output() validateOperation: EventEmitter<boolean> = new EventEmitter<boolean>();
+
   toggleShowPopup() {
     this.showPopup.emit(false);
   }
@@ -30,7 +32,7 @@ export class SudoPopupComponent {
       let password = this.passwordInput.nativeElement.value;
       this.loginService.loginConfirmationAndAdmin(email, password).then((value) => {
         if (value) {
-          this.validateOperation();
+          this.validateOperation.emit(true);
         } else {
           this.showAlert();
         }
@@ -38,8 +40,5 @@ export class SudoPopupComponent {
     }
   }
 
-  validateOperation() {
-
-  }
 }
 

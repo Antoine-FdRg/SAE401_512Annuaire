@@ -44,7 +44,7 @@
           />
         </svg>
         <svg
-          (click)="toggleShowPopup()"
+          (click)="openPopUp('delete', member.dn)"
           width="60"
           height="60"
           viewBox="0 0 60 60"
@@ -60,7 +60,7 @@
     </li>
   </ul>
   <app-create-user-form *ngIf="showCreatePopup"  ></app-create-user-form>
-  <app-sudo-popup *ngIf="showPopup" (showPopup)="toggleShowPopup()" (alertPopup)="toogleShowAlert()"></app-sudo-popup>
-  <app-alert-component *ngIf="showAlert"></app-alert-component>
+  <app-sudo-popup *ngIf="showSudoPopup" (showPopup)="toggleShowSudoPopup()" (alertPopup)="toggleShowAlert()" (validateOperation)="afterValidateOperation()"></app-sudo-popup>
+  <app-alert-component *ngIf="showAlertPopup"></app-alert-component>
 
 </div>
