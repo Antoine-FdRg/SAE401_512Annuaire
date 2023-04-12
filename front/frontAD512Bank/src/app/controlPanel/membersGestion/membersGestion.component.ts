@@ -54,7 +54,10 @@ export class MembersGestionComponent implements OnInit {
     this.showCreatePopup = !this.showCreatePopup;
   }
 
-  openPopUp(option: string, itemDN: string) {
+  openPopUp(option: string, itemDN: any) {
+    if (typeof itemDN !== "string") {
+      return;
+    }
     this.dnOfCurrentSelectedItem = itemDN;
     if (option === "create") {
       this.toggleShowCreatePopup();
