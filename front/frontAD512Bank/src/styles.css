@@ -52,6 +52,21 @@ body {
   justify-content: center !important;
   align-items: center !important;
 }
+
+.cdk-global-overlay-wrapper button{
+  margin: 0 1em;
+}
+
+.cdk-global-overlay-wrapper #danger{
+  color: crimson;
+}
+.cdk-global-overlay-wrapper #danger:hover{
+  background: crimson;
+  color: white;
+  filter: grayscale(40%);
+  transition: 0.1s;
+}
+
 .blue-style {
   background: var(--blue512);
   box-shadow: 6px 10px 20px rgba(0, 0, 0, 0.25);
