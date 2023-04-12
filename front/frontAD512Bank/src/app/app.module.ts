@@ -19,6 +19,7 @@ import { SudoPopupComponent } from './controlPanel/sudo-popup/sudo-popup.compone
 import { CreateUserFormComponent } from './controlPanel/groups-gestion/create-user-form/create-user-form.component';
 import { ReactiveFormsModule } from '@angular/forms';
 import { AddGroupComponent } from './controlPanel/add-group/add-group.component';
+import { MatDialogModule } from '@angular/material/dialog';
 @NgModule({
   declarations: [
     AppComponent,
@@ -40,7 +41,8 @@ import { AddGroupComponent } from './controlPanel/add-group/add-group.component'
     CommonModule,
     AppRoutingModule,
     HttpClientModule,
-    ReactiveFormsModule
+    ReactiveFormsModule,
+    MatDialogModule
   ],
   providers: [HttpClient,
     {
