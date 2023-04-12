@@ -9,6 +9,7 @@ import { ResultComponent } from './result/result.component';
 import { InfosComponent } from './infos/infos.component';
 import { AuthGuard } from './auth.guard';
 import { AddGroupComponent } from './controlPanel/add-group/add-group.component';
+import { MembersOfGroupComponent } from './controlPanel/members-of-group/members-of-group.component';
 const routes: Routes = [
   {
     path: '',
@@ -41,6 +42,9 @@ const routes: Routes = [
   {
     path : 'controlPanel/groups/addGroup',
     component : AddGroupComponent
+  },{
+    path: 'controlPanel/groups/members',
+    component: MembersOfGroupComponent,
   }
 ];
 

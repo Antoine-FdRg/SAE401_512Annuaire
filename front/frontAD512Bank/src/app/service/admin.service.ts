@@ -27,7 +27,11 @@ export class AdminService {
   createGroup(name:String){
     return this.http.post(apiURL + "/admin/group/create",{cn:name});
   }
+  getMembersOfGroup(name:string)
+  {
+    return this.http.get(apiURL + "/admin/group/members/"+name);
 
+  }
   deleteGroup(cn:String){
     const options = {
       headers: new HttpHeaders({

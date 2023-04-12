@@ -14,6 +14,8 @@ export class GroupsGestionComponent {
     this.adminService.getGroups().subscribe(
       (response) => {
         this.listGroups = response as [];
+
+        this.sort();
       }
     );
   }
@@ -58,5 +60,11 @@ export class GroupsGestionComponent {
     window.open(url);
 
 
+  }
+
+  sort()
+  {
+
+    this.listGroups.reverse();
   }
 }
