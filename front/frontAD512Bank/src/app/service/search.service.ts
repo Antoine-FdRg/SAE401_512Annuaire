@@ -11,8 +11,11 @@ import { PersonAdmin } from '../person-admin';
 })
 export class SearchService {
   resultShowing: boolean = false;
+  defaultSorting: Person[] = [];
+  sortingValue: string = "rang";
   actualPage: number = 0;
   lastResults: Person[] = [];
+
   constructor(private http: HttpClient) { }
 
   search(search: string) {
@@ -20,6 +23,8 @@ export class SearchService {
       (response) => {
         this.resultShowing = true;
         this.lastResults = response as Person[];
+        this.defaultSorting = this.lastResults.slice();
+        this.sort(this.sortingValue);
       }
     );
   }
@@ -44,6 +49,7 @@ export class SearchService {
   }
 
   sort(e: string) {
+    this.sortingValue = e;
     if (e == "nom") {
       this.lastResults.sort((a: Person, b: Person) => {
         if (a.lastName < b.lastName) {
@@ -55,7 +61,7 @@ export class SearchService {
         return 0;
       });
     }
-    if (e == "prenom") {
+    else if (e == "prenom") {
 
       this.lastResults.sort((a: Person, b: Person) => {
         if (a.firstName < b.firstName) {
@@ -67,10 +73,9 @@ export class SearchService {
         return 0;
       });
     }
-    if (e == "rang") {
-
-
-
+    else if (e == "rang") {
+      this.lastResults = this.defaultSorting.slice();
+      console.log(this.defaultSorting);
 
     }
   }

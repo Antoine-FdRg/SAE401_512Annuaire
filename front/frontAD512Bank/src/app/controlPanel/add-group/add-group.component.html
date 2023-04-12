@@ -1,9 +1,9 @@
 <div  class="mainContainer">
   <div class="form">
     <h1>Ajout d'un groupe</h1>
-    <input [formControl]="form" class="input" type="text" placeholder="Nom du groupe" >
+    <input [formControl]="form" class="input" type="text" placeholder="Nom du groupe" (keyup.enter)="createGroup()" >
     <div id="bottoms_buttons">
-      <button (click)="cancel();" class="clickable">Annuler</button>
+      <button routerLink="/controlPanel/groups" class="clickable">Annuler</button>
       <button (click)="createGroup();" class="clickable">Créer</button>
     </div>
   </div>
