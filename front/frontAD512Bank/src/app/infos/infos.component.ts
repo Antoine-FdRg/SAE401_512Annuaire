@@ -21,9 +21,8 @@ export class InfosComponent {
   user : Person | undefined;
 
   constructor(public loginService : LoginService){
-    this.user = loginService.getUser();
+    this.user = loginService.user;
   }
-
 
   newField(field : ChangingField){
     switch (field){

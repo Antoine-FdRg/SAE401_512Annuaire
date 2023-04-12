@@ -20,13 +20,13 @@ export class ProfileComponent {
   surname = "Paul";
   initials: string = "";
 
-  constructor(private loginService: LoginService, private router: Router) {
+  constructor(protected loginService: LoginService, private router: Router) {
     this.status = Status.disconnected;
-    if (this.loginService.getUser() == undefined) {
+    if (this.loginService.getUserAndCheck() == undefined) {
       return
     }
-    this.name = this.loginService.getUser()!.firstName;
-    this.surname = this.loginService.getUser()!.lastName;
+    this.name = this.loginService.getUserAndCheck()!.firstName;
+    this.surname = this.loginService.getUserAndCheck()!.lastName;
     if (this.name != undefined && this.surname != undefined)
 
       this.initials = this.name.charAt(0) + this.surname.charAt(0);
@@ -51,7 +51,7 @@ export class ProfileComponent {
   }
 
   ngAfterViewChecked(): void {
-    if (this.loginService.getUser() == undefined || this.loginService.getUser() == null) {
+    if (this.loginService.getUserAndCheck() == undefined || this.loginService.getUserAndCheck() == null) {
       this.status = Status.disconnected;
 
 
@@ -62,8 +62,8 @@ export class ProfileComponent {
       this.visibility["profilePicture"] = true;
       this.visibility["connexion"] = false;
       // this.visibility["infoMenu"] = true;
-      this.name = this.loginService.getUser()!.firstName;
-      this.surname = this.loginService.getUser()!.lastName;
+      this.name = this.loginService.getUserAndCheck()!.firstName;
+      this.surname = this.loginService.getUserAndCheck()!.lastName;
       if (this.name != undefined && this.surname != undefined)
 
         this.initials = this.name.charAt(0) + this.surname.charAt(0);
