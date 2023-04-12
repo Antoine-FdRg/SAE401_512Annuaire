@@ -14,6 +14,7 @@ export class MembersGestionComponent implements OnInit {
   listMembers: Person[] = [];
   showPopup: boolean = false;
   showCreatePopup: boolean = false;
+  showAlert: boolean = false;
   constructor(private adminService: AdminService) {
     this.adminService.getMembers().subscribe(
       (response) => {
@@ -40,6 +41,9 @@ export class MembersGestionComponent implements OnInit {
 
   toggleShowPopup() {
     this.showPopup = !this.showPopup;
+  }
+  toogleShowAlert() {
+    this.showAlert = !this.showAlert;
   }
 
   toggleShowCreatePopup() {
