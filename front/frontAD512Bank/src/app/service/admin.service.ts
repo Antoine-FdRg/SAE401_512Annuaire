@@ -19,20 +19,20 @@ export class AdminService {
     return this.http.get(apiURL + "/admin/group/all");
   }
 
-  getFilters()
-  {
+  getFilters(){
     return this.http.get(apiURL+"/admin/allFilters");
   }
 
   createGroup(name:String){
     return this.http.post(apiURL + "/admin/group/create",{cn:name});
   }
-  getMembersOfGroup(name:string)
-  {
-    return this.http.get(apiURL + "/admin/group/members/"+name);
 
+  getMembersOfGroup(name:string){
+    return this.http.get(apiURL + "/admin/group/members/"+name);
   }
+
   deleteGroup(cn:String){
+    console.log("delete group : " + cn);
     const options = {
       headers: new HttpHeaders({
         'Content-Type': 'application/json',
