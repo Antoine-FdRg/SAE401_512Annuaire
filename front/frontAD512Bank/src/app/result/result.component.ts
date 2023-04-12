@@ -12,22 +12,14 @@ export class ResultComponent {
   clickedPosition: number = -1;
   opacity: number = 0;
   i: number = 0;
-  selectionState: string = "block"
+  selectionState: string = "block";
+  hideResponsiveDetails = false;
 
   constructor(public searchService: SearchService) {
-
     //time out 1s to wait for the search service to be updated
     setTimeout(() => {
       window.scrollTo(0, 800);
-    }
-      , 300);
-  }
-
-
-  ngAfterContentChecked(): void {
-    //Called after every check of the component's or directive's content.
-    //Add 'implements AfterContentChecked' to the class.
-    //
+    }, 300);
   }
 
   displayNotFound(): string {
@@ -38,6 +30,13 @@ export class ResultComponent {
   }
 
   personClicked(person: Person, position: number) {
+    if (this.clickedPosition === position && !this.hideResponsiveDetails) {
+      this.hideResponsiveDetails = true;
+    }
+    else {
+      this.hideResponsiveDetails = false;
+    }
+
     this.clickedPosition = position;
     this.opacity = 1;
     this.searchService.getInfos(person);
@@ -49,8 +48,6 @@ export class ResultComponent {
     }
     return 0;
   }
-
-
 }
 
 

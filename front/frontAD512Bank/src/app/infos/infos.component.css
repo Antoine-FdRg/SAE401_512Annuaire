@@ -1,0 +1,282 @@
+#sheet {
+    margin-top: 50px !important;
+    width: 80%;
+    margin: 0 auto;
+    display: flex;
+    flex-direction: column;
+    min-height: fit-content;
+
+
+    /* justify-content: center; */
+    align-items: center;
+}
+
+#header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    width: 100%;
+}
+
+#header *{
+    min-width: 38px;
+}
+
+#close-infos:hover {
+    background-color: var(--orange512);
+}
+
+#title {
+    /* align-self: start; */
+}
+
+#infos {
+    width: 100%;
+    height: fit-content;
+    margin-top: 60px;
+
+    display: grid;
+    grid-template-rows: auto;
+    grid-template-columns: 1fr 1fr;
+    gap: 25px;
+}
+
+#infos>div {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: start;
+    /* box-shadow: 12px 13px 2px 2px #3D83FF; */
+    box-shadow: rgba(0, 0, 0, 0.02) 0px 1px 3px 0px, rgba(27, 31, 35, 0.15) 0px 0px 0px 1px;
+    border-radius: 20px;
+    padding: 25px;
+    padding-bottom: 45px;
+    /* border-style: solid; */
+    border-width: 1px;
+}
+
+#login {
+    align-items: center !important;
+}
+
+.material-symbols-outlined {
+    cursor: pointer;
+    padding: 7px;
+    border-radius: 10px;
+    transition: 0.3s;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.material-symbols-outlined:hover {
+    background-color: var(--background512);
+    transition: 0.3s;
+}
+
+
+.info-header {
+    width: 100%;
+    height: 100%;
+
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+}
+
+.indicator {
+    /* align-self: flex-start; */
+}
+
+.info-group {
+    align-self: center;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 50%;
+    height: 80px;
+    position: relative;
+    bottom: 11px;
+}
+
+.information,
+.group {
+    font-size: 1.5rem;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+/* MODIFICATION */
+.modification {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    gap: 25px;
+    position: relative;
+    top: 15px;
+}
+
+.buttons {
+    display: flex;
+    justify-content: space-between;
+    width: 100%;
+}
+
+.commit,
+.rollback {
+    padding: 10px;
+    border-radius: 10px;
+    border-width: 0px;
+    color: var(--white-text);
+    width: 85px;
+    cursor: pointer;
+}
+
+.commit {
+    background-color: var(--blue512);
+}
+
+.rollback {
+    background-color: var(--orange512);
+}
+
+
+
+
+
+.group {
+    position: relative;
+    display: inline-block;
+}
+
+
+
+group * {
+    width: 100%;
+}
+
+.input {
+    font-size: 16px;
+    padding: 10px 10px 10px 5px;
+    display: block;
+    width: 200px;
+    border: none;
+    border-bottom: 1px solid #515151;
+    background: transparent;
+}
+
+.input:focus {
+    outline: none;
+}
+
+label {
+    color: #999;
+    font-size: 18px;
+    font-weight: normal;
+    position: absolute;
+    pointer-events: none;
+    left: 5px;
+    top: 10px;
+    transition: 0.2s ease all;
+    -moz-transition: 0.2s ease all;
+    -webkit-transition: 0.2s ease all;
+}
+
+.input:focus~label,
+.input:valid~label {
+    top: -20px;
+    font-size: 14px;
+    color: var(--very-dark-blue-512);
+}
+
+.bar {
+    position: relative;
+    display: block;
+    width: 200px;
+}
+
+.bar:before,
+.bar:after {
+    content: '';
+    height: 2px;
+    width: 0;
+    bottom: 1px;
+    position: absolute;
+    background: var(--very-dark-blue-512);
+    transition: 0.2s ease all;
+    -moz-transition: 0.2s ease all;
+    -webkit-transition: 0.2s ease all;
+}
+
+.bar:before {
+    left: 50%;
+}
+
+.bar:after {
+    right: 50%;
+}
+
+.input:focus~.bar:before,
+.input:focus~.bar:after {
+    width: 50%;
+}
+
+.highlight {
+    position: absolute;
+    height: 60%;
+    width: 100px;
+    top: 25%;
+    left: 0;
+    pointer-events: none;
+    opacity: 0.5;
+}
+
+.input:focus~.highlight {
+    animation: inputHighlighter 0.3s ease;
+}
+
+@keyframes inputHighlighter {
+    from {
+        background: #5264AE;
+    }
+
+    to {
+        width: 0;
+        background: transparent;
+    }
+}
