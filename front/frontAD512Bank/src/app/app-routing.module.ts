@@ -8,6 +8,7 @@ import { HomePageComponent } from './home-page/home-page.component';
 import { ResultComponent } from './result/result.component';
 import { InfosComponent } from './infos/infos.component';
 import { AuthGuard } from './auth.guard';
+import { AddGroupComponent } from './controlPanel/add-group/add-group.component';
 const routes: Routes = [
   {
     path: '',
@@ -36,6 +37,10 @@ const routes: Routes = [
     path: 'infos',
     component: InfosComponent,
     canActivate: [AuthGuard],
+  },
+  {
+    path : 'controlPanel/groups/addGroup',
+    component : AddGroupComponent
   }
 ];
 

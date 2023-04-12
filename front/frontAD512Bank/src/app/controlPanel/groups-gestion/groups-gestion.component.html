@@ -2,7 +2,7 @@
   <ul>
     <li id="headerLi">
       <div class="getCSV">Obtenir un CSV</div>
-      <div class="addGroup">Ajouter un groupe</div>
+      <button routerLink="addGroup" class="addGroup clickable">Ajouter un groupe</button>
     </li>
     <li *ngFor="let group of listGroups">
       <div class="role">{{ group.cn }}</div>

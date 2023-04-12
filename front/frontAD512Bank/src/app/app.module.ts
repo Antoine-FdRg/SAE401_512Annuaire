@@ -16,6 +16,7 @@ import { InfosComponent } from './infos/infos.component';
 import { HttpRequestInterceptor } from './http.interceptor';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { ReactiveFormsModule } from '@angular/forms';
+import { AddGroupComponent } from './controlPanel/add-group/add-group.component';
 @NgModule({
   declarations: [
     AppComponent,
@@ -26,7 +27,8 @@ import { ReactiveFormsModule } from '@angular/forms';
     ControlPanelComponent,
     MembersGestionComponent,
     GroupsGestionComponent,
-    InfosComponent
+    InfosComponent,
+    AddGroupComponent
   ],
   imports: [
     BrowserAnimationsModule,

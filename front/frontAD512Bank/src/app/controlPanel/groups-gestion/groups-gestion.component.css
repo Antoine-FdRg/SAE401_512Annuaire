@@ -56,3 +56,19 @@
 .role {
   font-size: 1.5em;
 }
+
+.mainContainer button {
+  background: #5271ff;
+  /* innerButton */
+
+  box-shadow: 6px 10px 20px rgba(0, 0, 0, 0.25),
+    inset -20px 20px 41px rgba(74, 102, 230, 0.51);
+  border-radius: 19px;
+  color: white;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 1em;
+  border: none;
+  font-size: 1em;
+}

@@ -21,4 +21,7 @@ export class AdminService {
   {
     return this.http.get(apiURL+"/admin/allFilters");
   }
+  createGroup(name:String){
+    return this.http.post(apiURL + "/admin/group/create",{cn:name});
+  }
 }
