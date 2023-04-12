@@ -13,7 +13,12 @@ export class AdminService {
   public getMembers() {
     return this.http.get(apiURL + "/public/search/person", { params: { name: "a ", page: 0, perPage: 30 } });
   }
+
   getGroups() {
     return this.http.get(apiURL + "/admin/group/all");
+  }
+  getFilters()
+  {
+    return this.http.get(apiURL+"/admin/allFilters");
   }
 }
