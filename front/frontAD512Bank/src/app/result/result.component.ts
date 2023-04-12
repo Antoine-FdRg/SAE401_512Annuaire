@@ -25,11 +25,7 @@ export class ResultComponent {
   }
 
 
-  ngAfterContentChecked(): void {
-    //Called after every check of the component's or directive's content.
-    //Add 'implements AfterContentChecked' to the class.
-    //
-  }
+
 
   displayNotFound(): string {
     if (this.searchService.lastResults.length === 0) {
@@ -39,7 +35,7 @@ export class ResultComponent {
   }
 
   personClicked(person: Person, position: number) {
-    if(this.clickedPosition === position && !this.hideResponsiveDetails){
+    if (this.clickedPosition === position && !this.hideResponsiveDetails) {
       this.hideResponsiveDetails = true;
     }
     else {

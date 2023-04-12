@@ -52,7 +52,10 @@
           <div>{{ person.lastName }}</div>
         </div>
       </div>
+
     </div>
+    <div class="person" id="loadMoreResults"><button (click)="this.searchService.getMorePage()">Charger Plus de
+        résultats</button></div>
 
     <div class="responsive-details" [style.height.px]="this.hideResponsiveDetails === true ? 0 : developDetails(i)">
 

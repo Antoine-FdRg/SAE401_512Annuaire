@@ -10,11 +10,12 @@ import { ResultComponent } from '../result/result.component';
 })
 export class SearchService {
   resultShowing: boolean = false;
+  actualPage: number = 1;
   lastResults: Person[] = [];
   constructor(private http: HttpClient) { }
 
   search(search: string) {
-    this.http.get(apiURL + "/public/search/person", { params: { name: search } }).subscribe(
+    this.http.get(apiURL + "/public/search/person", { params: { name: search, page: 1, perPage: 15 } }).subscribe(
       (response) => {
         // console.log(response);
         this.resultShowing = true;
@@ -22,8 +23,22 @@ export class SearchService {
         console.log(this.lastResults);
       }
     );
+  }
+  getMorePage() {
+    console.log(this.actualPage);
 
 
+    this.actualPage++;
+    console.log(this.actualPage);
+
+    this.http.get(apiURL + "/public/search/person", { params: { name: "", page: this.actualPage, perPage: 15 } }).subscribe(
+      (response) => {
+        // console.log(response);
+        this.resultShowing = true;
+        this.lastResults = this.lastResults.concat(response as Person[]);
+        console.log(this.lastResults);
+      }
+    );
   }
 
   getInfos(person: Person) {
