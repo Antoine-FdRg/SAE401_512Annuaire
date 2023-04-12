@@ -41,7 +41,7 @@ public class AdminController {
         RateLimiterSingleton.get().tryConsume(String.valueOf(request.getLocalAddress()));
         try {
             return ADConnectionManagerSingleton.INSTANCE.get().getQuerier(token).getFullPersonInfo(dn);
-        } catch (NamingException e) {
+        } catch (NamingException | SeinkSansDoozeBackException e) {
             throw new SeinkSansDoozeBackException(
                     HttpStatus.UNAUTHORIZED,
                     "Erreur de connexion, la session a peut être expirée, veuillez vous reconnecter."
@@ -60,7 +60,7 @@ public class AdminController {
         RateLimiterSingleton.INSTANCE.get().tryConsume(String.valueOf(request.getLocalAddress()));
         try {
             return ADConnectionManagerSingleton.INSTANCE.get().getQuerier(token).getStructureInfo(dn);
-        } catch (NamingException e) {
+        } catch (NamingException | SeinkSansDoozeBackException e) {
             throw new SeinkSansDoozeBackException(
                     HttpStatus.UNAUTHORIZED,
                     "Erreur de connexion, la session a peut être expirée, veuillez vous reconnecter."
@@ -80,7 +80,7 @@ public class AdminController {
         RateLimiterSingleton.INSTANCE.get().tryConsume(String.valueOf(request.getLocalAddress()));
         try {
             ADConnectionManagerSingleton.INSTANCE.get().getQuerier(token).createPerson(payload);
-        } catch (NamingException e) {
+        } catch (NamingException | SeinkSansDoozeBackException e) {
             throw new SeinkSansDoozeBackException(
                     HttpStatus.UNAUTHORIZED,
                     "Erreur de connexion, la session a peut être expirée, veuillez vous reconnecter."
@@ -101,7 +101,7 @@ public class AdminController {
         RateLimiterSingleton.INSTANCE.get().tryConsume(String.valueOf(request.getLocalAddress()));
         try {
             ADConnectionManagerSingleton.INSTANCE.get().getQuerier(token).deletePerson(dn);
-        } catch (NamingException e) {
+        } catch (NamingException | SeinkSansDoozeBackException e) {
             throw new SeinkSansDoozeBackException(
                     HttpStatus.UNAUTHORIZED,
                     "Erreur de connexion, la session a peut être expirée, veuillez vous reconnecter."
@@ -121,7 +121,7 @@ public class AdminController {
         RateLimiterSingleton.INSTANCE.get().tryConsume(String.valueOf(request.getLocalAddress()));
         try {
             return ADConnectionManagerSingleton.INSTANCE.get().getQuerier(token).getAllGroups();
-        } catch (NamingException e) {
+        } catch (NamingException | SeinkSansDoozeBackException e) {
             throw new SeinkSansDoozeBackException(
                     HttpStatus.UNAUTHORIZED,
                     "Erreur de connexion, la session a peut être expirée, veuillez vous reconnecter."
@@ -142,7 +142,7 @@ public class AdminController {
         boolean isGroupCreated;
         try {
             isGroupCreated = ADConnectionManagerSingleton.INSTANCE.get().getQuerier(token).createGroup(group.getCn());
-        } catch (NamingException e) {
+        } catch (NamingException | SeinkSansDoozeBackException e) {
             throw new SeinkSansDoozeBackException(
                     HttpStatus.UNAUTHORIZED,
                     "Erreur de connexion, la session a peut être expirée, veuillez vous reconnecter."
@@ -163,7 +163,7 @@ public class AdminController {
         RateLimiterSingleton.INSTANCE.get().tryConsume(String.valueOf(request.getLocalAddress()));
         try {
             return ADConnectionManagerSingleton.INSTANCE.get().getQuerier(token).getGroupMembers(cn);
-        } catch (NamingException e) {
+        } catch (NamingException | SeinkSansDoozeBackException e) {
             throw new SeinkSansDoozeBackException(
                     HttpStatus.UNAUTHORIZED,
                     "Erreur de connexion, la session a peut être expirée, veuillez vous reconnecter."
@@ -183,7 +183,7 @@ public class AdminController {
         RateLimiterSingleton.INSTANCE.get().tryConsume(String.valueOf(request.getLocalAddress()));
         try {
             ADConnectionManagerSingleton.INSTANCE.get().getQuerier(token).deleteGroup(group.getCn());
-        } catch (NamingException e) {
+        } catch (NamingException | SeinkSansDoozeBackException e) {
             throw new SeinkSansDoozeBackException(
                     HttpStatus.UNAUTHORIZED,
                     "Erreur de connexion, la session a peut être expirée, veuillez vous reconnecter."
@@ -207,7 +207,7 @@ public class AdminController {
         boolean isUserAdded;
         try {
             isUserAdded = ADConnectionManagerSingleton.INSTANCE.get().getQuerier(token).addUserToGroup(payload.getDn(), payload.getGroupCN());
-        } catch (NamingException e) {
+        } catch (NamingException | SeinkSansDoozeBackException e) {
             throw new SeinkSansDoozeBackException(
                     HttpStatus.UNAUTHORIZED,
                     "Erreur de connexion, la session a peut être expirée, veuillez vous reconnecter."
@@ -229,7 +229,7 @@ public class AdminController {
         boolean isUserRemoved;
         try {
             isUserRemoved = ADConnectionManagerSingleton.INSTANCE.get().getQuerier(token).removeUserFromGroup(payload.getDn(), payload.getGroupCN());
-        } catch (NamingException e) {
+        } catch (NamingException | SeinkSansDoozeBackException e) {
             throw new SeinkSansDoozeBackException(
                     HttpStatus.UNAUTHORIZED,
                     "Erreur de connexion, la session a peut être expirée, veuillez vous reconnecter."
