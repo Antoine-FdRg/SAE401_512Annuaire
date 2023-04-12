@@ -11,40 +11,47 @@
   <strong>{{ searchService.lastResults.length }}</strong>
   résultat(s) trouvé(s)
 </div>
+<div [style.display]="displayNotFound() == 'none' ? 'flex' : 'none'" >
+  <select [formControl]="this.form">
+    <option value="nom">Trier par nom</option>
+    <option value="prenom">Trier par prenom</option>
+    <option value="rang">Trier par rang</option>
+  </select>
+</div>
 <section id="results-container" [style.display]="displayNotFound() == 'none' ? 'flex' : 'none'">
   <section id="person-container">
     <div class="person-zone" *ngFor="let person of this.searchService.lastResults; let i = index">
       <div class="person" (click)="personClicked(person, i)">
         <div class="position" [class.blue]="
-            person.position == 'Directeur financier' ||
-            person.position == 'Responsable de paie' ||
-            person.position == 'Responsable comptabilité'
+            person.title == 'Directeur financier' ||
+            person.title == 'Responsable de paie' ||
+            person.title == 'Responsable comptabilité'
           " [class.orange]="
-            person.position == 'Directeur administratif et juridique' ||
-            person.position == 'Responsable juridique' ||
-            person.position == 'Responsable administration' ||
-            person.position == 'Responsable adjoint administratif' ||
-            person.position == 'Responsable adjoint juridique'
+            person.title == 'Directeur administratif et juridique' ||
+            person.title == 'Responsable juridique' ||
+            person.title == 'Responsable administration' ||
+            person.title == 'Responsable adjoint administratif' ||
+            person.title == 'Responsable adjoint juridique'
           " [class.green]="
-            person.position == 'Directeur ressources humaines' ||
-            person.position == 'Responsable gestion du personnel' ||
-            person.position == 'Responsable recrutement'
+            person.title == 'Directeur ressources humaines' ||
+            person.title == 'Responsable gestion du personnel' ||
+            person.title == 'Responsable recrutement'
           " [class.lightBlue]="
-            person.position == 'Directrice technique' ||
-            person.position == 'Responsable recherche et développement' ||
-            person.position == 'Responsable logistique'
+            person.title == 'Directrice technique' ||
+            person.title == 'Responsable recherche et développement' ||
+            person.title == 'Responsable logistique'
           " [class.purple]="
-            person.position == 'Directeur commercial' ||
-            person.position == 'Responsable produit' ||
-            person.position == 'Responsable marketing'
-          " [class.red1]="person.position == 'Présidente'" [class.red2]="person.position == 'Directeur général'"
+            person.title == 'Directeur commercial' ||
+            person.title == 'Responsable produit' ||
+            person.title == 'Responsable marketing'
+          " [class.red1]="person.title == 'Présidente'" [class.red2]="person.title == 'Directeur général'"
           [class.red3]="
-            person.position == 'Directeur général adjoint' ||
-            person.position == 'Secrétaire général' ||
-            person.position == 'Responsable marketing' ||
-            person.position == 'Responsable produit'
+            person.title == 'Directeur général adjoint' ||
+            person.title == 'Secrétaire général' ||
+            person.title == 'Responsable marketing' ||
+            person.title == 'Responsable produit'
           ">
-          {{ person.position }}
+          {{ person.title }}
         </div>
 
         <div class="names">
@@ -52,7 +59,10 @@
           <div>{{ person.lastName }}</div>
         </div>
       </div>
+
     </div>
+    <div class="person" id="loadMoreResults"><button (click)="this.searchService.getMorePage()">Charger Plus de
+        résultats</button></div>
 
     <div class="responsive-details" [style.height.px]="this.hideResponsiveDetails === true ? 0 : developDetails(i)">
 
@@ -107,42 +117,42 @@
       <div
         class="position"
         [class.blue]="
-          person.position == 'Directeur financier' ||
-          person.position == 'Responsable de paie' ||
-          person.position == 'Responsable comptabilité'
+          person.title == 'Directeur financier' ||
+          person.title == 'Responsable de paie' ||
+          person.title == 'Responsable comptabilité'
         "
         [class.orange]="
-          person.position == 'Directeur administratif et juridique' ||
-          person.position == 'Responsable juridique' ||
-          person.position == 'Responsable administration' ||
-          person.position == 'Responsable adjoint administratif' ||
-          person.position == 'Responsable adjoint juridique'
+          person.title == 'Directeur administratif et juridique' ||
+          person.title == 'Responsable juridique' ||
+          person.title == 'Responsable administration' ||
+          person.title == 'Responsable adjoint administratif' ||
+          person.title == 'Responsable adjoint juridique'
         "
         [class.green]="
-          person.position == 'Directeur ressources humaines' ||
-          person.position == 'Responsable gestion du personnel' ||
-          person.position == 'Responsable recrutement'
+          person.title == 'Directeur ressources humaines' ||
+          person.title == 'Responsable gestion du personnel' ||
+          person.title == 'Responsable recrutement'
         "
         [class.lightBlue]="
-          person.position == 'Directrice technique' ||
-          person.position == 'Responsable recherche et développement' ||
-          person.position == 'Responsable logistique'
+          person.title == 'Directrice technique' ||
+          person.title == 'Responsable recherche et développement' ||
+          person.title == 'Responsable logistique'
         "
         [class.purple]="
-          person.position == 'Directeur commercial' ||
-          person.position == 'Responsable produit' ||
-          person.position == 'Responsable marketing'
+          person.title == 'Directeur commercial' ||
+          person.title == 'Responsable produit' ||
+          person.title == 'Responsable marketing'
         "
-        [class.red1]="person.position == 'Présidente'"
-        [class.red2]="person.position == 'Directeur général'"
+        [class.red1]="person.title == 'Présidente'"
+        [class.red2]="person.title == 'Directeur général'"
         [class.red3]="
-          person.position == 'Directeur général adjoint' ||
-          person.position == 'Secrétaire général' ||
-          person.position == 'Responsable marketing' ||
-          person.position == 'Responsable produit'
+          person.title == 'Directeur général adjoint' ||
+          person.title == 'Secrétaire général' ||
+          person.title == 'Responsable marketing' ||
+          person.title == 'Responsable produit'
         "
       >
-        {{ person.position }}
+        {{ person.title }}
       </div>
 
       <div class="contacts">

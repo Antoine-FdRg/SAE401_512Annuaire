@@ -17,6 +17,7 @@ import { HttpRequestInterceptor } from './http.interceptor';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { SudoPopupComponent } from './controlPanel/sudo-popup/sudo-popup.component';
 import { CreateUserFormComponent } from './controlPanel/groups-gestion/create-user-form/create-user-form.component';
+import { ReactiveFormsModule } from '@angular/forms';
 @NgModule({
   declarations: [
     AppComponent,
@@ -37,6 +38,7 @@ import { CreateUserFormComponent } from './controlPanel/groups-gestion/create-us
     CommonModule,
     AppRoutingModule,
     HttpClientModule,
+    ReactiveFormsModule
   ],
   providers: [HttpClient,
     {

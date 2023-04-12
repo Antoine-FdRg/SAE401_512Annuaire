@@ -8,7 +8,6 @@ import {SudoPopupComponent} from "../sudo-popup/sudo-popup.component";
   templateUrl: './membersGestion.component.html',
   styleUrls: ['./membersGestion.component.css']
 })
-
 export class MembersGestionComponent implements OnInit {
   @ViewChild(SudoPopupComponent) child: any;
 
@@ -19,7 +18,6 @@ export class MembersGestionComponent implements OnInit {
     this.adminService.getMembers().subscribe(
       (response) => {
         this.listMembers = response as Person[];
-        console.log(this.listMembers);
       }
     );
     this.listMembers.push(
@@ -28,13 +26,12 @@ export class MembersGestionComponent implements OnInit {
         "lastName": "Caldwell",
         "email": "test",
         "login": "test",
-        "position": "Directeur Commercial",
+        "title": "Directeur Commercial",
       }
     )
     console.log('====================================');
     console.log(this.listMembers);
     console.log('====================================');
-
   }
 
   ngOnInit() {

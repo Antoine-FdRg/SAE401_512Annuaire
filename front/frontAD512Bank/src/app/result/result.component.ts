@@ -1,4 +1,5 @@
 import { AfterViewInit, Component } from '@angular/core';
+import { FormControl } from '@angular/forms';
 import { elementAt, first } from 'rxjs';
 import { Person } from '../person';
 import { SearchService } from '../service/search.service';
@@ -14,9 +15,12 @@ export class ResultComponent {
   i: number = 0;
   selectionState: string = "block";
   hideResponsiveDetails = false;
-
+  form:FormControl=new FormControl("");
   constructor(public searchService: SearchService) {
+    this.form.valueChanges.subscribe((e)=>{
+        this.searchService.sort(e);
 
+    })
     //time out 1s to wait for the search service to be updated
     setTimeout(() => {
       window.scrollTo(0, 800);
@@ -25,11 +29,7 @@ export class ResultComponent {
   }
 
 
-  ngAfterContentChecked(): void {
-    //Called after every check of the component's or directive's content.
-    //Add 'implements AfterContentChecked' to the class.
-    //
-  }
+
 
   displayNotFound(): string {
     if (this.searchService.lastResults.length === 0) {
@@ -39,7 +39,7 @@ export class ResultComponent {
   }
 
   personClicked(person: Person, position: number) {
-    if(this.clickedPosition === position && !this.hideResponsiveDetails){
+    if (this.clickedPosition === position && !this.hideResponsiveDetails) {
       this.hideResponsiveDetails = true;
     }
     else {
@@ -57,6 +57,7 @@ export class ResultComponent {
     }
     return 0;
   }
+
 }
 
 

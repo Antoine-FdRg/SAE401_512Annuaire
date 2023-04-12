@@ -38,13 +38,13 @@ export class LoginService {
 
     this.http.post(apiURL + "/auth/login", { username: login, password: password }).subscribe(
       (response: any) => {
-        this.userBase = { firstName: response.firstName, lastName: response.lastName, login: response.login, email: response.email, dn: response.dn };
+        this.userBase = { firstName: response.firstName, lastName: response.lastName, login: response.login, email: response.email, dn: response.dn, admin: response.admin };
         sessionStorage.setItem('user', JSON.stringify(this.userBase));
         // store the token Autorisation which is in header in session storage
         sessionStorage.setItem('token', response.token);
         console.log(response);
 
-        this.router.navigate(['/controlPanel']);
+        this.router.navigate(['/home']);
       },
       (error) => {
         console.log(error);
@@ -55,7 +55,6 @@ export class LoginService {
   logout() {
     this.http.post(apiURL + "/auth/logout", {}).subscribe(
       (response) => {
-        console.log(response);
         sessionStorage.removeItem('user');
         sessionStorage.removeItem('token');
         this.userBase = undefined;

@@ -1,3 +1,5 @@
+import { LoginService } from './../service/login.service';
+import { AdminService } from 'src/app/service/admin.service';
 import { SearchService } from './../service/search.service';
 import { ApplicationRef, Component, ElementRef, Injector, ViewChild } from '@angular/core';
 import { elementAt } from 'rxjs';
@@ -9,9 +11,8 @@ import { elementAt } from 'rxjs';
 })
 export class HomePageComponent {
 
-  branches = ["Bordeaux", "Lyon", "Marseille", "Paris", "Toulouse"];
-
-  constructor(private searchService: SearchService) {
+  public branches = this.getFilters();
+  constructor(private searchService: SearchService,private adminService: AdminService, public loginService: LoginService) {
 
   }
 
@@ -38,6 +39,15 @@ export class HomePageComponent {
 
   showResults() {
     this.searchService.resultShowing = true;
+  }
+  showResult() {
+    return this.searchService.resultShowing;
+  }
+  getFilters(): any {
+    this.adminService.getFilters().subscribe((data) => {
+      this.branches = data;
+      this.branches.splice(0, 0, "Filtres");
+    })
   }
 }
 
