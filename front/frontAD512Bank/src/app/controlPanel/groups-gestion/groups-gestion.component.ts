@@ -20,4 +20,15 @@ export class GroupsGestionComponent {
   deleteGroup(groupCN: string) {
 
   }
+  exportCSV() {
+    var csvFile = "cn\n";
+    this.listGroups.forEach(group => {
+      csvFile += group.cn + "\n";
+    });
+    var blob = new Blob([csvFile], { type: 'text/csv;charset=utf-8;', endings: 'native' });
+    var url = window.URL.createObjectURL(blob);
+    window.open(url);
+
+
+  }
 }
