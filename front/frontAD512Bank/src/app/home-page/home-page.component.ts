@@ -11,7 +11,7 @@ import { elementAt } from 'rxjs';
 })
 export class HomePageComponent {
 
-  public branches ?= this.getFilters();
+  public branches = this.getFilters();
   constructor(private searchService: SearchService,private adminService: AdminService, public loginService: LoginService) {
 
   }
@@ -34,8 +34,7 @@ export class HomePageComponent {
   onSearch($event: SubmitEvent) {
     $event.preventDefault();
     var search = (<HTMLInputElement>document.getElementById("search")).value;
-
-    this.searchService.search(search,);
+    this.searchService.search(search);
   }
 
   showResults() {
@@ -44,8 +43,10 @@ export class HomePageComponent {
   getFilters() : any
   {
     this.adminService.getFilters().subscribe((data)=>{
+      console.log(data);
+
       this.branches=data;
-      this.branches.splice(0,0,"Filtres");
+
     })
   }
 }

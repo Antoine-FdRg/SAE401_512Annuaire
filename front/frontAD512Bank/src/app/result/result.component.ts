@@ -1,4 +1,5 @@
 import { AfterViewInit, Component } from '@angular/core';
+import { FormControl } from '@angular/forms';
 import { elementAt, first } from 'rxjs';
 import { Person } from '../person';
 import { SearchService } from '../service/search.service';
@@ -14,9 +15,12 @@ export class ResultComponent {
   i: number = 0;
   selectionState: string = "block";
   hideResponsiveDetails = false;
-
+  form:FormControl=new FormControl("");
   constructor(public searchService: SearchService) {
+    this.form.valueChanges.subscribe((e)=>{
+        this.searchService.sort(e);
 
+    })
     //time out 1s to wait for the search service to be updated
     setTimeout(() => {
       window.scrollTo(0, 800);
@@ -53,6 +57,7 @@ export class ResultComponent {
     }
     return 0;
   }
+
 }
 
 

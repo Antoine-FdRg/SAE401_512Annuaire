@@ -50,5 +50,39 @@ export class SearchService {
     );
   }
 
+  sort(e:string)
+  {
+    if(e=="nom")
+      {
+        this.lastResults.sort((a:Person,b:Person)=>{
+          if (a.lastName < b.lastName) {
+            return -1;
+          }
+          if (a.lastName > b.lastName) {
+            return 1;
+          }
+          return 0;
+        });
+      }
+      if(e=="prenom")
+      {
 
+        this.lastResults.sort((a:Person,b:Person)=>{
+          if (a.firstName < b.firstName) {
+            return -1;
+          }
+          if (a.firstName > b.firstName) {
+            return 1;
+          }
+          return 0;
+        });
+      }
+      if(e=="rang")
+      {
+
+
+
+
+      }
+  }
 }

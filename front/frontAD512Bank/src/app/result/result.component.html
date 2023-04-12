@@ -11,6 +11,13 @@
   <strong>{{ searchService.lastResults.length }}</strong>
   résultat(s) trouvé(s)
 </div>
+<div [style.display]="displayNotFound() == 'none' ? 'flex' : 'none'" >
+  <select [formControl]="this.form">
+    <option value="nom">Trier par nom</option>
+    <option value="prenom">Trier par prenom</option>
+    <option value="rang">Trier par rang</option>
+  </select>
+</div>
 <section id="results-container" [style.display]="displayNotFound() == 'none' ? 'flex' : 'none'">
   <section id="person-container">
     <div class="person-zone" *ngFor="let person of this.searchService.lastResults; let i = index">

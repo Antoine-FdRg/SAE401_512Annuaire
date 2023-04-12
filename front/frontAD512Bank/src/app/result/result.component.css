@@ -331,3 +331,10 @@ button:active {
   -moz-transition: box-shadow 0.2s ease-in;
   transition: box-shadow 0.2s ease-in;
 }
+.sortButton{
+  display: flex;
+  text-align: center;
+  align-self: center;
+  justify-content: center;
+}
+
