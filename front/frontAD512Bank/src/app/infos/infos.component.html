@@ -97,7 +97,7 @@
 
                 <div class="modification" [style.display]="modified['address'] ? 'flex' : 'none'">
                     <div class="group">
-                        <input required="" type="text" class="input">
+                        <input #addr required="" type="text" class="input">
                         <span class="highlight"></span>
                         <span class="bar"></span>
                         <label>Nouvelle adresse</label>
@@ -107,14 +107,13 @@
                         <button class="rollback clickable" (click)="modified['address']=false">
                             Annuler
                         </button>
-                        <button class="commit clickable" (click)="newField(ChangingField.address)">
+                        <button class="commit clickable" (click)="newField(ChangingField.address, addr.value)">
                             Valider
                         </button>
                     </div>
                 </div>
             </div>
         </div>
-
         
         <div id="mail">
             <div class="info-header">
@@ -183,7 +182,7 @@
                 <div class="information" [style.display]="!modified['personalPhone'] ? 'block' : 'none'">{{user?.personalPhone}}</div>
                 <div class="modification" [style.display]="modified['personalPhone'] ? 'flex' : 'none'">
                     <div class="group">
-                        <input required="" type="text" class="input">
+                        <input #perPhone required="" type="text" class="input">
                         <span class="highlight"></span>
                         <span class="bar"></span>
                         <label>Nouveau numéro</label>
@@ -193,7 +192,7 @@
                         <button class="rollback clickable" (click)="modified['personalPhone']=false">
                             Annuler
                         </button>
-                        <button class="commit clickable" (click)="newField(ChangingField.personalPhone)">
+                        <button class="commit clickable" (click)="newField(ChangingField.personalPhone, perPhone.value)">
                             Valider
                         </button>
                     </div>
@@ -211,7 +210,7 @@
                 <div class="information" [style.display]="!modified['professionalPhone'] ? 'block' : 'none'">{{user?.professionalPhone}}</div>
                 <div class="modification" [style.display]="modified['professionalPhone'] ? 'flex' : 'none'">
                     <div class="group">
-                        <input required="" type="text" class="input">
+                        <input #profPhone required="" type="text" class="input">
                         <span class="highlight"></span>
                         <span class="bar"></span>
                         <label>Nouveau numéro</label>
@@ -221,7 +220,7 @@
                         <button class="rollback clickable" (click)="modified['professionalPhone']=false">
                             Annuler
                         </button>
-                        <button class="commit clickable" (click)="newField(ChangingField.professionalPhone)">
+                        <button class="commit clickable" (click)="newField(ChangingField.professionalPhone, profPhone.value)">
                             Valider
                         </button>
                     </div>

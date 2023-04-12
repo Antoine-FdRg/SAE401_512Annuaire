@@ -11,14 +11,23 @@ export class ModifyService {
   constructor(private http: HttpClient, private router: Router, private loginService : LoginService) { }
 
   modifyField(field : string, value : string) {
+    // let link = apiURL + "/member/" + "modify" + "?attribute=" + field + "&value=" + value;
+    // this.http.put(link, {}).subscribe(
+    //   () => {
+    //     this.loginService.updateUser();
+    //   }
+    // );
 
-
-    let link = apiURL + "/member/" + "modify" + "?attribute=" + field + "&value=" + value;
-
-    this.http.put(link, {}).subscribe(
-      () => {
-        this.loginService.updateUser();
-      }
+    let params = {
+      attribute: field,
+      value: value
+    };
+  
+    this.http.put(apiURL + "/member/modify", params).subscribe(
+        (response : any) => {
+            // Traiter la réponse ici
+            this.loginService.updateUser();
+        }
     );
   }
 }

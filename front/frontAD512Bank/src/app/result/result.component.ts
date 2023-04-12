@@ -16,16 +16,11 @@ export class ResultComponent {
   hideResponsiveDetails = false;
 
   constructor(public searchService: SearchService) {
-
     //time out 1s to wait for the search service to be updated
     setTimeout(() => {
       window.scrollTo(0, 800);
-    }
-      , 300);
+    }, 300);
   }
-
-
-
 
   displayNotFound(): string {
     if (this.searchService.lastResults.length === 0) {

@@ -28,13 +28,22 @@ export class InfosComponent {
     this.user = loginService.user;
   }
 
-  newField(field : ChangingField, value : string = "test"){
+  newField(field : ChangingField, element : string = "placeholder"){
     switch (field){
       case ChangingField.address :
-        this.modifyservice.modifyField("address", value);
+        this.modifyservice.modifyField("streetAddress", element);
+        this.modified.address = false;
+        break;
+      case ChangingField.professionalPhone :
+        this.modifyservice.modifyField("telephoneNumber", element);
+        this.modified.professionalPhone = false;
+        break;
+      case ChangingField.personalPhone :
+        this.modifyservice.modifyField("mobile", element);
+        this.modified.personalPhone = false;
+        break;
     }
   }
-  
 }
 
 enum ChangingField {
