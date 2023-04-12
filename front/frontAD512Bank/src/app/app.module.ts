@@ -16,7 +16,7 @@ import { InfosComponent } from './infos/infos.component';
 import { HttpRequestInterceptor } from './http.interceptor';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { SudoPopupComponent } from './controlPanel/sudo-popup/sudo-popup.component';
-import { CreateUserFormComponent } from './controlPanel/groups-gestion/create-user-form/create-user-form.component';
+import { CreateUserFormComponent } from './controlPanel/membersGestion/create-user-form/create-user-form.component';
 import { ReactiveFormsModule } from '@angular/forms';
 import { AddGroupComponent } from './controlPanel/add-group/add-group.component';
 import { MembersOfGroupComponent } from './controlPanel/members-of-group/members-of-group.component';

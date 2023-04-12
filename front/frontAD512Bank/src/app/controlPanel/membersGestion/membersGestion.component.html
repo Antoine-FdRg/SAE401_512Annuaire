@@ -59,7 +59,7 @@
       </div>
     </li>
   </ul>
-  <app-create-user-form *ngIf="showCreatePopup"  ></app-create-user-form>
+  <app-create-user-form *ngIf="showCreatePopup" (showCreatePopup)="toggleShowCreatePopup()" ></app-create-user-form>
   <app-sudo-popup *ngIf="showSudoPopup" (showPopup)="toggleShowSudoPopup()" (alertPopup)="toggleShowAlert()" (validateOperation)="afterValidateOperation()"></app-sudo-popup>
   <app-alert-component *ngIf="showAlertPopup"></app-alert-component>
 

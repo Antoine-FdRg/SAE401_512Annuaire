@@ -53,4 +53,24 @@ export class AdminService {
     };
     return this.http.delete(apiURL + "/admin/member/delete?dn="+dn, options);
   }
+
+  createMember(firstName:string, lastName:string,structureDN:string, title:string, personalPhone:string, professionalPhone:string, dateOfBirth:string, address:string,managerDN:string){
+    const options = {
+      headers: new HttpHeaders({
+        'Content-Type': 'application/json',
+      }),
+      body: {
+        firstName: firstName,
+        lastName: lastName,
+        structureDN: structureDN,
+        title: title,
+        personalPhone: personalPhone,
+        professionalPhone: professionalPhone,
+        dateOfBirth: dateOfBirth,
+        address: address,
+        managerDN: managerDN
+      }
+    }
+    return this.http.post(apiURL + "/admin/member/create", options);
+  }
 }
