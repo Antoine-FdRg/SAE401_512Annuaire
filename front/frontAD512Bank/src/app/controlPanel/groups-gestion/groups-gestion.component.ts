@@ -9,41 +9,44 @@ import { AdminService } from 'src/app/service/admin.service';
 })
 export class GroupsGestionComponent {
   listGroups: { cn: string }[] = []; //TODO : Change type to Group
+  targetedGroupCN:String = "";
 
   constructor(private adminService: AdminService,private confirmationPopup: MatDialog) {
     this.adminService.getGroups().subscribe(
       (response) => {
         this.listGroups = response as [];
-
         this.sort();
-      }
-    );
+      });
   }
 
-  openDeleteConfirmationPopup(templateRef: TemplateRef<any>) {
+  openDeleteConfirmationPopup(templateRef: TemplateRef<any>, groupCN: String) {
     this.confirmationPopup.open(templateRef);
+    this.targetedGroupCN = groupCN;
   }
 
+  //TODO pq les requetes parte 2 fois ?
 
+  deleteGroup() {
+    this.adminService.deleteGroup(this.targetedGroupCN).subscribe((response) => {
+      console.log(response);
+      this.listGroups = this.listGroups.filter((group) => group.cn != this.targetedGroupCN);
+    },
+    (error) => {
+      console.log(error.status);
+      if (error.status == 200) {
+        this.popup("Le groupe a bien été supprimé.");
+        this.listGroups = this.listGroups.filter((group) => group.cn != this.targetedGroupCN);
+      } else if (error.status == 404) {
+        this.popup("Le groupe n'existe pas.");
+      } else {
+        this.popup("Une erreur est survenue lors de la création du groupe.")
+      }
+    });
+  }
 
-  deleteGroup(groupCN: string) {
-    if (window.confirm("Voulez-vous vraiment supprimer le groupe " + groupCN + " ? Cette action est IRRÉVERSIBLE.")) {
-      this.adminService.deleteGroup(groupCN).subscribe((response) => {
-        console.log(response);
-        this.listGroups = this.listGroups.filter((group) => group.cn != groupCN);
-      },
-        (error) => {
-          console.log(error.status);
-          if (error.status == 200) {
-            this.popup("Le groupe a bien été supprimé.");
-            this.listGroups = this.listGroups.filter((group) => group.cn != groupCN);
-          } else if (error.status == 404) {
-            this.popup("Le groupe n'existe pas.");
-          } else {
-            this.popup("Une erreur est survenue lors de la création du groupe.")
-          }
-        });
-    }
+  cancel(){
+    this.confirmationPopup.closeAll();
+    this.targetedGroupCN = "";
   }
 
   popup(msg: String) {

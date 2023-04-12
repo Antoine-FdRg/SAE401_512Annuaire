@@ -17,6 +17,7 @@ export class HomePageComponent {
   private value:string="";
   private filter: string="";
   public branches = this.getFilters();
+  private subject:string="person";
   constructor(private searchService: SearchService,private adminService: AdminService, public loginService: LoginService) {
     this.filterForm.valueChanges.subscribe((e) => {
       this.filter=e;
@@ -30,12 +31,14 @@ export class HomePageComponent {
     document.getElementsByClassName("dropdown")![0].classList.toggle("show");
   }
   selectHouse() {
+    this.subject="house";
     document.getElementById("house")!.style.display = "block";
     document.getElementById("person")!.style.display = "none";
     document.getElementById("house1")!.style.display = "none";
     document.getElementById("person1")!.style.display = "block";
   }
   selectPerson() {
+    this.subject="person";
     document.getElementById("person")!.style.display = "block";
     document.getElementById("house")!.style.display = "none";
     document.getElementById("person1")!.style.display = "none";
@@ -44,7 +47,13 @@ export class HomePageComponent {
   onSearch($event: SubmitEvent) {
     $event.preventDefault();
     var search = (<HTMLInputElement>document.getElementById("search")).value;
-    this.searchService.search(search,this.loginService.getUser()?.admin,this.filter,this.value);
+
+    if(this.subject==="house"){
+      this.searchService.searchHouse(search);
+    }
+    else{
+      this.searchService.search(search,this.loginService.getUser()?.admin,this.filter,this.value);
+    }
   }
 
   showResults() {
