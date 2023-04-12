@@ -16,4 +16,8 @@ export class GroupsGestionComponent {
       }
     );
   }
+
+  deleteGroup(groupCN: string) {
+
+  }
 }
