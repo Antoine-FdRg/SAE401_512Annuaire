@@ -14,7 +14,9 @@ export class InfosComponent {
     "name"    : false,
     "mail"    : false,
     "surname" : false,
-    "phone"   : false,
+    "personalPhone"   : false,
+    "professionalPhone" : false,
+    "birthDate" : false,
   };
 
   ChangingField = ChangingField;
@@ -38,5 +40,8 @@ enum ChangingField {
   name,
   address,
   phone,
-  mail
+  mail,
+  personalPhone,
+  professionalPhone,
+  birthDate,
 }
