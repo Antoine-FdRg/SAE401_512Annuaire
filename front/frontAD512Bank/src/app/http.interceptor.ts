@@ -6,7 +6,7 @@ import {
   HttpInterceptor,
   HttpErrorResponse
 } from '@angular/common/http';
-import { Observable, catchError } from 'rxjs';
+import { Observable, catchError, throwError } from 'rxjs';
 import { Router } from '@angular/router';
 import { MatDialog } from '@angular/material/dialog';
 import { AppComponent } from './app.component';
@@ -26,19 +26,20 @@ export class HttpRequestInterceptor implements HttpInterceptor {
         }
       });
     }
-    return next.handle(request).pipe(catchError((error, caught) => {
-      if (error instanceof HttpErrorResponse) {
+    return next.handle(request).pipe(
+      catchError((error: HttpErrorResponse) => {
         if (error.status === 401) {
           this.loginService.logout();
           this.router.navigate(['/login']);
-          let dialogRef = this.confirmationPopup.open(AlertComponentComponent, {
+          this.confirmationPopup.open(AlertComponentComponent, {
             height: '200px',
             width: '300px',
             position: { right: '10px', top: '10px' }
           });
+          return throwError(error); // utiliser throwError pour renvoyer une erreur
         }
-      }
-      return next.handle(request);
-    }) as any);
+        return throwError(error);
+      })
+    );
   }
 }
