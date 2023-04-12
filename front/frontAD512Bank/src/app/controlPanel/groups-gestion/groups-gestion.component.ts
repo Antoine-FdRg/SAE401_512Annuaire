@@ -14,7 +14,7 @@ export class GroupsGestionComponent {
       (response) => {
         this.listGroups = response as [];
 
-
+        this.sort();
       }
     );
   }
@@ -22,16 +22,10 @@ export class GroupsGestionComponent {
   deleteGroup(groupCN: string) {
 
   }
-  getGroupMembers(groupCN: string)
-  {
-    this.adminService.getMembersOfGroup(groupCN).subscribe((data)=>{
-      console.log(data);
-    });
-  }
+
   sort()
   {
-    this.listGroups.sort((a,b)=>{
-      return 1;
-  });
+
+    this.listGroups.reverse();
   }
 }

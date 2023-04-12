@@ -1,0 +1,19 @@
+<div class="content">{{cn}}</div>
+
+<div class="mainContainer">
+  <ul >
+    <li *ngFor="let item of this.listMembers">
+
+        <div class="firstname">
+          {{item.firstName}}
+        </div>
+        <div class="lastname">
+          {{item.lastName}}
+        </div>
+
+      <div class="title">
+        {{item.title}}
+      </div>
+    </li>
+  </ul>
+</div>
