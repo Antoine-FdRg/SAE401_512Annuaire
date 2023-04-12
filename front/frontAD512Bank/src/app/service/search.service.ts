@@ -10,12 +10,12 @@ import { ResultComponent } from '../result/result.component';
 })
 export class SearchService {
   resultShowing: boolean = false;
-  actualPage: number = 1;
+  actualPage: number = 0;
   lastResults: Person[] = [];
   constructor(private http: HttpClient) { }
 
   search(search: string) {
-    this.http.get(apiURL + "/public/search/person", { params: { name: search, page: 1, perPage: 15 } }).subscribe(
+    this.http.get(apiURL + "/public/search/person", { params: { name: search, page: this.actualPage, perPage: 15 } }).subscribe(
       (response) => {
         // console.log(response);
         this.resultShowing = true;
