@@ -1,4 +1,4 @@
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { apiURL } from './apiURL';
 
@@ -31,5 +31,16 @@ export class AdminService {
   {
     return this.http.get(apiURL + "/admin/group/members/"+name);
 
+  }
+  deleteGroup(cn:String){
+    const options = {
+      headers: new HttpHeaders({
+        'Content-Type': 'application/json',
+      }),
+      body: {
+        cn: cn
+      },
+    };
+    return this.http.delete(apiURL + "/admin/group/delete", options);
   }
 }

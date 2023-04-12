@@ -20,6 +20,7 @@ import { CreateUserFormComponent } from './controlPanel/groups-gestion/create-us
 import { ReactiveFormsModule } from '@angular/forms';
 import { AddGroupComponent } from './controlPanel/add-group/add-group.component';
 import { MembersOfGroupComponent } from './controlPanel/members-of-group/members-of-group.component';
+import { MatDialogModule } from '@angular/material/dialog';
 @NgModule({
   declarations: [
     AppComponent,
@@ -42,7 +43,8 @@ import { MembersOfGroupComponent } from './controlPanel/members-of-group/members
     CommonModule,
     AppRoutingModule,
     HttpClientModule,
-    ReactiveFormsModule
+    ReactiveFormsModule,
+    MatDialogModule
   ],
   providers: [HttpClient,
     {

@@ -21,7 +21,9 @@ export class AddGroupComponent {
       console.log(response);
     },
     (error:HttpErrorResponse) => {
-      if(error.status==409){
+      if(error.status==200){
+        this.popup("Le groupe a bien été créé.");
+      }else if(error.status==409){
         this.popup("Un groupe avec ce nom existe déjà.");
       }else{
         this.popup("Une erreur est survenue lors de la création du groupe.");
