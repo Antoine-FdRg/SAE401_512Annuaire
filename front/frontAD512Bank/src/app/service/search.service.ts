@@ -5,6 +5,7 @@ import { apiURL } from './apiURL';
 import { Person } from '../person';
 import { ResultComponent } from '../result/result.component';
 import { PersonAdmin } from '../person-admin';
+import { AdminService } from './admin.service';
 
 @Injectable({
   providedIn: 'root'
@@ -15,24 +16,41 @@ export class SearchService {
   sortingValue: string = "rang";
   actualPage: number = 0;
   lastResults: Person[] = [];
+  lastQuery: string = "";
 
   constructor(private http: HttpClient) { }
 
-  search(search: string) {
-    this.http.get(apiURL + "/public/search/person", { params: { name: search, page: this.actualPage, perPage: 15 } }).subscribe(
-      (response) => {
-        this.resultShowing = true;
-        this.lastResults = response as Person[];
-        this.defaultSorting = this.lastResults.slice();
-        this.sort(this.sortingValue);
-        this.sortingValue = "rang";
-      }
-    );
+  search(search: string, isAdmin: any, filters:string,value:string) {
+
+    if(isAdmin && filters!="" && value!="")
+    {
+      console.log(filters + " " + value);
+
+      this.http.get(apiURL + "/admin/search/person", { params: { name: search, value:value, page: this.actualPage, perPage: 15, filter: filters } }).subscribe((data)=>{
+        console.log(data);
+
+      })
+    }else {
+
+      this.http.get(apiURL + "/public/search/person", { params: { name: search, page: this.actualPage, perPage: 15 } }).subscribe(
+        (response) => {
+          this.lastQuery = search;
+
+          this.resultShowing = true;
+          this.lastResults = response as Person[];
+          this.defaultSorting = this.lastResults.slice();
+          this.sort(this.sortingValue);
+          this.sortingValue = "rang";
+        }
+      );
+    }
+
+
   }
 
   getMorePage() {
     this.actualPage++;
-    this.http.get(apiURL + "/public/search/person", { params: { name: "", page: this.actualPage, perPage: 15 } }).subscribe(
+    this.http.get(apiURL + "/public/search/person", { params: { name: this.lastQuery, page: this.actualPage, perPage: 15 } }).subscribe(
       (response) => {
         // console.log(response);
         this.resultShowing = true;
