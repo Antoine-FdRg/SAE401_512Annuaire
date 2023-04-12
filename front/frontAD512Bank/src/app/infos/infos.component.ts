@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
 import { LoginService } from '../service/login.service';
 import { Person } from '../person';
+import { ModifyService } from '../service/modify.service';
 
 @Component({
   selector: 'app-infos',
@@ -22,14 +23,14 @@ export class InfosComponent {
   ChangingField = ChangingField;
   user : Person | undefined;
 
-  constructor(public loginService : LoginService){
+  constructor(public modifyservice : ModifyService, public loginService : LoginService){
     this.user = loginService.user;
   }
 
-  newField(field : ChangingField){
+  newField(field : ChangingField, value : string = "test"){
     switch (field){
       case ChangingField.address :
-        break;
+        this.modifyservice.modifyField("address", value);
     }
   }
   
