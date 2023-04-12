@@ -41,7 +41,17 @@ body {
   text-align: center;
   border: none;
 }
-
+.cdk-global-overlay-wrapper {
+  position: fixed;
+  top: 0;
+  left: 0;
+  height: 100vh;
+  display: flex;
+  width: 100vw;
+  backdrop-filter: blur(12px);
+  justify-content: center !important;
+  align-items: center !important;
+}
 .blue-style {
   background: var(--blue512);
   box-shadow: 6px 10px 20px rgba(0, 0, 0, 0.25);
@@ -113,4 +123,13 @@ body {
   -moz-user-select: none;
   -ms-user-select: none;
   user-select: none;
+}
+
+html,
+body {
+  height: 100%;
+}
+body {
+  margin: 0;
+  font-family: Roboto, "Helvetica Neue", sans-serif;
 }

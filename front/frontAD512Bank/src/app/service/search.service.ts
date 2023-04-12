@@ -25,6 +25,7 @@ export class SearchService {
         this.lastResults = response as Person[];
         this.defaultSorting = this.lastResults.slice();
         this.sort(this.sortingValue);
+        this.sortingValue = "rang";
       }
     );
   }
@@ -35,7 +36,8 @@ export class SearchService {
         // console.log(response);
         this.resultShowing = true;
         this.lastResults = this.lastResults.concat(response as Person[]);
-        console.log(this.lastResults);
+        this.defaultSorting = this.lastResults.slice();
+        this.sort(this.sortingValue)
       }
     );
   }
@@ -49,6 +51,8 @@ export class SearchService {
   }
 
   sort(e: string) {
+    console.log(e);
+
     this.sortingValue = e;
     if (e == "nom") {
       this.lastResults.sort((a: Person, b: Person) => {

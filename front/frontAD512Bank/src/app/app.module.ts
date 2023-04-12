@@ -20,6 +20,7 @@ import { CreateUserFormComponent } from './controlPanel/groups-gestion/create-us
 import { ReactiveFormsModule } from '@angular/forms';
 import { AddGroupComponent } from './controlPanel/add-group/add-group.component';
 import { MatDialogModule } from '@angular/material/dialog';
+import { AlertComponentComponent } from './login/alert-component/alert-component.component';
 @NgModule({
   declarations: [
     AppComponent,
@@ -33,7 +34,8 @@ import { MatDialogModule } from '@angular/material/dialog';
     InfosComponent,
     AddGroupComponent,
     SudoPopupComponent,
-    CreateUserFormComponent
+    CreateUserFormComponent,
+    AlertComponentComponent
   ],
   imports: [
     BrowserAnimationsModule,
