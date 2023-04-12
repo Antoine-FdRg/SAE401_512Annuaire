@@ -15,7 +15,7 @@ import java.lang.reflect.InvocationTargetException;
  * Et de pouvoir les fermer une fois le token expiré et ainsi libérer la mémoire
  */
 public class ADConnectionManager {
-    private final ConcurrentHashMapAutoCleaning<String, ADConnection> connections = new ConcurrentHashMapAutoCleaning<>(3600000);
+    private final ConcurrentHashMapAutoCleaning<String, ADConnection> connections = new ConcurrentHashMapAutoCleaning<>(60*60*1000);// 1 Heur
     private final ITokenGenerator tokenGenerator;
     private final ITokenSanitizer tokenSanitizer;
     /**
@@ -95,15 +95,11 @@ public class ADConnectionManager {
         if (!this.tokenSanitizer.valideToken(token)) {
             throw new NamingException("Token not valid");
         }
-        //check if token exists
-        if (!connections.containsKey(token)) {
+        ADConnection connection = connections.get(token);
+        if (connection == null) {
             throw new NamingException("Token not found");
         }
-        ADConnection connection = connections.get(token);
-        //check if token is expired
-        if (connection.isExpired()) {
-            throw new NamingException("Token expired");
-        }
+
         //update last use date
         connection.updateLastUseDate();
         //return querier
