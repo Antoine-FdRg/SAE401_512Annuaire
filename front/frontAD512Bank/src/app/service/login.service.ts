@@ -88,7 +88,12 @@ export class LoginService {
         console.log(response);
 
         this.updateUser();
-        this.router.navigate(['/controlPanel']);
+        
+        if(response.admin){
+          this.router.navigate(['/controlPanel']);
+          return;
+        }
+        this.router.navigate(['/home']);
       },
       (error) => {
         console.log(error);
