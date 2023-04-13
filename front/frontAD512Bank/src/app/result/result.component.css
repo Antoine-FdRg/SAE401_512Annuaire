@@ -278,7 +278,10 @@ button {
   -moz-transition: all 0.2s ease-in;
   transition: all 0.2s ease-in;
 }
-
+button:disabled:hover {
+  box-shadow: 0 0 30px 5px #f0530b;
+  background: rgba(220, 43, 20, 0.63);
+}
 button:hover {
   background: var(--blue512);
   box-shadow: 0 0 30px 5px #4dabff;
@@ -377,4 +380,8 @@ h2 {
 
 .moreInfos span {
   font-weight: 500;
+}
+
+#buttonLoadMore:disabled {
+  opacity: 0.5;
 }
