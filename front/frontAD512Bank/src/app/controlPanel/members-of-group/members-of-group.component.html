@@ -1,7 +1,8 @@
 <div class="content">{{cn}}</div>
 
 <div class="mainContainer">
-  <ul >
+  <div class="error" *ngIf="this.listMembers.length==0">Ce groupe ne possède pas de membres</div>
+  <ul *ngIf="this.listMembers.length>0">
     <li *ngFor="let item of this.listMembers">
 
         <div class="firstname">
