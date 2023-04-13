@@ -401,8 +401,9 @@ h2 {
   justify-content: center;
   gap: 20px;
   width: 60%;
-  height: 80%;
+  height: fit-content;
   margin: 0 auto;
+  padding-bottom: 8em;
 
 }
 
