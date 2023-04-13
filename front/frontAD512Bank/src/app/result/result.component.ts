@@ -1,7 +1,10 @@
 import { AfterViewInit, Component } from '@angular/core';
+import { FormControl } from '@angular/forms';
 import { elementAt, first } from 'rxjs';
 import { Person } from '../person';
 import { SearchService } from '../service/search.service';
+import { LoginService } from '../service/login.service';
+import { PersonAdmin } from '../person-admin';
 @Component({
   selector: 'app-result',
   templateUrl: './result.component.html',
@@ -10,19 +13,21 @@ import { SearchService } from '../service/search.service';
 export class ResultComponent {
   listPerson: Person[] = [];
   clickedPosition: number = -1;
+  personInfoClicked: PersonAdmin = { firstName: "", lastName: "", dn: "", title: "", login: "", email: "", personalPhone: "", professionalPhone: "", address: "", dateOfBirth: "", managerDN: "" };
   opacity: number = 0;
   i: number = 0;
   selectionState: string = "block";
   hideResponsiveDetails = false;
+  form: FormControl = new FormControl("");
+  constructor(public searchService: SearchService, public loginService: LoginService) {
+    this.form.valueChanges.subscribe((e) => {
+      this.searchService.sort(e);
 
-  constructor(public searchService: SearchService) {
-    //time out 1s to wait for the search service to be updated
-    setTimeout(() => {
-      window.scrollTo(0, 800);
-    }, 300);
+    })
   }
 
   displayNotFound(): string {
+
     if (this.searchService.lastResults.length === 0) {
       return "flex";
     }
@@ -30,6 +35,7 @@ export class ResultComponent {
   }
 
   personClicked(person: Person, position: number) {
+    if (!this.loginService.getUserAndCheck()?.admin) return;
     if (this.clickedPosition === position && !this.hideResponsiveDetails) {
       this.hideResponsiveDetails = true;
     }
@@ -39,7 +45,10 @@ export class ResultComponent {
 
     this.clickedPosition = position;
     this.opacity = 1;
-    this.searchService.getInfos(person);
+    this.searchService.getInfos(person)?.subscribe((response: PersonAdmin) => {
+      this.personInfoClicked = response;
+    });
+
   }
 
   developDetails(i: number) {
@@ -48,6 +57,7 @@ export class ResultComponent {
     }
     return 0;
   }
+
 }
 
 

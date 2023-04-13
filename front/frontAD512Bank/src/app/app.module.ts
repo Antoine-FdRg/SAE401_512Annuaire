@@ -15,6 +15,13 @@ import { GroupsGestionComponent } from './controlPanel/groups-gestion/groups-ges
 import { InfosComponent } from './infos/infos.component';
 import { HttpRequestInterceptor } from './http.interceptor';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { SudoPopupComponent } from './controlPanel/sudo-popup/sudo-popup.component';
+import { CreateUserFormComponent } from './controlPanel/membersGestion/create-user-form/create-user-form.component';
+import { ReactiveFormsModule } from '@angular/forms';
+import { AddGroupComponent } from './controlPanel/add-group/add-group.component';
+import { MembersOfGroupComponent } from './controlPanel/members-of-group/members-of-group.component';
+import { MatDialogModule } from '@angular/material/dialog';
+import { AlertComponentComponent } from './login/alert-component/alert-component.component';
 @NgModule({
   declarations: [
     AppComponent,
@@ -25,7 +32,12 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
     ControlPanelComponent,
     MembersGestionComponent,
     GroupsGestionComponent,
-    InfosComponent
+    InfosComponent,
+    AddGroupComponent,
+    SudoPopupComponent,
+    CreateUserFormComponent,
+    AlertComponentComponent,
+    MembersOfGroupComponent
   ],
   imports: [
     BrowserAnimationsModule,
@@ -33,6 +45,8 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
     CommonModule,
     AppRoutingModule,
     HttpClientModule,
+    ReactiveFormsModule,
+    MatDialogModule
   ],
   providers: [HttpClient,
     {

@@ -56,3 +56,62 @@
 .role {
   font-size: 1.5em;
 }
+
+.mainContainer button {
+  background: #5271ff;
+  box-shadow: 6px 10px 20px rgba(0, 0, 0, 0.25),
+    inset -20px 20px 41px rgba(74, 102, 230, 0.51);
+  border-radius: 19px;
+  color: white;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 1em;
+  border: none;
+  font-size: 1em;
+}
+
+.clickablesvg{
+  fill: "121212";
+  border-radius: 5px;
+}
+
+.clickablesvg:hover{
+  fill: crimson;
+}
+
+#popupContainer{
+  position : absolute;
+  display : flex;
+  width: 100%;
+  top: 15%;
+  justify-content: space-around;
+}
+
+#popupSuccess{
+  background-color: green;
+  display: none;
+}
+
+#popupError{
+  background-color: crimson;
+  display: none;
+}
+
+.popup{
+  width: 30%;
+  height: 30%;
+  background-color: white;
+  border-radius: 20px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-around;
+  min-width: 350px;
+}
+
+.fadeout {
+  visibility: none;
+  opacity: 0;
+  transition: visibility 1s, opacity 1s linear;
+}

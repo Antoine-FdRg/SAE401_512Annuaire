@@ -1,8 +1,6 @@
 header {
-  margin-top: 10px;
   display: flex;
-  flex-wrap: wrap;
-  gap: 2em;
+  height: 15%;
   flex-direction: row;
   justify-content: space-between;
   align-items: center;

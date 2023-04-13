@@ -6,13 +6,12 @@
   <div *ngIf="isAdmin()" id="controlPanel">CONTROL PANEL</div>
   <section id="right-part-header">
     <div routerLink="/controlPanel" class="help clickable">Control Panel</div>
-    <app-profile (click)="hideResults()"></app-profile>
+    <app-profile></app-profile>
   </section>
 </header>
 <main>
   <div [@routeAnimations]="prepareRoute(outlet)">
     <router-outlet #outlet="outlet"></router-outlet>
   </div>
-  <app-result *ngIf="showResults()"></app-result>
 
 </main>

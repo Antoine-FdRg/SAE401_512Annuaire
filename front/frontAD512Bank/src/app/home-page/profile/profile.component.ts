@@ -42,8 +42,6 @@ export class ProfileComponent {
   @HostListener('document:click', ['$event'])
   onDocumentClick(event: MouseEvent) {
     let target: HTMLElement = event.target as HTMLElement;
-    console.log(target.classList);
-
     if (target.id !== "connexionButton" && !target.classList.contains("profile-picture") && target.id !== "infoMenu") {
       this.visibility["infoMenu"] = false;
       this.menuShown = false
@@ -71,8 +69,6 @@ export class ProfileComponent {
   }
 
   connexionClicked() {
-    console.log(this.status);
-
     if (this.status == 1) {
       this.router.navigate(['/login']);
     }

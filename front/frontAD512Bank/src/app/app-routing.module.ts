@@ -7,6 +7,9 @@ import { RouterModule, Routes } from '@angular/router';
 import { HomePageComponent } from './home-page/home-page.component';
 import { ResultComponent } from './result/result.component';
 import { InfosComponent } from './infos/infos.component';
+import { AuthGuard } from './auth.guard';
+import { AddGroupComponent } from './controlPanel/add-group/add-group.component';
+import { MembersOfGroupComponent } from './controlPanel/members-of-group/members-of-group.component';
 const routes: Routes = [
   {
     path: '',
@@ -20,17 +23,29 @@ const routes: Routes = [
   },
   {
     path: 'controlPanel',
-    component: ControlPanelComponent
+    component: ControlPanelComponent,
+    canActivate: [AuthGuard]
   },
   {
     path: 'controlPanel/members',
     component: MembersGestionComponent,
+    canActivate: [AuthGuard]
   }, {
     path: 'controlPanel/groups',
     component: GroupsGestionComponent,
+    canActivate: [AuthGuard],
   }, {
     path: 'infos',
     component: InfosComponent,
+  },
+  {
+    path: 'controlPanel/groups/addGroup',
+    component: AddGroupComponent,
+    canActivate: [AuthGuard],
+  }, {
+    path: 'controlPanel/groups/members',
+    component: MembersOfGroupComponent,
+    canActivate: [AuthGuard],
   }
 ];
 
