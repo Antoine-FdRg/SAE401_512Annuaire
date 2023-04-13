@@ -39,13 +39,18 @@
   display: flex;
   top: 17%;
 }
+#house {
+  z-index: 99;
+}
 #person {
+  z-index: 99;
 }
 #arrow {
   cursor: pointer;
   margin-top: 5%;
 }
 .dropdown {
+  background-color: var(--person512);
   visibility: hidden;
   position: absolute;
   /* height: 0; */
@@ -54,12 +59,15 @@
   z-index: 1;
   transition: all 0.5s ease;
   padding-top: 100%;
+  /* padding-left: 15%;
+  padding-right: 15%; */
 }
 .dropdown svg {
   position: relative;
   z-index: 999;
 }
 .dropdown.show {
+  border-radius: 15px;
   opacity: 1;
   visibility: visible;
   animation: animationIn 0.5s ease forwards;
