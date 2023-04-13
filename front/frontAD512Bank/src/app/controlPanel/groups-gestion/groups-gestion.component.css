@@ -80,3 +80,38 @@
   fill: crimson;
 }
 
+#popupContainer{
+  position : absolute;
+  display : flex;
+  width: 100%;
+  top: 15%;
+  justify-content: space-around;
+}
+
+#popupSuccess{
+  background-color: green;
+  display: none;
+}
+
+#popupError{
+  background-color: crimson;
+  display: none;
+}
+
+.popup{
+  width: 30%;
+  height: 30%;
+  background-color: white;
+  border-radius: 20px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-around;
+  min-width: 350px;
+}
+
+.fadeout {
+  visibility: none;
+  opacity: 0;
+  transition: visibility 1s, opacity 1s linear;
+}

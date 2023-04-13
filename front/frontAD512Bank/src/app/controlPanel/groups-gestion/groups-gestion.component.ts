@@ -28,18 +28,13 @@ export class GroupsGestionComponent {
 
   deleteGroup() {
     this.adminService.deleteGroup(this.targetedGroupCN).subscribe((response) => {
-      console.log(response);
       this.listGroups = this.listGroups.filter((group) => group.cn != this.targetedGroupCN);
     },
     (error) => {
-      console.log(error.status);
-      if (error.status == 200) {
-        this.popup("Le groupe a bien été supprimé.");
+      let success:boolean = error.status == 200 || error.status == 201;
+      this.popup(success, success?error.error.message:error.error.error);
+      if(success){
         this.listGroups = this.listGroups.filter((group) => group.cn != this.targetedGroupCN);
-      } else if (error.status == 404) {
-        this.popup("Le groupe n'existe pas.");
-      } else {
-        this.popup("Une erreur est survenue lors de la création du groupe.")
       }
     });
   }
@@ -49,10 +44,27 @@ export class GroupsGestionComponent {
     this.targetedGroupCN = "";
   }
 
-  popup(msg: String) {
-    //TODO : replace with a better popup
-    window.alert(msg);
+  popup(sucess:boolean, msg: string) {
+    let popup:HTMLElement;
+    let content:HTMLElement
+    if(sucess){
+      popup = document.getElementById("popupSuccess")!;
+      content= document.getElementById("popupSuccessContent")!;
+    }else{
+      popup = document.getElementById("popupError")!;
+      content = document.getElementById("popupErrorContent")!;
+    }
+    content.innerHTML = msg;
+    popup.style.display = "flex";
+    setTimeout(() => {
+      popup.classList.add("fadeout");
+    }, 1500);
+    setTimeout(() => {
+      popup.classList.remove("fadeout");
+      popup.style.display = "none";
+    },3000);
   }
+
   exportCSV() {
     var csvFile = "cn\n";
     this.listGroups.forEach(group => {
@@ -61,8 +73,6 @@ export class GroupsGestionComponent {
     var blob = new Blob([csvFile], { type: 'text/csv;charset=utf-8;', endings: 'native' });
     var url = window.URL.createObjectURL(blob);
     window.open(url);
-
-
   }
 
   sort()

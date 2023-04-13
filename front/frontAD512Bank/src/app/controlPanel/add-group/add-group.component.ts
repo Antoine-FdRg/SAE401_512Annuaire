@@ -15,19 +15,17 @@ export class AddGroupComponent {
   constructor(private adminService: AdminService) { }
 
   createGroup(){
+    if(this.form.value == ''){
+      return this.popup(false, "Le nom du groupe ne peut pas être vide.");
+    }
     console.log("createGroup() called");
     console.log(this.form.value);
     this.adminService.createGroup(this.form.value).subscribe((response) => {
-      console.log(response);
+      console.log("succes"+response);
     },
     (error:HttpErrorResponse) => {
-      if(error.status==200){
-        this.popup("Le groupe a bien été créé.");
-      }else if(error.status==409){
-        this.popup("Un groupe avec ce nom existe déjà.");
-      }else{
-        this.popup("Une erreur est survenue lors de la création du groupe.");
-      }
+      let success:boolean = error.status == 200 || error.status == 201;
+      this.popup(success, success?error.message:error.error.error);
     });
     this.form.setValue('');
   }
@@ -36,8 +34,24 @@ export class AddGroupComponent {
     console.log("cancel() called");
   }
 
-  popup(msg:String){
-    //TODO : replace with a better popup
-    window.alert(msg);
+  popup(sucess:boolean, msg: string) {
+    let popup:HTMLElement;
+    let content:HTMLElement
+    if(sucess){
+      popup = document.getElementById("popupSuccess")!;
+      content= document.getElementById("popupSuccessContent")!;
+    }else{
+      popup = document.getElementById("popupError")!;
+      content = document.getElementById("popupErrorContent")!;
+    }
+    content.innerHTML = msg;
+    popup.style.display = "flex";
+    setTimeout(() => {
+      popup.classList.add("fadeout");
+    }, 1500);
+    setTimeout(() => {
+      popup.classList.remove("fadeout");
+      popup.style.display = "none";
+    },3000);
   }
 }
