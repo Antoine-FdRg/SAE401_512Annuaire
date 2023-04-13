@@ -20,6 +20,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.http.server.reactive.ServerHttpRequest;
 
 import javax.naming.NamingException;
+import java.io.*;
 import java.util.List;
 
 /**
@@ -262,15 +263,42 @@ public class AdminController {
             @ApiResponse(responseCode = "200", description = "Recherche réussie."),
             @ApiResponse(responseCode = "401", description = "Token invalide.")
     })
-    @GetMapping("/allFilters")
-    public List<String> getAllFilters(@RequestHeader(HttpHeaders.AUTHORIZATION) String token, ServerHttpRequest request) {
+    @GetMapping("/getCsvOfAllUsers")
+    public String getAllFilters(@RequestHeader(HttpHeaders.AUTHORIZATION) String token, ServerHttpRequest request) {
         RateLimiterSingleton.INSTANCE.get().tryConsume(String.valueOf(request.getLocalAddress()));
+        // open file and get string
         try {
-            return ADConnectionManagerSingleton.INSTANCE.get().getQuerier(token).getAllFilters();
-        } catch (Exception e) {
-            e.printStackTrace();
-            return null;
+            ADConnectionManagerSingleton.INSTANCE.get().getQuerier(token);
+        } catch (NamingException e) {
+            throw new SeinkSansDoozeBackException(
+                    HttpStatus.UNAUTHORIZED,
+                    "Erreur de connexion, la session a peut être expirée, veuillez vous reconnecter."
+            );
         }
+        StringBuilder csvString = new StringBuilder();
+        //onpen file form resources
+        File file = new File("src/main/resources/Users.csv");
+
+        BufferedReader br;
+        try {
+            br= new BufferedReader(new FileReader(file));
+            String st;
+            while ((st = br.readLine()) != null){
+                // Print the string
+                csvString.append(st);
+            }
+        } catch (IOException e) {
+            throw new SeinkSansDoozeBackException(
+                    HttpStatus.UNAUTHORIZED,
+                    "Erreur dans la lecture du fichier."
+            );
+        }
+
+        return csvString.toString();
     }
+
+
+
+
 
 }
