@@ -48,7 +48,7 @@
         </div>
       </div>
       <input type="text" name="search" id="search" />
-      <button class="clickable" (click)="showResults(); ">Rechercher</button>
+      <button class="clickable" (click)="showResults();">Rechercher</button>
     </div>
     <div *ngIf="this.loginService.getUser()?.admin" id="filters">
       <select [formControl]="this.filterForm" #selector name="branch" id="branchSelector">

@@ -25,10 +25,7 @@ export class ResultComponent {
 
     })
     //time out 1s to wait for the search service to be updated
-    setTimeout(() => {
-      window.scrollTo(0, 800);
-    }
-      , 300);
+    
   }
 
 

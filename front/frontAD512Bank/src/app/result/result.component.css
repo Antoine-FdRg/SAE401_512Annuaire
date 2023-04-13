@@ -378,3 +378,41 @@ h2 {
 .moreInfos span {
   font-weight: 500;
 }
+
+
+/* STRUCTURES */
+
+.struct-zone {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 20px;
+  width: 60%;
+  margin: 0 auto;
+}
+
+.struct {
+  width: 100%;
+}
+
+.struct-header {
+  display: flex;
+  justify-content: space-between;
+  padding: 15px;
+  background-color: var(--white-gradient);
+  width: 100%;
+  height: 90px;
+  border-radius: 20px;
+}
+
+.info-struct-button {
+  padding: 0px!important;
+  transform: rotate(90deg);
+  font-size: 20px;
+  width: 56px !important;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: none;
+}

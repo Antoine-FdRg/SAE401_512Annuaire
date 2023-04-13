@@ -49,7 +49,7 @@ export class HomePageComponent {
     var search = (<HTMLInputElement>document.getElementById("search")).value;
 
     if(this.subject==="house"){
-      this.searchService.searchHouse(search);
+      this.searchService.searchStruct(search);
     }
     else{
       this.searchService.search(search,this.loginService.getUser()?.admin,this.filter,this.value);
@@ -57,6 +57,10 @@ export class HomePageComponent {
   }
 
   showResults() {
+    setTimeout(() => {
+      window.scrollTo(0, 800);
+    }
+      , 300);
     this.searchService.resultShowing = true;
   }
   showResult() {
