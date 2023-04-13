@@ -288,7 +288,7 @@ button:disabled {
 }
 button:enabled:hover {
   background: var(--blue512);
-  box-shadow: 0 0 15px 5px #4dabff;
+  box-shadow: 0 0 15px 2px #398ed891;
   -webkit-transition: all 0.2s ease-out;
   -moz-transition: all 0.2s ease-out;
   transition: all 0.2s ease-out;
@@ -314,7 +314,7 @@ button::before {
   left: 0%;
   opacity: 0;
   background: #fff;
-  box-shadow: 0 0 50px 30px #fff;
+  box-shadow: 0 0 25px 10px #ffffff50;
   -webkit-transform: skewX(-20deg);
   -moz-transform: skewX(-20deg);
   -ms-transform: skewX(-20deg);

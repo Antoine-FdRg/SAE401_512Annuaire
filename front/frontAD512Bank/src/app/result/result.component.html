@@ -104,12 +104,12 @@
   </section>
 
   <div id="person-details">
-    <div id="start-text"><span *ngIf="this.loginService.user?.admin&&this.clickedPosition==-1">Cliquez sur
-        un élément</span> <span *ngIf="!this.loginService.user?.admin">Connectez vous avec un compte
+    <div id="start-text"><span *ngIf="this.loginService.getUser()?.admin&&this.clickedPosition==-1">Cliquez sur
+        un élément</span> <span *ngIf="!this.loginService.getUser()?.admin">Connectez vous avec un compte
         administrateur</span>
       <span *ngIf="this.clickedPosition==-1"> pour voir plus de détails</span>
     </div>
-    <div class="moreInfos" *ngIf="this.loginService.user?.admin&&this.personInfoClicked.dn!=''">
+    <div class="moreInfos" *ngIf="this.loginService.getUser()?.admin&&this.personInfoClicked.dn!=''">
 
       <h2>{{this.personInfoClicked.firstName}}</h2>
       <h2>{{this.personInfoClicked.lastName}}</h2>

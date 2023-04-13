@@ -35,6 +35,8 @@ export class ResultComponent {
   }
 
   personClicked(person: Person, position: number) {
+    console.log(this.loginService.getUser());
+
     if (!this.loginService.getUser()?.admin) return;
     if (this.clickedPosition === position && !this.hideResponsiveDetails) {
       this.hideResponsiveDetails = true;
@@ -46,7 +48,11 @@ export class ResultComponent {
     this.clickedPosition = position;
     this.opacity = 1;
     this.searchService.getInfos(person)?.subscribe((response: PersonAdmin) => {
+      console.log(response);
+
       this.personInfoClicked = response;
+      console.log(this.personInfoClicked);
+
     });
 
   }
