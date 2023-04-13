@@ -1,3 +1,4 @@
+import { AddMemberToGroupComponent } from './../controlPanel/add-member-to-group/add-member-to-group.component';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { apiURL } from './apiURL';
@@ -94,5 +95,13 @@ export class AdminService {
       }
     }
     return this.http.get(apiURL + "/public/search/structure", options)
+  }
+  AddMemberToGroup(gdn:string, cn:string)
+  {
+    const options = {
+      dn:gdn,
+      groupCN:cn
+    }
+    return this.http.put(apiURL+"/admin/group/addUser",options)
   }
 }

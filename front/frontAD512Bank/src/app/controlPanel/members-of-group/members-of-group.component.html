@@ -1,5 +1,12 @@
-<div class="content">{{cn}}</div>
+<div class="content">
+  <div class="cn">
+    {{cn}}
+  </div>
 
+  <div [routerLink]="['/controlPanel/groups/members/add']" [queryParams]="{ cn:this.cn }" routerLinkActive="router-link-active"  class="addMember">
+    Ajouter un membre au groupe
+  </div>
+</div>
 <div class="mainContainer">
   <div class="error" *ngIf="this.listMembers.length==0">Ce groupe ne possède pas de membres</div>
   <ul *ngIf="this.listMembers.length>0">

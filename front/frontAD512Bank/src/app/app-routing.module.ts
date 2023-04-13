@@ -1,8 +1,9 @@
+import { AddMemberToGroupComponent } from './controlPanel/add-member-to-group/add-member-to-group.component';
 import { GroupsGestionComponent } from './controlPanel/groups-gestion/groups-gestion.component';
 import { MembersGestionComponent } from './controlPanel/membersGestion/membersGestion.component';
 import { ControlPanelComponent } from './controlPanel/controlPanel.component';
 import { LoginComponent } from './login/login.component';
-import { NgModule } from '@angular/core';
+import { NgModule, Component } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 import { HomePageComponent } from './home-page/home-page.component';
 import { ResultComponent } from './result/result.component';
@@ -46,6 +47,11 @@ const routes: Routes = [
     path: 'controlPanel/groups/members',
     component: MembersOfGroupComponent,
     canActivate: [AuthGuard],
+  },{
+    path:'controlPanel/groups/members/add',
+    component: AddMemberToGroupComponent,
+    canActivate: [AuthGuard],
+
   }
 ];
 

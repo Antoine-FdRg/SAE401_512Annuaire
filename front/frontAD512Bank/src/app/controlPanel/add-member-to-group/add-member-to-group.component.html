@@ -1,0 +1,9 @@
+<div class="mainContainer">
+  <select name="" [formControl]="person" id="">
+    <option value="" selected disabled hidden>Choisir un membre</option>
+    <option *ngFor="let person of this.listMembers" value="{{person.dn}}">
+      {{person.firstName}}
+    </option>
+  </select>
+  <button (click)="addMember()">Ajouter</button>
+</div>

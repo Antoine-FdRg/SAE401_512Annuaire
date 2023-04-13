@@ -45,11 +45,30 @@ li{
     color: purple;
 }
 .content{
-  font-size: 2.3em;
+  display: flex;
+  flex-direction: column;
+  gap: 40px;
+  align-items: center;
+  justify-content: center;
   text-align: center;
 }
 .error{
   font-size: 2.2em;
   text-align: center;
   height: 50%;
+}
+.cn{
+  font-size: 2.3em;
+
+
+}
+.addMember{
+  font-size: 1.3em;
+  cursor: pointer;
+  background-color: #5271ff;
+  color: #fff;
+  padding: 10px;
+  border-radius: 15px;
+  width: 30%;
+
 }

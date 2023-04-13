@@ -22,6 +22,7 @@ import { AddGroupComponent } from './controlPanel/add-group/add-group.component'
 import { MembersOfGroupComponent } from './controlPanel/members-of-group/members-of-group.component';
 import { MatDialogModule } from '@angular/material/dialog';
 import { AlertComponentComponent } from './login/alert-component/alert-component.component';
+import { AddMemberToGroupComponent } from './controlPanel/add-member-to-group/add-member-to-group.component';
 @NgModule({
   declarations: [
     AppComponent,
@@ -37,7 +38,8 @@ import { AlertComponentComponent } from './login/alert-component/alert-component
     SudoPopupComponent,
     CreateUserFormComponent,
     AlertComponentComponent,
-    MembersOfGroupComponent
+    MembersOfGroupComponent,
+    AddMemberToGroupComponent
   ],
   imports: [
     BrowserAnimationsModule,
