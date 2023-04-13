@@ -14,16 +14,16 @@ public class TestADQuerier {
 
     private static void testAuthenticatedQuerier() {
         String id = "fadda.antoine";
-        String pwd = "@Arnaudisthebest83";
+        String pwd = "@SuperMDP062#";
         IAuthentifiedADQuerier querier = new AuthentifiedADQuerier(id, pwd);
         String dn = "CN=Thomas Gorisse,OU=Direction General,OU=512Direction,OU=512Batiment,OU=512BankFR,DC=EQUIPE1B,DC=local";
         String structureDn = "OU=Secteur Comptabilite,OU=Departement Finance,OU=512Batiment,OU=512BankFR,DC=EQUIPE1B,DC=local";
 
-        System.out.println(querier.getFullPersonInfo(dn));
+//        System.out.println(querier.getFullPersonInfo(dn));
         NewPersonPayload person = new NewPersonPayload("Donald","Trump",structureDn,"Employé","0611911911","01234567890","19610101","Tour a son nom","CN=Bernard Roger,OU=Secteur Comptabilite,OU=Departement Finance,OU=512Batiment,OU=512BankFR,DC=EQUIPE1B,DC=local");
 //        querier.createPerson(person);
 //        System.out.println(querier.getFullPersonInfo("CN=Donald Trump,OU=Secteur Comptabilite,OU=Departement Finance,OU=512Batiment,OU=512BankFR,DC=EQUIPE1B,DC=local"));
-        querier.deletePerson("CN=Donald Trump,OU=Secteur Comptabilite,OU=Departement Finance,OU=512Batiment,OU=512BankFR,DC=EQUIPE1B,DC=local");
+//        querier.deletePerson("CN=Donald Trump,OU=Secteur Comptabilite,OU=Departement Finance,OU=512Batiment,OU=512BankFR,DC=EQUIPE1B,DC=local");
 //        System.out.println(querier.getFullPersonInfo("CN=Donald Trump,OU=Secteur Comptabilite,OU=Departement Finance,OU=512Batiment,OU=512BankFR,DC=EQUIPE1B,DC=local"));
 
         //        querier.modifyAttribute("streetAddress","22 rue de la Chapelle");
@@ -52,13 +52,11 @@ public class TestADQuerier {
 ////
 //        System.out.println("Suppression du groupe test");
 //        System.out.println(querier.deleteGroup("test"));
-
-//        querier.searchPerson("Antoine","dayOfBirth","15",0,15).forEach(System.out::println); //streetAddress, title, manager
-//        querier.searchPerson("Antoine","monthOfBirth","1",0,15).forEach(System.out::println); //streetAddress, title, manager
-//        querier.searchPerson("Antoine","yearOfBirth","198",0,15).forEach(System.out::println); //streetAddress, title, manager
+        querier.getAllFilters().forEach(System.out::println);
+//        querier.searchPerson("antoine","Adrsse","chapelle",0,15).forEach(System.out::println); //streetAddress, title, manager
+//        querier.searchPerson("Antoine","Mois de naissance","1",0,15).forEach(System.out::println); //streetAddress, title, manager
+//        querier.searchPerson("Antoine","Année de naissance","198",0,15).forEach(System.out::println); //streetAddress, title, manager
         querier.logout();
-
-
     }
 
     private static void testPublicQuerier() {
