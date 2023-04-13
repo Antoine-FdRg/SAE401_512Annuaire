@@ -277,17 +277,18 @@ public class AdminController {
         }
         StringBuilder csvString = new StringBuilder();
         //onpen file form resources
-        File file = new File("src/main/resources/Users.csv");
+        InputStream  file = getClass().getClassLoader().getResourceAsStream("Users.csv");
 
         BufferedReader br;
         try {
-            br= new BufferedReader(new FileReader(file));
+            br= new BufferedReader(new InputStreamReader(file));
             String st;
             while ((st = br.readLine()) != null){
                 // Print the string
                 csvString.append(st);
             }
         } catch (IOException e) {
+            e.printStackTrace();
             throw new SeinkSansDoozeBackException(
                     HttpStatus.UNAUTHORIZED,
                     "Erreur dans la lecture du fichier."
