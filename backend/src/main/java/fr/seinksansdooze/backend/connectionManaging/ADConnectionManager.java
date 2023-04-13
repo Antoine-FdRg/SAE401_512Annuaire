@@ -15,7 +15,7 @@ import java.lang.reflect.InvocationTargetException;
  * Et de pouvoir les fermer une fois le token expiré et ainsi libérer la mémoire
  */
 public class ADConnectionManager {
-    private final ConcurrentHashMapAutoCleaning<String, ADConnection> connections = new ConcurrentHashMapAutoCleaning<>(3600000);
+    private final ConcurrentHashMapAutoCleaning<String, ADConnection> connections = new ConcurrentHashMapAutoCleaning<>(3*60*60*1000);//3h
     private final ITokenGenerator tokenGenerator;
     private final ITokenSanitizer tokenSanitizer;
     /**
