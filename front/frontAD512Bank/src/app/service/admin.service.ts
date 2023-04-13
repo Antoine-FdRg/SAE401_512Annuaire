@@ -46,6 +46,7 @@ export class AdminService {
 
   deleteUser(dn:string){
     console.log("delete user : " + dn);
+    dn= encodeURIComponent(dn)
     const options = {
       headers: new HttpHeaders({
         'Content-Type': 'application/json',
