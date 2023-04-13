@@ -80,4 +80,19 @@ export class AdminService {
   {
     return this.http.get(apiURL + "/public/search/person", { params: { name: "*", page: 0, perPage: 100 } })
   }
+
+  searchAllOU()
+  {
+    const options = {
+      headers: new HttpHeaders({
+        'Content-Type': 'application/json',
+      }),
+      params: {
+        name: "*",
+        page: "0",
+        perPage: "100"
+      }
+    }
+    return this.http.get(apiURL + "/public/search/structure", options)
+  }
 }

@@ -20,7 +20,7 @@
           <input [formControl]="phone" placeholder="Téléphone" type="phone"/>
           <input [formControl]="title" placeholder="Poste" type="text"/>
           <input [formControl]="dateOfBirth" placeholder="Date de naissance" type="text"/>
-          <select name="" [formControl]="manager"  id="">
+          <select name="" [formControl]="manager" id="">
             <option value="" selected disabled hidden>Choisir un manager</option>
 
             <option *ngFor="let person of this.personList" value="{{person.dn}}">
@@ -28,8 +28,14 @@
             </option>
 
           </select>
+          <select name="" [formControl]="depSect" id="secteur">
+            <option value="" selected disabled hidden>Choisir un département/secteur</option>
+            <option *ngFor="let secteur of this.secteurList" value="{{secteur.dn}}">
+              {{secteur.department}}/{{secteur.name}}
+            </option>
+          </select>
         </div>
-        </div>
+      </div>
       <!--
       <div class="group5-frame21">
         <span class="group5-text06"><input #name placeholder="Nom" type="text"/>
@@ -53,5 +59,5 @@
       <span class="group5-text18"><span>CREATION DE COMPTE</span></span>
     </div>
      -->
+    </div>
   </div>
-</div>
