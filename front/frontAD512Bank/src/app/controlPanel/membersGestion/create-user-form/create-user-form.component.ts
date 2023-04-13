@@ -73,8 +73,8 @@ export class CreateUserFormComponent {
       alert("Veuillez remplir tous les champs");
       return;
     }
-
-    this.adminService.createMember(this.firstname.value, this.lastname.value, this.depSect.value, this.title.value, this.phone.value, this.phone.value, this.dateOfBirth.value, this.address.value, this.manager.value).subscribe(
+    console.log(this.depSect.value);
+    this.adminService.createMember(this.firstname.value, this.lastname.value, this.depSect.value.toString(), this.title.value, this.phone.value, this.phone.value, this.dateOfBirth.value, this.address.value, this.manager.value).subscribe(
       (response) => {
         console.log(response);
       }
