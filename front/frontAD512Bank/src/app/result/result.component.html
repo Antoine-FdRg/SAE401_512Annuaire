@@ -19,8 +19,8 @@
       {{struct.members}}
     </div>
   </div>
-
 </div>
+
 
 <section id="no-results" [style.display]="displayNotFound()">
   Oups, nous n'avons pas trouvé de résultats correspondants à votre recherche
@@ -83,7 +83,8 @@
 
     </div>
 
-    <div class="person" id="loadMoreResults"><button (click)="this.searchService.getMorePage()">Charger Plus de
+    <div class="person" id="loadMoreResults"><button [disabled]="!this.searchService.morePageResult" id="buttonLoadMore"
+        (click)="this.searchService.getMorePage()">Charger Plus de
         résultats</button></div>
 
     <div class="responsive-details" [style.height.px]="this.hideResponsiveDetails === true ? 0 : developDetails(i)">

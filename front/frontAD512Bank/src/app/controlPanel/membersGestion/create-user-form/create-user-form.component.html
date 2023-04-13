@@ -1,5 +1,5 @@
 <div>
-  <div class="group5-group5">
+  <div class="mainContainer">
     <div class="group5-frame20">
       <div class="group5-frame4" (click)="toggleShowCreatePopup()">
         <span class="group5-text"><span>ANNULER</span></span>
@@ -7,11 +7,30 @@
       <div class="group5-frame3" (click)="onCreatePressed()">
         <span class="group5-text02"><span>CRÉER</span></span>
       </div>
-      <div class="group5-frame22">
-        <span class="group5-text04">
-          <span>Changement de mot de passe à la prochaine connexion</span>
-        </span>
-      </div>
+
+      <div class="formContainer">
+        <div class="left half">
+
+          <input [formControl]="lastname" placeholder="Nom" type="text"/>
+          <input [formControl]="firstname" placeholder="Prénom" type="text"/>
+          <input [formControl]="email" placeholder="Adresse mail" type="email"/>
+          <input [formControl]="address" placeholder="Adresse" type="text"/>
+        </div>
+        <div class="half right">
+          <input [formControl]="phone" placeholder="Téléphone" type="phone"/>
+          <input [formControl]="title" placeholder="Poste" type="text"/>
+          <input [formControl]="dateOfBirth" placeholder="Date de naissance" type="text"/>
+          <select name="" [formControl]="manager"  id="">
+            <option value="" selected disabled hidden>Choisir un manager</option>
+
+            <option *ngFor="let person of this.personList" value="{{person.dn}}">
+              {{person.firstName}}
+            </option>
+
+          </select>
+        </div>
+        </div>
+      <!--
       <div class="group5-frame21">
         <span class="group5-text06"><input #name placeholder="Nom" type="text"/>
         </span>
@@ -33,5 +52,6 @@
       </div>
       <span class="group5-text18"><span>CREATION DE COMPTE</span></span>
     </div>
+     -->
   </div>
 </div>
