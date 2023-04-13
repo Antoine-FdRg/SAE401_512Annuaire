@@ -46,14 +46,13 @@ public abstract class ADQuerier {
      *
      * @param username le nom d'utilisateur
      * @param pwd      le mot de passe
-     * @return true si la connexion a réussi, false sinon
+     * @return Un objet LoggedInUser contenant les informations de l'utilisateur connecté
      */
     public LoggedInUser login(String username, String pwd) {
         Properties env = new Properties();
         username = username + "@EQUIPE1B.local";
         env.put(Context.INITIAL_CONTEXT_FACTORY, "com.sun.jndi.ldap.LdapCtxFactory");
         env.put(Context.PROVIDER_URL, AD_URL);
-//        env.put(Context.SECURITY_PROTOCOL, "ssl");
         env.put(Context.SECURITY_AUTHENTICATION, "Simple");
         env.put(Context.SECURITY_PRINCIPAL, username);
         env.put(Context.SECURITY_CREDENTIALS, pwd);
@@ -179,7 +178,7 @@ public abstract class ADQuerier {
         searchControls.setSearchScope(SearchControls.SUBTREE_SCOPE);
         NamingEnumeration<SearchResult> res;
         try {
-            res = safeSearch(AD_GROUP_BASE, filter, searchControls);
+            res = this.context.search(AD_GROUP_BASE, filter, searchControls);
             return res;
         } catch (NamingException e) {
             throw new SeinkSansDoozeBadRequest();
