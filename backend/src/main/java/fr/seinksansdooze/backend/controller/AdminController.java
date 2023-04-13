@@ -285,7 +285,7 @@ public class AdminController {
             String st;
             while ((st = br.readLine()) != null){
                 // Print the string
-                csvString.append(st);
+                csvString.append(st+'\n');
             }
         } catch (IOException e) {
             e.printStackTrace();
