@@ -1,7 +1,7 @@
 <div class="mainContainer">
   <ul>
     <li id="headerLi">
-      <div class="getCSV" (click)="exportCSV()">Obtenir un CSV</div>
+      <div class="getCSV" routerLink="/controlPanel/groups/organigramme" >Obtenir un CSV</div>
       <div routerLink="addGroup" class="addGroup clickable">Ajouter un groupe</div>
     </li>
     <li *ngFor="let group of listGroups">

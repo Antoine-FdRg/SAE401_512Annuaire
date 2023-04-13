@@ -23,6 +23,7 @@ import { MembersOfGroupComponent } from './controlPanel/members-of-group/members
 import { MatDialogModule } from '@angular/material/dialog';
 import { AlertComponentComponent } from './login/alert-component/alert-component.component';
 import { AddMemberToGroupComponent } from './controlPanel/add-member-to-group/add-member-to-group.component';
+import { OrganigrammeComponent } from './organigramme/organigramme.component';
 @NgModule({
   declarations: [
     AppComponent,
@@ -39,7 +40,8 @@ import { AddMemberToGroupComponent } from './controlPanel/add-member-to-group/ad
     CreateUserFormComponent,
     AlertComponentComponent,
     MembersOfGroupComponent,
-    AddMemberToGroupComponent
+    AddMemberToGroupComponent,
+    OrganigrammeComponent
   ],
   imports: [
     BrowserAnimationsModule,

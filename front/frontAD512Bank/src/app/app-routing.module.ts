@@ -11,6 +11,7 @@ import { InfosComponent } from './infos/infos.component';
 import { AuthGuard } from './auth.guard';
 import { AddGroupComponent } from './controlPanel/add-group/add-group.component';
 import { MembersOfGroupComponent } from './controlPanel/members-of-group/members-of-group.component';
+import { OrganigrammeComponent } from './organigramme/organigramme.component';
 const routes: Routes = [
   {
     path: '',
@@ -52,6 +53,10 @@ const routes: Routes = [
     component: AddMemberToGroupComponent,
     canActivate: [AuthGuard],
 
+  },{
+    path:'controlPanel/groups/organigramme',
+    component: OrganigrammeComponent,
+    canActivate: [AuthGuard],
   }
 ];
 
