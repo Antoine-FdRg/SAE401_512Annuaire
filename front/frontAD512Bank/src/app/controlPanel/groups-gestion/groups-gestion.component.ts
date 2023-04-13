@@ -28,14 +28,11 @@ export class GroupsGestionComponent {
 
   deleteGroup() {
     this.adminService.deleteGroup(this.targetedGroupCN).subscribe((response) => {
+      this.popup(true, response.msg);
       this.listGroups = this.listGroups.filter((group) => group.cn != this.targetedGroupCN);
     },
       (error) => {
-        let success: boolean = error.status == 200 || error.status == 201;
-        this.popup(success, success ? error.error.message : error.error.error);
-        if (success) {
-          this.listGroups = this.listGroups.filter((group) => group.cn != this.targetedGroupCN);
-        }
+        this.popup(false, error.error.error);
       });
   }
 
