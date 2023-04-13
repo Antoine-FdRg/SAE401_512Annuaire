@@ -1,5 +1,5 @@
 import { MatDialog } from '@angular/material/dialog';
-import { Component,TemplateRef } from '@angular/core';
+import { Component, TemplateRef } from '@angular/core';
 import { AdminService } from 'src/app/service/admin.service';
 
 @Component({
@@ -9,9 +9,9 @@ import { AdminService } from 'src/app/service/admin.service';
 })
 export class GroupsGestionComponent {
   listGroups: { cn: string }[] = []; //TODO : Change type to Group
-  targetedGroupCN:String = "";
+  targetedGroupCN: String = "";
 
-  constructor(private adminService: AdminService,private confirmationPopup: MatDialog) {
+  constructor(private adminService: AdminService, private confirmationPopup: MatDialog) {
     this.adminService.getGroups().subscribe(
       (response) => {
         this.listGroups = response as [];
@@ -31,23 +31,23 @@ export class GroupsGestionComponent {
       this.popup(true, response.msg);
       this.listGroups = this.listGroups.filter((group) => group.cn != this.targetedGroupCN);
     },
-    (error) => {
-      this.popup(false,error.error.error);
-    });
+      (error) => {
+        this.popup(false, error.error.error);
+      });
   }
 
-  cancel(){
+  cancel() {
     this.confirmationPopup.closeAll();
     this.targetedGroupCN = "";
   }
 
-  popup(sucess:boolean, msg: string) {
-    let popup:HTMLElement;
-    let content:HTMLElement
-    if(sucess){
+  popup(sucess: boolean, msg: string) {
+    let popup: HTMLElement;
+    let content: HTMLElement
+    if (sucess) {
       popup = document.getElementById("popupSuccess")!;
-      content= document.getElementById("popupSuccessContent")!;
-    }else{
+      content = document.getElementById("popupSuccessContent")!;
+    } else {
       popup = document.getElementById("popupError")!;
       content = document.getElementById("popupErrorContent")!;
     }
@@ -59,7 +59,7 @@ export class GroupsGestionComponent {
     setTimeout(() => {
       popup.classList.remove("fadeout");
       popup.style.display = "none";
-    },3000);
+    }, 3000);
   }
 
   exportCSV() {
@@ -72,8 +72,7 @@ export class GroupsGestionComponent {
     window.open(url);
   }
 
-  sort()
-  {
+  sort() {
 
     this.listGroups.reverse();
   }

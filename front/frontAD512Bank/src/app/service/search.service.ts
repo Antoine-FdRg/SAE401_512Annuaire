@@ -51,6 +51,7 @@ export class SearchService {
 
 
   search(search: string, isAdmin: any, filters: string, values: string) {
+    this.morePageResult = true;
     this.personResults = true;
     this.structResults = false;
     if (isAdmin && filters != "" && values != "") {
