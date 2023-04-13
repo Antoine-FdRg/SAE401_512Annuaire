@@ -24,7 +24,7 @@ export class AdminService {
   }
 
   createGroup(name:String){
-    return this.http.post(apiURL + "/admin/group/create",{cn:name});
+    return this.http.post<{msg:string}>(apiURL + "/admin/group/create",{cn:name});
   }
 
   getMembersOfGroup(name:string){
@@ -41,7 +41,7 @@ export class AdminService {
         cn: cn
       },
     };
-    return this.http.delete(apiURL + "/admin/group/delete", options);
+    return this.http.delete<{msg:string}>(apiURL + "/admin/group/delete", options);
   }
 
   deleteUser(dn:string){

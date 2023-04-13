@@ -18,14 +18,11 @@ export class AddGroupComponent {
     if(this.form.value == ''){
       return this.popup(false, "Le nom du groupe ne peut pas être vide.");
     }
-    console.log("createGroup() called");
-    console.log(this.form.value);
     this.adminService.createGroup(this.form.value).subscribe((response) => {
-      console.log("succes"+response);
+      this.popup(true, response.msg);
     },
     (error:HttpErrorResponse) => {
-      let success:boolean = error.status == 200 || error.status == 201;
-      this.popup(success, success?error.message:error.error.error);
+      this.popup(false, error.error.error);
     });
     this.form.setValue('');
   }

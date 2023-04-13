@@ -78,6 +78,7 @@
 
 .clickablesvg:hover{
   fill: crimson;
+  filter: grayscale(0%);
 }
 
 #popupContainer{
@@ -89,8 +90,9 @@
 }
 
 #popupSuccess{
-  background-color: green;
+  background-color: rgba(0, 128, 0, 0.774);
   display: none;
+  color: white;
 }
 
 #popupError{
