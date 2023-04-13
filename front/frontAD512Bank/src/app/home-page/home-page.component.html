@@ -57,12 +57,9 @@
           {{ branch }}
         </option>
       </select>
-      <input [formControl]="this.filterFormValue" type="text" placeholder="Valeur du filtre">
+      <input class="filterinput" [formControl]="this.filterFormValue" type="text" placeholder="Valeur du filtre">
     </div>
   </form>
-
-
-
   <div class="absoluteImages">
     <img src="../../assets/semiflatPerson.png" alt="semiFlatPerson" id="semiFlatPerson" />
     <div class="placementLoupe">
@@ -75,4 +72,4 @@
     </div>
   </div>
 </div>
-<app-result *ngIf="showResult()"></app-result>
+<app-result class="result" *ngIf="showResult()"></app-result>
