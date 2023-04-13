@@ -24,18 +24,6 @@ export class MembersGestionComponent implements OnInit {
         this.listMembers = response as Person[];
       }
     );
-    this.listMembers.push(
-      {
-        "firstName": "Raphael",
-        "lastName": "Caldwell",
-        "email": "test",
-        "login": "test",
-        "title": "Directeur Commercial",
-      }
-    )
-    console.log('====================================');
-    console.log(this.listMembers);
-    console.log('====================================');
   }
 
   ngOnInit() {
@@ -43,8 +31,8 @@ export class MembersGestionComponent implements OnInit {
   }
 
   toggleShowSudoPopup() {
-
     this.showSudoPopup = !this.showSudoPopup;
+
   }
 
   toggleShowAlert() {

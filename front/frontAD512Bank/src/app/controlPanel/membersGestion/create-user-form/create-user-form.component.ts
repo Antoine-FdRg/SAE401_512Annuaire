@@ -35,8 +35,6 @@ personList:Person[] = []
   }
 
   toggleShowCreatePopup() {
-    console.log("here");
-
     this.showCreatePopup.emit(false);
   }
 
