@@ -10,12 +10,12 @@ export class AuthGuard implements CanActivate {
   constructor(private loginService: LoginService) { }
   canActivate(): boolean {
     // si l'utilisateur n'est pas connecté, on le redirige vers la page de login
-    if (this.loginService.getUser() == undefined) {
+    if (this.loginService.user == undefined) {
       return false;
 
 
     }
-    if (this.loginService.getUser()!.admin == false) {
+    if (this.loginService.user!.admin == false) {
 
       return false;
     }

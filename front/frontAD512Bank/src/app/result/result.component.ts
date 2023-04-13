@@ -35,7 +35,7 @@ export class ResultComponent {
   }
 
   personClicked(person: Person, position: number) {
-    if (!this.loginService.getUserAndCheck()?.admin) return;
+    if (!this.loginService.getUser()?.admin) return;
     if (this.clickedPosition === position && !this.hideResponsiveDetails) {
       this.hideResponsiveDetails = true;
     }

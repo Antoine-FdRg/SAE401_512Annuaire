@@ -27,7 +27,7 @@ export class LoginService {
   constructor(private http: HttpClient, private router: Router) { }
 
 
-  getUserAndCheck(): Person | undefined {
+  getUser(): Person | undefined {
     // if userbase undefined then search in session storage
     if (this.userBase == undefined) {
       var parsed = JSON.parse(sessionStorage.getItem('user') || 'null');
