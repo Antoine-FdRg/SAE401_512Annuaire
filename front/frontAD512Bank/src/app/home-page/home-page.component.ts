@@ -45,6 +45,7 @@ export class HomePageComponent {
     document.getElementById("house1")!.style.display = "block";
   }
   onSearch($event: SubmitEvent) {
+    this.searchService.actualPage = 0;
     $event.preventDefault();
     var search = (<HTMLInputElement>document.getElementById("search")).value;
 
