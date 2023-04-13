@@ -43,6 +43,7 @@ export class MembersGestionComponent implements OnInit {
   }
 
   toggleShowSudoPopup() {
+
     this.showSudoPopup = !this.showSudoPopup;
   }
 
@@ -51,6 +52,7 @@ export class MembersGestionComponent implements OnInit {
   }
 
   toggleShowCreatePopup() {
+
     this.showCreatePopup = !this.showCreatePopup;
   }
 

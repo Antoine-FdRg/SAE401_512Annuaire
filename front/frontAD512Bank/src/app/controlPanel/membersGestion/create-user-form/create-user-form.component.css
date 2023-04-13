@@ -1,7 +1,7 @@
 :host {
   display: contents;
 }
-input, input:active,input:focus{
+input, input:active,input:focus,select,select:active{
   border: none;
   outline:none!important;
 }
