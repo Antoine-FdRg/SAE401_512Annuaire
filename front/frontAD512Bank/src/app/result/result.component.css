@@ -279,16 +279,23 @@ button {
   transition: all 0.2s ease-in;
 }
 button:disabled:hover {
-  box-shadow: 0 0 30px 5px #f0530b;
-  background: rgba(220, 43, 20, 0.63);
+  box-shadow: 0 0 0 0 transparent;
+  background: transparent;
+  border: 1px solid var(--blue512);
 }
-button:hover {
+button:disabled {
+  opacity: 0.5;
+}
+button:enabled:hover {
   background: var(--blue512);
-  box-shadow: 0 0 30px 5px #4dabff;
+  box-shadow: 0 0 15px 5px #4dabff;
   -webkit-transition: all 0.2s ease-out;
   -moz-transition: all 0.2s ease-out;
   transition: all 0.2s ease-out;
   color: white;
+}
+button:enabled {
+  cursor: pointer;
 }
 
 button:hover::before {
@@ -313,6 +320,9 @@ button::before {
   -ms-transform: skewX(-20deg);
   -o-transform: skewX(-20deg);
   transform: skewX(-20deg);
+}
+button:disabled::before {
+  display: none;
 }
 
 @keyframes sh02 {
@@ -382,7 +392,6 @@ h2 {
   font-weight: 500;
 }
 
-
 /* STRUCTURES */
 
 .struct-zone {
@@ -410,7 +419,7 @@ h2 {
 }
 
 .info-struct-button {
-  padding: 0px!important;
+  padding: 0px !important;
   transform: rotate(90deg);
   font-size: 20px;
   width: 56px !important;
@@ -432,4 +441,3 @@ h2 {
   display: flex;
   gap: 15px;
 }
-

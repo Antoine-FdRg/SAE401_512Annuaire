@@ -63,7 +63,6 @@ body {
 .cdk-global-overlay-wrapper #danger:hover{
   background: crimson;
   color: white;
-  filter: grayscale(40%);
   transition: 0.1s;
 }
 

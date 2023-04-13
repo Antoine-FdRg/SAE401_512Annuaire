@@ -43,6 +43,7 @@ li{
   flex: 5;
   font-style: italic;
     color: purple;
+    margin-right: 5%;
 }
 .content{
   display: flex;
@@ -57,6 +58,7 @@ li{
   text-align: center;
   height: 50%;
 }
+<<<<<<< HEAD
 .cn{
   font-size: 2.3em;
 
@@ -71,4 +73,16 @@ li{
   border-radius: 15px;
   width: 30%;
 
+=======
+
+
+.clickablesvg{
+  fill: "121212";
+  border-radius: 5px;
+}
+
+.clickablesvg:hover{
+  fill: crimson;
+  filter: grayscale(0%);
+>>>>>>> 29086e4dfcb7adb9c3026655ba730ac08f9a3f16
 }

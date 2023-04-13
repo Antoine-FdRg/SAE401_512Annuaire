@@ -58,7 +58,7 @@
 }
 
 .mainContainer button {
-  background: #5271ff;
+  background: var(--blue512);
   box-shadow: 6px 10px 20px rgba(0, 0, 0, 0.25),
     inset -20px 20px 41px rgba(74, 102, 230, 0.51);
   border-radius: 19px;
@@ -78,7 +78,14 @@
 
 .clickablesvg:hover{
   fill: crimson;
+  filter: grayscale(0%);
 }
+
+#showMember:hover{
+  fill: var(--blue512);
+}
+
+
 
 #popupContainer{
   position : absolute;
@@ -89,8 +96,9 @@
 }
 
 #popupSuccess{
-  background-color: green;
+  background-color: rgba(0, 128, 0, 0.774);
   display: none;
+  color: white;
 }
 
 #popupError{
@@ -114,4 +122,8 @@
   visibility: none;
   opacity: 0;
   transition: visibility 1s, opacity 1s linear;
+}
+
+.getCSV{
+  cursor: pointer;
 }
