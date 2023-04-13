@@ -12,7 +12,7 @@ import { ActivatedRoute } from '@angular/router';
 export class AddMemberToGroupComponent {
   public listMembers:Person[] = [];
   public person : FormControl= new FormControl("");
-  private cn:string = "";
+  public cn:string = "";
 
   constructor(private adminService:AdminService, private route: ActivatedRoute)
   {

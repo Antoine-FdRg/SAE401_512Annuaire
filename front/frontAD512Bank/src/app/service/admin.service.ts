@@ -72,10 +72,16 @@ export class AdminService {
   }
   removeMemberFromGroup(cn:string, dnUser:string)
   {
-    return this.http.delete(apiURL + "/admin/group/removeUser",{params:{
-      groupCN:cn,
-      dn:dnUser
-    }})
+    const options = {
+      headers: new HttpHeaders({
+        'Content-Type': 'application/json',
+      }),
+      body: {
+        groupCN:cn,
+        dn:dnUser
+      },
+    };
+    return this.http.delete(apiURL + "/admin/group/removeUser",options);
   }
   searchAll()
   {

@@ -1,4 +1,4 @@
-import { Component, TemplateRef } from '@angular/core';
+import { Component, TemplateRef, OnInit } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { ActivatedRoute, Route } from '@angular/router';
 import { Person } from 'src/app/person';
@@ -15,14 +15,18 @@ export class MembersOfGroupComponent {
   targetedGroupCN:String = "";
   deleteDN:string ="";
   constructor(private adminService : AdminService, private route: ActivatedRoute,public confirmationPopup: MatDialog) {
+
+
+
+  }
+  ngOnInit():void{
     this.route.queryParams.subscribe(params => {
       this.cn = params["cn"];
       this.getMembersOfGroup( this.cn );
 
     })
-
-
   }
+
 
   getMembersOfGroup(groupCN: string) {
     this.adminService.getMembersOfGroup(groupCN).subscribe((data)=>{
@@ -64,7 +68,7 @@ export class MembersOfGroupComponent {
     {
       this.adminService.removeMemberFromGroup(this.cn,this.deleteDN).subscribe((data)=>{
         console.log(data);
-
+        this.ngOnInit();
       });
     }
 

@@ -58,7 +58,6 @@ li{
   text-align: center;
   height: 50%;
 }
-<<<<<<< HEAD
 .cn{
   font-size: 2.3em;
 
@@ -72,8 +71,7 @@ li{
   padding: 10px;
   border-radius: 15px;
   width: 30%;
-
-=======
+}
 
 
 .clickablesvg{
@@ -84,5 +82,4 @@ li{
 .clickablesvg:hover{
   fill: crimson;
   filter: grayscale(0%);
->>>>>>> 29086e4dfcb7adb9c3026655ba730ac08f9a3f16
 }

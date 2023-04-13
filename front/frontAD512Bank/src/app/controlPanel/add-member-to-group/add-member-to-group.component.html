@@ -5,5 +5,5 @@
       {{person.firstName}}
     </option>
   </select>
-  <button (click)="addMember()">Ajouter</button>
+  <button [routerLink]="['/controlPanel/groups/members']"[queryParams]="{ cn:this.cn }" routerLinkActive="router-link-active"  (click)="addMember()">Ajouter</button>
 </div>
