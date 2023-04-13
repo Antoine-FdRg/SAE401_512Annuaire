@@ -289,3 +289,6 @@ input:focus {
   border: none;
   border-radius: 20px;
 }
+.result{
+  margin-bottom: 30px;
+}
