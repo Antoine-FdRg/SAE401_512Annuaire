@@ -9,41 +9,7 @@
         <div class="name">M. {{ member.firstName }} {{ member.lastName }}</div>
       </div>
       <div class="logos">
-        <svg
-          class="clickable"
-          width="60"
-          height="60"
-          viewBox="0 0 60 60"
-          fill="none"
-          xmlns="http://www.w3.org/2000/svg"
-        >
-          <path
-            d="M32.5 52.5H52.5"
-            stroke="#323232"
-            stroke-width="5"
-            stroke-linecap="round"
-            stroke-linejoin="round"
-          />
-          <path
-            d="M50.1627 18.4856L17.7492 51.0285C16.8109 51.9705 15.5362 52.5 14.2066 52.5H10.0096C8.62357 52.5 7.5 51.3665 7.5 49.9805V45.7467C7.5 44.424 8.02405 43.1552 8.95742 42.2182L41.3793 9.66702C48.908 3.36802 56.4367 12.1865 50.1627 18.4856Z"
-            stroke="#323232"
-            stroke-width="5"
-            stroke-linecap="round"
-            stroke-linejoin="round"
-          />
-          <path
-            d="M38.2739 13.2744L46.8182 21.8188"
-            stroke="#323232"
-            stroke-width="5"
-            stroke-linecap="round"
-            stroke-linejoin="round"
-          />
-          <path
-            opacity="0.1"
-            d="M46.39 22.2736L17.7492 51.0286C16.811 51.9706 15.5361 52.5001 14.2066 52.5001H10.0096C8.62357 52.5001 7.5 51.3666 7.5 49.9806V45.7468C7.5 44.4241 8.02405 43.1553 8.95742 42.2183L37.6618 13.3994C37.6855 13.5156 37.7423 13.6263 37.8323 13.7164L46.3765 22.2607C46.381 22.2651 46.3855 22.2694 46.39 22.2736Z"
-            fill="#323232"
-          />
-        </svg>
+
         <svg
           (click)="openPopUp('delete', member.dn)"
           width="60"

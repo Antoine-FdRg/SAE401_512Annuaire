@@ -280,3 +280,12 @@ input:focus {
     flex-direction: column;
   }
 }
+#filters{
+  display: flex;
+  gap: 40px;
+}
+.filterinput{
+  padding: 20px;
+  border: none;
+  border-radius: 20px;
+}
