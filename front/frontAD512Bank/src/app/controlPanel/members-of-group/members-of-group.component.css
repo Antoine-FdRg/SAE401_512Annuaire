@@ -43,6 +43,7 @@ li{
   flex: 5;
   font-style: italic;
     color: purple;
+    margin-right: 5%;
 }
 .content{
   font-size: 2.3em;
@@ -52,4 +53,15 @@ li{
   font-size: 2.2em;
   text-align: center;
   height: 50%;
+}
+
+
+.clickablesvg{
+  fill: "121212";
+  border-radius: 5px;
+}
+
+.clickablesvg:hover{
+  fill: crimson;
+  filter: grayscale(0%);
 }
