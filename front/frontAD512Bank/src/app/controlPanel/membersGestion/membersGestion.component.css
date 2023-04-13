@@ -31,6 +31,8 @@
 }
 
 #addMember {
+  cursor: pointer;
+
   height: auto;
   color: var(--white-text);
   background-color: var(--blue512);
