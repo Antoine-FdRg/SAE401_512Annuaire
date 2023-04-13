@@ -12,7 +12,6 @@
     </div>
 
     <section id="infos">
-
         <div id="surname">
             <div class="info-header">
                 <div class="indicator">Nom</div>
@@ -44,48 +43,6 @@
 
         </div>
 
-        <div id="login">
-            <div class="info-header">
-                <div class="indicator">Login</div>
-
-            </div>
-
-            <div class="info-group">
-                <div class="information">{{user?.login}}</div>
-            </div>
-        </div>
-
-        <div id="address">
-            <div class="info-header">
-                <div class="indicator">Adresse</div>
-                <span class="material-symbols-outlined" (click)="modified['address'] = true">edit</span>
-            </div>
-
-            <div class="info-group">
-                <div class="information" [style.display]="!modified['address'] ? 'block' : 'none'">
-                    <blockquote>TODO</blockquote>
-                </div>
-
-                <div class="modification" [style.display]="modified['address'] ? 'flex' : 'none'">
-                    <div class="group">
-                        <input required="" type="text" class="input">
-                        <span class="highlight"></span>
-                        <span class="bar"></span>
-                        <label>Nouvelle adresse</label>
-                    </div>
-
-                    <div class="buttons">
-                        <button class="rollback clickable" (click)="modified['address']=false">
-                            Annuler
-                        </button>
-                        <button class="commit clickable" (click)="newField(ChangingField.address)">
-                            Valider
-                        </button>
-                    </div>
-                </div>
-            </div>
-        </div>
-
         <div id="name">
             <div class="info-header">
                 <div class="indicator">Prénom</div>
@@ -93,7 +50,8 @@
             </div>
 
             <div class="info-group">
-                <div class="information" [style.display]="!modified['name'] ? 'block' : 'none'">{{user?.firstName}}
+                <div class="information" [style.display]="!modified['name'] ? 'block' : 'none'">
+                    {{user?.firstName}}
                 </div>
                 <div class="modification" [style.display]="modified['name'] ? 'flex' : 'none'">
                     <div class="group">
@@ -115,6 +73,48 @@
             </div>
         </div>
 
+        <div id="login">
+            <div class="info-header">
+                <div class="indicator">Login</div>
+
+            </div>
+
+            <div class="info-group">
+                <div class="information">{{user?.login}}</div>
+            </div>
+        </div>
+
+        <div id="address">
+            <div class="info-header">
+                <div class="indicator">Adresse</div>
+                <span class="material-symbols-outlined" (click)="modified['address'] = true">edit</span>
+            </div>
+
+            <div class="info-group">
+                <div class="information" [style.display]="!modified['address'] ? 'block' : 'none'">
+                    {{user?.address}}
+                </div>
+
+                <div class="modification" [style.display]="modified['address'] ? 'flex' : 'none'">
+                    <div class="group">
+                        <input #addr required="" type="text" class="input">
+                        <span class="highlight"></span>
+                        <span class="bar"></span>
+                        <label>Nouvelle adresse</label>
+                    </div>
+
+                    <div class="buttons">
+                        <button class="rollback clickable" (click)="modified['address']=false">
+                            Annuler
+                        </button>
+                        <button class="commit clickable" (click)="newField(ChangingField.address, addr.value)">
+                            Valider
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
         <div id="mail">
             <div class="info-header">
                 <div class="indicator">Adresse email personelle</div>
@@ -144,35 +144,88 @@
 
         </div>
 
-        <div id="phone">
+        <div id="birth-date">
             <div class="info-header">
-                <div class="indicator">Numéro de Téléphone</div>
-                <span class="material-symbols-outlined" (click)="modified['phone'] = true">edit</span>
+                <div class="indicator">Date de naissance</div>
+                <span class="material-symbols-outlined" (click)="modified['birthDate'] = true">edit</span>
             </div>
 
             <div class="info-group">
-                <div class="information" [style.display]="!modified['phone'] ? 'block' : 'none'">{{user?.phone}}</div>
-                <div class="modification" [style.display]="modified['phone'] ? 'flex' : 'none'">
+                <div class="information" [style.display]="!modified['birthDate'] ? 'block' : 'none'">{{user?.birthDate}}</div>
+                <div class="modification" [style.display]="modified['birthDate'] ? 'flex' : 'none'">
                     <div class="group">
                         <input required="" type="text" class="input">
+                        <span class="highlight"></span>
+                        <span class="bar"></span>
+                        <label>Nouvelle date</label>
+                    </div>
+
+                    <div class="buttons">
+                        <button class="rollback clickable" (click)="modified['birthDate']=false">
+                            Annuler
+                        </button>
+                        <button class="commit clickable" (click)="newField(ChangingField.birthDate)">
+                            Valider
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div id="personalPhone">
+            <div class="info-header">
+                <div class="indicator">Numéro de téléphone personnel</div>
+                <span class="material-symbols-outlined" (click)="modified['personalPhone'] = true">edit</span>
+            </div>
+
+            <div class="info-group">
+                <div class="information" [style.display]="!modified['personalPhone'] ? 'block' : 'none'">{{user?.personalPhone}}</div>
+                <div class="modification" [style.display]="modified['personalPhone'] ? 'flex' : 'none'">
+                    <div class="group">
+                        <input #perPhone required="" type="text" class="input">
                         <span class="highlight"></span>
                         <span class="bar"></span>
                         <label>Nouveau numéro</label>
                     </div>
 
                     <div class="buttons">
-                        <button class="rollback clickable" (click)="modified['phone']=false">
+                        <button class="rollback clickable" (click)="modified['personalPhone']=false">
                             Annuler
                         </button>
-                        <button class="commit clickable" (click)="newField(ChangingField.phone)">
+                        <button class="commit clickable" (click)="newField(ChangingField.personalPhone, perPhone.value)">
                             Valider
                         </button>
                     </div>
                 </div>
             </div>
+        </div>
 
+        <div id="professionalPhone">
+            <div class="info-header">
+                <div class="indicator">Numéro de téléphone professionnel</div>
+                <span class="material-symbols-outlined" (click)="modified['professionalPhone'] = true">edit</span>
+            </div>
 
+            <div class="info-group">
+                <div class="information" [style.display]="!modified['professionalPhone'] ? 'block' : 'none'">{{user?.professionalPhone}}</div>
+                <div class="modification" [style.display]="modified['professionalPhone'] ? 'flex' : 'none'">
+                    <div class="group">
+                        <input #profPhone required="" type="text" class="input">
+                        <span class="highlight"></span>
+                        <span class="bar"></span>
+                        <label>Nouveau numéro</label>
+                    </div>
+
+                    <div class="buttons">
+                        <button class="rollback clickable" (click)="modified['professionalPhone']=false">
+                            Annuler
+                        </button>
+                        <button class="commit clickable" (click)="newField(ChangingField.professionalPhone, profPhone.value)">
+                            Valider
+                        </button>
+                    </div>
+                </div>
+            </div>
         </div>
     </section>
-
 </div>

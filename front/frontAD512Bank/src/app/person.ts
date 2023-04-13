@@ -8,4 +8,9 @@ export interface Person {
   email?: string;
   admin?: boolean;
   dn?: string;
+  personalPhone?: string;
+  professionalPhone?: string;
+  address?: string;
+  birthDate?: string;
 }
+

@@ -98,6 +98,8 @@ export class SearchService {
     );
   }
 
+
+
   getInfos(person: Person) {
     if (!person) return;
     if (!person.dn) return;

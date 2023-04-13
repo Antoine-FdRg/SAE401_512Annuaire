@@ -19,9 +19,12 @@ export class LoginService {
 
 
   userBase: Person | undefined;
-
-  constructor(private http: HttpClient, private router: Router) {
-  }
+  public user : Person = {
+    firstName: '',
+    lastName: '',
+    login: ''
+  };
+  constructor(private http: HttpClient, private router: Router) { }
 
 
   getUser(): Person | undefined {
@@ -69,24 +72,49 @@ export class LoginService {
     var headers = new HttpHeaders();
     headers = headers.append('Access-Control-Allow-Headers', '*');
 
-
-    this.http.post(apiURL + "/auth/login", {username: login, password: password}).subscribe(
+    this.http.post(apiURL + "/auth/login", { username: login, password: password }).subscribe(
       (response: any) => {
-        this.userBase = {
-          firstName: response.firstName,
-          lastName: response.lastName,
-          login: response.login,
-          email: response.email,
-          dn: response.dn,
-          admin: response.admin
-        };
+        this.userBase = { 
+          firstName: response.firstName, 
+          lastName: response.lastName, 
+          login: response.login, 
+          email: response.email, 
+          dn: response.dn, 
+          admin: response.admin };
+
         sessionStorage.setItem('user', JSON.stringify(this.userBase));
         // store the token Autorisation which is in header in session storage
         sessionStorage.setItem('token', response.token);
+        console.log(response);
+
+        this.updateUser();
+        
+        if(response.admin){
+          this.router.navigate(['/controlPanel']);
+          return;
+        }
         this.router.navigate(['/home']);
       },
       (error) => {
         console.log(error);
+      }
+    );
+  }
+
+  updateUser() {
+    this.http.get(apiURL + "/member/getInfo", {}).subscribe(
+      (response : any) => {
+        console.log(response);
+        this.user.firstName = response.firstName;
+        this.user.lastName = response.lastName;
+        this.user.login = response.login;
+        this.user.email = response.email;
+        this.user.address = response.address;
+        this.user.personalPhone = response.personalPhone;
+        this.user.professionalPhone = response.professionalPhone;
+        this.user.dn = response.dn;
+        this.user.admin = response.admin;
+        this.user.birthDate = response.dateOfBirth;
       }
     );
   }

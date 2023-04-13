@@ -24,12 +24,7 @@ export class ResultComponent {
       this.searchService.sort(e);
 
     })
-    //time out 1s to wait for the search service to be updated
-    
   }
-
-
-
 
   displayNotFound(): string {
 

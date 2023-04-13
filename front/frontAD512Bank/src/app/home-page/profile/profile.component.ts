@@ -20,7 +20,7 @@ export class ProfileComponent {
   surname = "Paul";
   initials: string = "";
 
-  constructor(private loginService: LoginService, private router: Router) {
+  constructor(protected loginService: LoginService, private router: Router) {
     this.status = Status.disconnected;
     if (this.loginService.getUser() == undefined) {
       return
