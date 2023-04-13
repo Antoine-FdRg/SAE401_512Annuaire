@@ -6,44 +6,63 @@ import { Person } from '../person';
 import { ResultComponent } from '../result/result.component';
 import { PersonAdmin } from '../person-admin';
 import { AdminService } from './admin.service';
+import { Struct } from '../struct';
 
 @Injectable({
   providedIn: 'root'
 })
 export class SearchService {
   resultShowing: boolean = false;
+  personResults: boolean = false;
+  structResults: boolean = false;
   defaultSorting: Person[] = [];
   sortingValue: string = "rang";
   actualPage: number = 0;
   lastResults: Person[] = [];
   lastQuery: string = "";
-
-  structureResult:string[]=[];
+  morePageResult: boolean = true; // permet de savoir si le bouton "plus de résultats" doit être affiché
+  structureResult: Struct[] = [];
 
   constructor(private http: HttpClient) { }
-  searchHouse(search:string)
-  {
-
-    this.http.get(apiURL + "/public/search/structure", { params: { name: search, page: this.actualPage, perPage: 15 } }).subscribe((data)=>{
+  searchStruct(search: string) {
+    this.personResults = false;
+    this.structResults = true;
+    this.http.get(apiURL + "/public/search/structure", { params: { name: search, page: this.actualPage, perPage: 15 } }).subscribe((data) => {
       this.lastQuery = search;
       this.resultShowing = true;
-      this.structureResult=data as [];
+      console.log(data);
 
+      this.structureResult = data as Struct[];
+      for (let i = 0; i < this.structureResult.length; i++) {
+        let struct = this.structureResult[i];
+        let value = struct.dn.substr(0, struct.dn.indexOf(","));
+        value = value.replace("OU=", "");
+        struct.title = value;
+      }
     });
   }
-  search(search: string, isAdmin: any, filters:string,values:string) {
 
-    if(isAdmin && filters!="" && values!="")
-    {
-      this.http.get(apiURL + "/admin/search/person", { params: { name: search,filter : filters, value: values,page :this.actualPage,perPage: 15 } }).subscribe((data)=>{
-          this.lastQuery = search;
-          this.resultShowing = true;
-          this.lastResults = data as Person[];
-          this.defaultSorting = this.lastResults.slice();
-          this.sort(this.sortingValue);
-          this.sortingValue = "rang";
+  detailStruct(struct: Struct) {
+    this.http.get(apiURL + "/admin/info/structure/" + encodeURIComponent(struct.dn)).subscribe((data) => {
+      struct.members = (data as Struct).members;
+    });
+  }
+
+
+
+  search(search: string, isAdmin: any, filters: string, values: string) {
+    this.personResults = true;
+    this.structResults = false;
+    if (isAdmin && filters != "" && values != "") {
+      this.http.get(apiURL + "/admin/search/person", { params: { name: search, filter: filters, value: values, page: this.actualPage, perPage: 15 } }).subscribe((data) => {
+        this.lastQuery = search;
+        this.resultShowing = true;
+        this.lastResults = data as Person[];
+        this.defaultSorting = this.lastResults.slice();
+        this.sort(this.sortingValue);
+        this.sortingValue = "rang";
       });
-    }else {
+    } else {
 
       this.http.get(apiURL + "/public/search/person", { params: { name: search, page: this.actualPage, perPage: 15 } }).subscribe(
         (response) => {
@@ -56,15 +75,21 @@ export class SearchService {
         }
       );
     }
-
-
   }
 
   getMorePage() {
+    let somethingAdded: boolean = false;
     this.actualPage++;
-    this.http.get(apiURL + "/public/search/person", { params: { name: this.lastQuery, page: this.actualPage, perPage: 15 } }).subscribe(
+    this.http.get<Person[]>(apiURL + "/public/search/person", { params: { name: this.lastQuery, page: this.actualPage, perPage: 15 } }).subscribe(
       (response) => {
-        // console.log(response);
+        console.log(response);
+        if (response.length != 0) {
+          console.log("something added");
+
+          somethingAdded = true;
+        }
+        this.morePageResult = somethingAdded;
+
         this.resultShowing = true;
         this.lastResults = this.lastResults.concat(response as Person[]);
         this.defaultSorting = this.lastResults.slice();

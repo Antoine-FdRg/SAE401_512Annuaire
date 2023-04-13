@@ -31,6 +31,8 @@
 }
 
 #addMember {
+  cursor: pointer;
+
   height: auto;
   color: var(--white-text);
   background-color: var(--blue512);
@@ -49,7 +51,7 @@
   align-items: flex-end;
   justify-content: flex-start;
   /* margin-bottom: 1em; */
-  font-size: 1.5em;
+  font-size: 1.3em;
 }
 .role {
   font-style: italic;

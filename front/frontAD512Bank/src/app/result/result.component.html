@@ -3,21 +3,42 @@
 <link rel="stylesheet"
   href="https://fonts.googleapis.com/css2?family=Material+Symbols+Rounded:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" />
 
-  <div class="person-zone" *ngFor="let struct of this.searchService.structureResult">
-    <div>
-      {{struct}}
+<div class="struct-zone" *ngIf="this.searchService.structResults">
+  <div class="struct" *ngFor="let struct of this.searchService.structureResult">
+    <div class="struct-header">
+      <div class="structTitle">
+        {{struct.title}}
+      </div>
+
+      <div *ngIf="this.loginService.getUser()?.admin" class="clickable blue-style info-struct-button"
+        (click)="this.searchService.detailStruct(struct)">
+        >
+      </div>
+    </div>
+
+    <div class="member-zone">
+      <div class="structMembers" *ngFor="let member of struct.members">
+      
+        {{member.firstName}} <br>
+        {{member.lastName}}
+        
+      </div>
     </div>
   </div>
+</div>
+
 
 <section id="no-results" [style.display]="displayNotFound()">
   Oups, nous n'avons pas trouvé de résultats correspondants à votre recherche
 </section>
 
-<div id="number-of-results" [style.display]="displayNotFound() == 'none' ? 'block' : 'none'">
+<div *ngIf="this.searchService.personResults" id="number-of-results"
+  [style.display]="displayNotFound() == 'none' ? 'block' : 'none'">
   <strong>{{ searchService.lastResults.length }}</strong>
   résultat(s) trouvé(s)
 </div>
-<div class="sortButton" [style.display]="displayNotFound() == 'none' ? 'flex' : 'none'">
+<div *ngIf="this.searchService.personResults" class="sortButton"
+  [style.display]="displayNotFound() == 'none' ? 'flex' : 'none'">
   <select class="selector" [formControl]="this.form">
     <option value="" selected disabled hidden>Trier par</option>
     <option value="rang">Trier par rang</option>
@@ -25,7 +46,9 @@
     <option value="prenom">Trier par prenom</option>
   </select>
 </div>
-<section id="results-container" [style.display]="displayNotFound() == 'none' ? 'flex' : 'none'">
+
+<section *ngIf="this.searchService.personResults" id="results-container"
+  [style.display]="displayNotFound() == 'none' ? 'flex' : 'none'">
   <section id="person-container">
     <div class="person-zone" *ngFor="let person of this.searchService.lastResults; let i = index">
       <div class="person" (click)="personClicked(person, i)">
@@ -69,7 +92,8 @@
 
     </div>
 
-    <div class="person" id="loadMoreResults"><button (click)="this.searchService.getMorePage()">Charger Plus de
+    <div class="person" id="loadMoreResults"><button [disabled]="!this.searchService.morePageResult" id="buttonLoadMore"
+        (click)="this.searchService.getMorePage()">Charger Plus de
         résultats</button></div>
 
     <div class="responsive-details" [style.height.px]="this.hideResponsiveDetails === true ? 0 : developDetails(i)">

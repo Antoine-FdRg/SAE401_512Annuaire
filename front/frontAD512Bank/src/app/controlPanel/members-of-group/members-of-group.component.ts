@@ -1,4 +1,5 @@
-import { Component } from '@angular/core';
+import { Component, TemplateRef } from '@angular/core';
+import { MatDialog } from '@angular/material/dialog';
 import { ActivatedRoute, Route } from '@angular/router';
 import { Person } from 'src/app/person';
 import { AdminService } from 'src/app/service/admin.service';
@@ -11,7 +12,9 @@ import { AdminService } from 'src/app/service/admin.service';
 export class MembersOfGroupComponent {
   listMembers: Person[] = []; //TODO : Change type to Group
   cn:string = "";
-  constructor(private adminService : AdminService, private route: ActivatedRoute) {
+  targetedGroupCN:String = "";
+  deleteDN:string ="";
+  constructor(private adminService : AdminService, private route: ActivatedRoute,public confirmationPopup: MatDialog) {
     this.route.queryParams.subscribe(params => {
       this.cn = params["cn"];
       this.getMembersOfGroup( this.cn );
@@ -44,5 +47,26 @@ export class MembersOfGroupComponent {
         return 1;
       }
     });
+  }
+  openDeleteConfirmationPopup(templateRef: TemplateRef<any>, groupCN: String, dn:any) {
+    this.confirmationPopup.open(templateRef);
+    this.targetedGroupCN = groupCN;
+    this.deleteDN = dn;
+  }
+  cancel()
+  {
+    this.confirmationPopup.closeAll();
+    this.targetedGroupCN = "";
+  }
+  removeMember()
+  {
+    if(this.deleteDN != "")
+    {
+      this.adminService.removeMemberFromGroup(this.cn,this.deleteDN).subscribe((data)=>{
+        console.log(data);
+
+      });
+    }
+
   }
 }

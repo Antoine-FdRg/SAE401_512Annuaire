@@ -1,5 +1,8 @@
 import {Component, EventEmitter, Output, ViewChild} from '@angular/core';
 import {AdminService} from "../../../service/admin.service";
+import { FormControl } from '@angular/forms';
+import { Person } from 'src/app/person';
+import { SearchService } from 'src/app/service/search.service';
 
 @Component({
   selector: 'app-create-user-form',
@@ -7,8 +10,26 @@ import {AdminService} from "../../../service/admin.service";
   styleUrls: ['./create-user-form.component.css']
 })
 export class CreateUserFormComponent {
+lastname :FormControl= new FormControl("");
+email :FormControl= new FormControl("");
+firstname :FormControl= new FormControl("");
+address :FormControl= new FormControl("");
+phone :FormControl= new FormControl("");
+title :FormControl= new FormControl("");
+dateOfBirth :FormControl= new FormControl("");
+manager :FormControl= new FormControl("");
 
-  constructor(private adminService: AdminService) { }
+personList:Person[] = []
+
+
+  constructor(private adminService: AdminService) {
+    this.adminService.searchAll().subscribe((data)=>{
+      console.log(data);
+
+      this.personList = data as [];
+    });
+  }
+
   @Output() showCreatePopup: EventEmitter<boolean> = new EventEmitter<boolean>();
   ngOnInit(): void {
   }
@@ -17,29 +38,20 @@ export class CreateUserFormComponent {
     this.showCreatePopup.emit(false);
   }
 
-  @ViewChild("name") name: string | undefined;
-  @ViewChild("email") email: string | undefined;
-  @ViewChild("firstname") firstname: string | undefined;
-  @ViewChild("addresse") addressed: string | undefined;
-  @ViewChild("telephone") telephone: string | undefined;
-  @ViewChild("login") login: string | undefined;
 
   onCreatePressed() {
-    if (this.name === undefined || this.email === undefined || this.firstname === undefined || this.addressed === undefined || this.telephone === undefined || this.login === undefined) {
+    console.log(this.manager.value);
+
+    if(this.lastname.value == "" || this.email.value == "" || this.firstname.value == "" || this.address.value == "" || this.phone.value == "" || this.title.value == "" || this.dateOfBirth.value == "" || this.manager.value == ""){
+      alert("Veuillez remplir tous les champs");
       return;
     }
-    let name = this.name;
-    let email = this.email;
-    let firstname = this.firstname;
-    let addresse = this.addressed;
-    let telephone = this.telephone;
-    let login = this.login;
 
-    this.adminService.createMember(firstname,name,"", "",telephone,"","",addresse,"").subscribe(
-      (response) => {
-        console.log(response);
-      }
-    );
+    this.adminService.createMember(this.firstname.value,this.lastname.value,"OU=512Batiment,OU=512BankFR,DC=EQUIPE1B,DC=local", this.title.value,this.phone.value,this.phone.value,this.dateOfBirth.value,this.address.value,this.manager.value).subscribe(
+       (response) => {
+         console.log(response);
+       }
+     );
 
   }
 

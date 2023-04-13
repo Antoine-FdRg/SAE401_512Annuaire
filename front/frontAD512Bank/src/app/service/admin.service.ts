@@ -11,7 +11,7 @@ export class AdminService {
   constructor(private http: HttpClient) { }
 
   public getMembers() {
-    return this.http.get(apiURL + "/public/search/person", { params: { name: "a ", page: 0, perPage: 30 } });
+    return this.http.get(apiURL + "/public/search/person", { params: { name: "*", page: 0, perPage: 120 } });
   }
 
 
@@ -46,6 +46,7 @@ export class AdminService {
 
   deleteUser(dn:string){
     console.log("delete user : " + dn);
+    dn= encodeURIComponent(dn)
     const options = {
       headers: new HttpHeaders({
         'Content-Type': 'application/json',
@@ -56,21 +57,27 @@ export class AdminService {
 
   createMember(firstName:string, lastName:string,structureDN:string, title:string, personalPhone:string, professionalPhone:string, dateOfBirth:string, address:string,managerDN:string){
     const options = {
-      headers: new HttpHeaders({
-        'Content-Type': 'application/json',
-      }),
-      body: {
-        firstName: firstName,
-        lastName: lastName,
-        structureDN: structureDN,
-        title: title,
-        personalPhone: personalPhone,
-        professionalPhone: professionalPhone,
-        dateOfBirth: dateOfBirth,
-        address: address,
-        managerDN: managerDN
-      }
+      firstName: firstName,
+      lastName: lastName,
+      structureDN: structureDN,
+      title: title,
+      personalPhone: personalPhone,
+      professionalPhone: professionalPhone,
+      dateOfBirth: dateOfBirth,
+      address: address,
+      managerDN: managerDN
     }
     return this.http.post(apiURL + "/admin/member/create", options);
+  }
+  removeMemberFromGroup(cn:string, dnUser:string)
+  {
+    return this.http.delete(apiURL + "/admin/group/removeUser",{params:{
+      groupCN:cn,
+      dn:dnUser
+    }})
+  }
+  searchAll()
+  {
+    return this.http.get(apiURL + "/public/search/person", { params: { name: "*", page: 0, perPage: 100 } })
   }
 }
