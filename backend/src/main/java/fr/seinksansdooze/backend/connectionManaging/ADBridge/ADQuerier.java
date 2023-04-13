@@ -6,11 +6,14 @@ import fr.seinksansdooze.backend.model.exception.SeinkSansDoozeBadRequest;
 import fr.seinksansdooze.backend.model.exception.group.SeinkSansDoozeGroupNotFound;
 import fr.seinksansdooze.backend.model.exception.user.SeinkSansDoozeUserNotFound;
 import fr.seinksansdooze.backend.model.response.LoggedInUser;
+import fr.seinksansdooze.backend.model.response.PartialPerson;
+import fr.seinksansdooze.backend.model.response.PartialStructure;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 
 import javax.naming.Context;
+import javax.naming.Name;
 import javax.naming.NamingEnumeration;
 import javax.naming.NamingException;
 import javax.naming.directory.*;
@@ -22,12 +25,11 @@ import java.util.Properties;
 public abstract class ADQuerier {
     private static final String AD_URL = "ldap://10.22.32.2:389/";  //389 (search et createSubcontext) ou 3268 (search only) ou 636 (SSL)
     protected static final String AD_BASE = "OU=512BankFR,DC=EQUIPE1B,DC=local";
+    protected static final String AD_GROUP_BASE = "CN=Users,DC=EQUIPE1B,DC=local";
 
     protected DirContext context;
 
-
     protected ADQuerier(String username, String pwd) {
-        //rajouter un systeme de session et d'authentification
         boolean connected = this.login(username, pwd) != null;
         if (!connected) {
             throw new SeinkSansDoozeBackException(HttpStatus.NOT_ACCEPTABLE, "Impossible de se connecter à l'annuaire Active Directory");
@@ -44,14 +46,13 @@ public abstract class ADQuerier {
      *
      * @param username le nom d'utilisateur
      * @param pwd      le mot de passe
-     * @return true si la connexion a réussi, false sinon
+     * @return Un objet LoggedInUser contenant les informations de l'utilisateur connecté
      */
     public LoggedInUser login(String username, String pwd) {
         Properties env = new Properties();
         username = username + "@EQUIPE1B.local";
         env.put(Context.INITIAL_CONTEXT_FACTORY, "com.sun.jndi.ldap.LdapCtxFactory");
         env.put(Context.PROVIDER_URL, AD_URL);
-//        env.put(Context.SECURITY_PROTOCOL, "ssl");
         env.put(Context.SECURITY_AUTHENTICATION, "Simple");
         env.put(Context.SECURITY_PRINCIPAL, username);
         env.put(Context.SECURITY_CREDENTIALS, pwd);
@@ -59,7 +60,7 @@ public abstract class ADQuerier {
             this.context = new InitialDirContext(env);
             return getLoggedInUser(username);
         } catch (NamingException e) {
-            throw new SeinkSansDoozeBackException(HttpStatus.UNAUTHORIZED, "Mot de passe incorrect");
+            throw new SeinkSansDoozeBackException(HttpStatus.UNAUTHORIZED, "Mot de passe incorrect", e);
         }
     }
 
@@ -76,28 +77,12 @@ public abstract class ADQuerier {
         }
     }
 
-    private boolean isAdminConnected(String username) {
-        SearchControls searchControls = new SearchControls();
-        searchControls.setSearchScope(SearchControls.SUBTREE_SCOPE);
-        String filter = "(&(objectClass=user)(userPrincipalName=" + username + ")(memberOf=CN=Administrateurs,CN=Builtin,DC=EQUIPE1B,DC=local))";
-        NamingEnumeration<SearchResult> res;
-        try {
-            res = this.context.search(AD_BASE, filter, searchControls);
-            return res.hasMore();
-        } catch (NamingException e) {
-            throw new SeinkSansDoozeBadRequest();
-        }
-    }
-
     /**
      * Méthode répondant à la route /api/auth/logout en déconnectant l'utilisateur de l'annuaire Active Directory
-     *
-     * @return true si la déconnexion a réussi, false sinon
      */
-    public boolean logout() {
+    public void logout() {
         try {
             this.context.close();
-            return true;
         } catch (NamingException e) {
             throw new SeinkSansDoozeBackException(HttpStatus.INTERNAL_SERVER_ERROR, "Erreur lors de la déconnexion");
         }
@@ -150,38 +135,50 @@ public abstract class ADQuerier {
         return items.subList(startIndex, endIndex);
     }
 
+    /**
+     * Effectue des <code>context.search()</code> de façon sécurisée.
+     * Par default ne fait rien mais est
+     *
+     * @see javax.naming.directory.DirContext#search(Name, String, SearchControls)
+     */
+    protected NamingEnumeration<SearchResult> safeSearch(String base, String filter, SearchControls searchControls) throws NamingException {
+        return this.context.search(base, filter, searchControls);
+    }
+
 
     /////////////////////////// Méthodes de requete AD ///////////////////////////
 
     //  api/search/person   api/search/structures   api/admin/group/all
     // recherche une personne ou une structure
     // consulter la liste des groupes
-    // TODO rajouter un paramètre filtrer pour permettre les requetes incluant des filtres
     protected NamingEnumeration<SearchResult> search(ObjectType searchType, String searchValue) {
-        searchValue = searchValue.replaceAll("(?<=\\w)(?=\\w)", "*");
-        String filter = "(&(objectClass=" + searchType + ")(" + searchType.getNamingAttribute() + "=*" + searchValue + "*))";
+        String filter;
+        if (searchValue.equals("*") || searchValue.equals("")) {
+            filter = "(&(objectClass=" + searchType + ")(!(cn=Dummy Query)))";
+        } else {
+            searchValue = searchValue.replaceAll("(?<=\\w)(?=\\w)", "*");
+            filter = "(&(objectClass=" + searchType + ")(" + searchType.getNamingAttribute() + "=*" + searchValue + "*)(!(cn=Dummy Query)))";
+        }
         SearchControls searchControls = new SearchControls();
         searchControls.setSearchScope(SearchControls.SUBTREE_SCOPE);
         NamingEnumeration<SearchResult> res;
         try {
-            res = this.context.search(AD_BASE, filter, searchControls);
+            res = safeSearch(AD_BASE, filter, searchControls);
             return res;
         } catch (NamingException e) {
-//            throw new RuntimeException(e);
             log.error("Erreur lors de la recherche", e);
             throw new SeinkSansDoozeBadRequest();
         }
     }
 
-
     // api/admin/group/all
     public NamingEnumeration<SearchResult> searchAllGroups() {
-        String filter = "(&(objectClass=group))";
+        String filter = "(objectClass=group)";
         SearchControls searchControls = new SearchControls();
         searchControls.setSearchScope(SearchControls.SUBTREE_SCOPE);
         NamingEnumeration<SearchResult> res;
         try {
-            res = this.context.search(AD_BASE, filter, searchControls);
+            res = this.context.search(AD_GROUP_BASE, filter, searchControls);
             return res;
         } catch (NamingException e) {
             throw new SeinkSansDoozeBadRequest();
@@ -199,7 +196,7 @@ public abstract class ADQuerier {
         searchControls.setSearchScope(SearchControls.SUBTREE_SCOPE);
         NamingEnumeration<SearchResult> res;
         try {
-            res = this.context.search(AD_BASE, filter, searchControls);
+            res = safeSearch(AD_GROUP_BASE, filter, searchControls);
         } catch (NamingException ex) {
             throw new SeinkSansDoozeBadRequest();
         }
@@ -208,10 +205,14 @@ public abstract class ADQuerier {
                 Attributes groupAttributs = res.next().getAttributes();
                 Attribute groupMembersName = groupAttributs.get("member");
                 ArrayList<SearchResult> groupMembers = new ArrayList<>();
-                NamingEnumeration<?> membersList = groupMembersName.getAll();
+                NamingEnumeration<?> membersList;
+                try {
+                    membersList = groupMembersName.getAll();
+                } catch (NullPointerException e) {
+                    return groupMembers;
+                }
                 while (membersList.hasMore()) {
                     String currentMemberCN = membersList.next().toString();
-                    //TODO s'assurer que le search ne créé pas de bug
                     NamingEnumeration<SearchResult> currentMemberEnum = search(ObjectType.PERSON, currentMemberCN.split(",")[0].split("=")[1]);
                     if (currentMemberEnum.hasMore()) {
                         SearchResult currentMember = currentMemberEnum.next();
@@ -219,14 +220,55 @@ public abstract class ADQuerier {
                     }
                 }
                 return groupMembers;
-
             } else {
                 throw new SeinkSansDoozeGroupNotFound();
             }
-
-
         } catch (NamingException ex) {
             throw new SeinkSansDoozeGroupNotFound();
         }
+    }
+
+
+    private NamingEnumeration<SearchResult> getStructureChildren(ObjectType type, String structureDN) {
+        String filter = "objectClass=" + type;
+        SearchControls searchControls = new SearchControls();
+        searchControls.setSearchScope(SearchControls.ONELEVEL_SCOPE);
+        NamingEnumeration<SearchResult> res;
+        try {
+            res = safeSearch(structureDN, filter, searchControls);
+        } catch (NamingException e) {
+            throw new SeinkSansDoozeBadRequest();
+        }
+        return res;
+    }
+
+    protected List<PartialPerson> getStructureMember(String structureDN) {
+        NamingEnumeration<SearchResult> res = getStructureChildren(ObjectType.PERSON, structureDN);
+        List<PartialPerson> members = new ArrayList<>();
+        try {
+            while (res.hasMore()) {
+                SearchResult currentMember = res.next();
+                PartialPerson member = new PartialPerson(currentMember);
+                members.add(member);
+            }
+        } catch (NamingException e) {
+            throw new SeinkSansDoozeBadRequest();
+        }
+        return members;
+    }
+
+    protected List<PartialStructure> getStructureSubStructures(String structureDN) {
+        NamingEnumeration<SearchResult> res = getStructureChildren(ObjectType.STRUCTURE, structureDN);
+        List<PartialStructure> children = new ArrayList<>();
+        try {
+            while (res.hasMore()) {
+                SearchResult currentChild = res.next();
+                PartialStructure child = new PartialStructure(currentChild);
+                children.add(child);
+            }
+        } catch (NamingException e) {
+            throw new SeinkSansDoozeBadRequest();
+        }
+        return children;
     }
 }

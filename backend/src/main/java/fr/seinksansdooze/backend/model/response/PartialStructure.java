@@ -13,9 +13,9 @@ import javax.naming.directory.SearchResult;
 @AllArgsConstructor
 @NoArgsConstructor
 public class PartialStructure {
-    private String ou;
+    private String dn;
 
     public PartialStructure(SearchResult sr) {
-        this.ou = sr.getNameInNamespace().split(",")[0].split("=")[1];
+        this.dn = sr.getAttributes().get("distinguishedName").toString().split(": ")[1];
     }
 }

@@ -1,5 +1,6 @@
 package fr.seinksansdooze.backend.model.response;
 
+import lombok.Data;
 import lombok.SneakyThrows;
 
 import javax.naming.NamingException;
@@ -7,8 +8,10 @@ import javax.naming.directory.Attribute;
 import javax.naming.directory.SearchResult;
 import java.util.Objects;
 
+@Data
 public class LoggedInUser extends PartialPerson{
     private boolean isAdmin;
+    private String token;
 
     @SneakyThrows(NamingException.class)
     public LoggedInUser(SearchResult result) {
@@ -29,9 +32,8 @@ public class LoggedInUser extends PartialPerson{
         return "LoggedInUser{" +
                 "firstName='" + getFirstName() + '\'' +
                 ", lastName='" + getLastName() + '\'' +
-                ", cn='" + getCn() + '\'' +
-                ", structureOU='" + getStructureOU() + '\'' +
-                ", position='" + getPosition() + '\'' +
+                ", structureOU='" + getDn() + '\'' +
+                ", position='" + getTitle() + '\'' +
                 ", isAdmin=" + isAdmin +
                 '}';
     }

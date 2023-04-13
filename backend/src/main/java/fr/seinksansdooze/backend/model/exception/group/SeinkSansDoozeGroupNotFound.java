@@ -5,6 +5,6 @@ import org.springframework.http.HttpStatus;
 
 public class SeinkSansDoozeGroupNotFound extends SeinkSansDoozeBackException {
     public SeinkSansDoozeGroupNotFound() {
-        super(HttpStatus.NOT_FOUND, "Le groupe n'existe pas");
+        super(HttpStatus.NOT_FOUND, "Le groupe n'existe pas.");
     }
 }

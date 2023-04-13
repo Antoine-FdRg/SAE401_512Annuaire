@@ -76,9 +76,9 @@ class PublicADQuerierTest {
 
         when(publicADQuerier.searchPerson(anyString(), anyInt(), anyInt())).thenCallRealMethod();
 
-        assertEquals(5, publicADQuerier.searchPerson("5", 0, 25).size());
+        assertEquals(5, publicADQuerier.searchPerson("5", 0, 15).size());
         assertEquals(10, publicADQuerier.searchPerson("10", 1, 10).size());
-        assertEquals(0, publicADQuerier.searchPerson("14", 20, 25).size());
+        assertEquals(0, publicADQuerier.searchPerson("14", 20, 15).size());
         assertEquals(0, publicADQuerier.searchPerson("7", 48, 2).size());
     }
 }

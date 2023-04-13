@@ -17,7 +17,6 @@ import java.util.List;
  */
 @RestController
 @RequestMapping("/api/public")
-@CrossOrigin
 public class PublicController {
 
     private final IPublicADQuerier querier;
@@ -47,23 +46,23 @@ public class PublicController {
     @GetMapping("/search/structure")
     public List<PartialStructure> searchStructure(@RequestParam String name,
                                                   @RequestParam(defaultValue = "0") int page,
-                                                  @RequestParam(defaultValue = "25") int perPage, ServerHttpRequest request) {
+                                                  @RequestParam(defaultValue = "15") int perPage, ServerHttpRequest request) {
         RateLimiterSingleton.get().tryConsume(String.valueOf(request.getLocalAddress()));
 
         return querier.searchStructure(name, page, perPage);
     }
 
-    @Operation(summary = "Récupère les informations d'une personne en fonction de son cn")
-    @GetMapping("/info/person/{cn}")
-    public PartialPerson personInfo(@PathVariable String cn, ServerHttpRequest request) {
-        RateLimiterSingleton.get().tryConsume(String.valueOf(request.getLocalAddress()));
-        return querier.getPartialPersonInfo(cn);
-    }
-
-    @Operation(summary = "Récupère les informations d'une structure en fonction de son ou")
-    @GetMapping("/info/structure/{ou}")
-    public PartialStructure structureInfo(@PathVariable String ou, ServerHttpRequest request) {
-        RateLimiterSingleton.get().tryConsume(String.valueOf(request.getLocalAddress()));
-        return querier.getPartialStructureInfo(ou);
-    }
+//    @Operation(summary = "Récupère les informations d'une personne en fonction de son cn")
+//    @GetMapping("/info/person/{dn}")
+//    public PartialPerson personInfo(@PathVariable String dn, ServerHttpRequest request) {
+//        RateLimiterSingleton.get().tryConsume(String.valueOf(request.getLocalAddress()));
+//        return querier.getPartialPersonInfo(dn);
+//    }
+//
+//    @Operation(summary = "Récupère les informations d'une structure en fonction de son ou")
+//    @GetMapping("/info/structure/{ou}")
+//    public PartialStructure structureInfo(@PathVariable String ou, ServerHttpRequest request) {
+//        RateLimiterSingleton.get().tryConsume(String.valueOf(request.getLocalAddress()));
+//        return querier.getPartialStructureInfo(ou);
+//    }
 }

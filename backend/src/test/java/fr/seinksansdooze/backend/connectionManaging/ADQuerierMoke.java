@@ -2,6 +2,7 @@ package fr.seinksansdooze.backend.connectionManaging;
 
 import fr.seinksansdooze.backend.connectionManaging.ADBridge.interfaces.IAuthentifiedADQuerier;
 import fr.seinksansdooze.backend.connectionManaging.ADBridge.interfaces.IPublicADQuerier;
+import fr.seinksansdooze.backend.model.payload.NewPersonPayload;
 import fr.seinksansdooze.backend.model.response.*;
 
 import java.util.ArrayList;
@@ -24,8 +25,18 @@ public class ADQuerierMoke implements IAuthentifiedADQuerier, IPublicADQuerier {
     }
 
     @Override
-    public boolean logout() {
-        return false;
+    public void logout() {
+
+    }
+
+    @Override
+    public void createPerson(NewPersonPayload person) {
+
+    }
+
+    @Override
+    public void deletePerson(String dn) {
+
     }
 
     @Override
@@ -53,11 +64,6 @@ public class ADQuerierMoke implements IAuthentifiedADQuerier, IPublicADQuerier {
         return null;
     }
 
-    @Override
-    public boolean userExists(String username) {
-        return false;
-    }
-
 
     @Override
     public boolean createGroup(String groupName) {
@@ -75,17 +81,17 @@ public class ADQuerierMoke implements IAuthentifiedADQuerier, IPublicADQuerier {
     }
 
     @Override
-    public boolean addUserToGroup(String username , String groupName) {
+    public boolean addUserToGroup(String userDN, String groupName) {
         return false;
     }
 
     @Override
-    public boolean removeUserFromGroup(String username, String groupName) {
+    public boolean removeUserFromGroup(String dn, String groupName) {
         return false;
     }
 
     @Override
-    public FullPerson getFullPersonInfo(String cn) {
+    public FullPerson getFullPersonInfo(String dn) {
         return null;
     }
 
@@ -95,7 +101,27 @@ public class ADQuerierMoke implements IAuthentifiedADQuerier, IPublicADQuerier {
     }
 
     @Override
-    public List<PartialPerson> getStructureInfo(String cn) {
+    public FullStructure getStructureInfo(String dn) {
+        return null;
+    }
+
+    @Override
+    public List<PartialPerson> searchPerson(String search, String filter, String value, int page, int perPage) {
+        return null;
+    }
+
+    @Override
+    public List<String> getAllFilters() {
+        return null;
+    }
+
+    @Override
+    public void modifyAttribute(String attribute, String value) {
+
+    }
+
+    @Override
+    public FullPerson getInfo() {
         return null;
     }
 }

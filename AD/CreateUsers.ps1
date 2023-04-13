@@ -18,7 +18,9 @@ foreach ($User in $ADUsers) {
         Write-Warning "The username $($User.username) is too long (Greater than 20)."
     }
     else {
-        try {
+        $managerName = $User.Responsable
+        $Manager = Get-ADUser -Filter {Surname -eq $managerName}
+
             New-ADUser `
                 -SamAccountName $User.username `
                 -UserPrincipalName $Upn `
@@ -31,7 +33,8 @@ foreach ($User in $ADUsers) {
                 -State $User.state `
                 -City $User.city `
                 -StreetAddress $User.streetaddress `
-                -OfficePhone $User.telephone `
+                -OfficePhone $User.telephone_pro `
+                -MobilePhone $User.telephone_perso `
                 -EmailAddress $User.email `
                 -Title $User.jobtitle `
                 -Department $User.department `
@@ -40,10 +43,11 @@ foreach ($User in $ADUsers) {
                 -ChangePasswordAtLogon $False `
                 -PasswordNeverExpires $True `
                 -CannotChangePassword $False
+
+            Set-ADUser -Identity $User.username -Manager $Manager.DistinguishedName
+            Set-ADUser -Identity $User.username -Add @{dateDeNaissance=$User.dateofbirth}
             Write-Host "The user $($User.firstname) $($User.lastname) ($($User.username)) was created."
-        }
-        catch {
-            Write-Error "The user $($User.firstname) $($User.lastname) ($($User.username)) was not created."
-        }
+
+
     }
 }
