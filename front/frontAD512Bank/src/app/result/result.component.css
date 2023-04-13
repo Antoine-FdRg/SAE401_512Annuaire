@@ -419,3 +419,17 @@ h2 {
   justify-content: center;
   box-shadow: none;
 }
+
+.member-zone {
+  height: fit-content;
+  margin: 0 auto;
+  background-color: var(--dark_blue_512);
+  color: var(--white-gradient);
+  width: 90%;
+  padding: 30px;
+  border-bottom-left-radius: 20px;
+  border-bottom-right-radius: 20px;
+  display: flex;
+  gap: 15px;
+}
+
