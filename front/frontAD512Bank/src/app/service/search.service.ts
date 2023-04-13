@@ -17,33 +17,31 @@ export class SearchService {
   actualPage: number = 0;
   lastResults: Person[] = [];
   lastQuery: string = "";
-
-  structureResult:string[]=[];
+  morePageResult: boolean = true; // permet de savoir si le bouton "plus de résultats" doit être affiché
+  structureResult: string[] = [];
 
   constructor(private http: HttpClient) { }
-  searchHouse(search:string)
-  {
+  searchHouse(search: string) {
 
-    this.http.get(apiURL + "/public/search/structure", { params: { name: search, page: this.actualPage, perPage: 15 } }).subscribe((data)=>{
+    this.http.get(apiURL + "/public/search/structure", { params: { name: search, page: this.actualPage, perPage: 15 } }).subscribe((data) => {
       this.lastQuery = search;
       this.resultShowing = true;
-      this.structureResult=data as [];
+      this.structureResult = data as [];
 
     });
   }
-  search(search: string, isAdmin: any, filters:string,values:string) {
+  search(search: string, isAdmin: any, filters: string, values: string) {
 
-    if(isAdmin && filters!="" && values!="")
-    {
-      this.http.get(apiURL + "/admin/search/person", { params: { name: search,filter : filters, value: values,page :this.actualPage,perPage: 15 } }).subscribe((data)=>{
-          this.lastQuery = search;
-          this.resultShowing = true;
-          this.lastResults = data as Person[];
-          this.defaultSorting = this.lastResults.slice();
-          this.sort(this.sortingValue);
-          this.sortingValue = "rang";
+    if (isAdmin && filters != "" && values != "") {
+      this.http.get(apiURL + "/admin/search/person", { params: { name: search, filter: filters, value: values, page: this.actualPage, perPage: 15 } }).subscribe((data) => {
+        this.lastQuery = search;
+        this.resultShowing = true;
+        this.lastResults = data as Person[];
+        this.defaultSorting = this.lastResults.slice();
+        this.sort(this.sortingValue);
+        this.sortingValue = "rang";
       });
-    }else {
+    } else {
 
       this.http.get(apiURL + "/public/search/person", { params: { name: search, page: this.actualPage, perPage: 15 } }).subscribe(
         (response) => {
@@ -61,10 +59,18 @@ export class SearchService {
   }
 
   getMorePage() {
+    let somethingAdded: boolean = false;
     this.actualPage++;
-    this.http.get(apiURL + "/public/search/person", { params: { name: this.lastQuery, page: this.actualPage, perPage: 15 } }).subscribe(
+    this.http.get<Person[]>(apiURL + "/public/search/person", { params: { name: this.lastQuery, page: this.actualPage, perPage: 15 } }).subscribe(
       (response) => {
-        // console.log(response);
+        console.log(response);
+        if (response.length != 0) {
+          console.log("something added");
+
+          somethingAdded = true;
+        }
+        this.morePageResult = somethingAdded;
+
         this.resultShowing = true;
         this.lastResults = this.lastResults.concat(response as Person[]);
         this.defaultSorting = this.lastResults.slice();
