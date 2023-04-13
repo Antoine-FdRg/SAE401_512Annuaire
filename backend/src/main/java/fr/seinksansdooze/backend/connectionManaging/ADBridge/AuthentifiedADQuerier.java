@@ -258,7 +258,6 @@ public class AuthentifiedADQuerier extends ADQuerier implements IAuthentifiedADQ
             if (res.hasMore()) {
                 SearchResult currentPerson = res.next();
                 String dn = currentPerson.getNameInNamespace();
-                System.out.println(dn);
                 this.context.addToEnvironment(Context.SECURITY_PRINCIPAL, dn);
                 this.context.addToEnvironment(Context.SECURITY_CREDENTIALS, prevPwd);
                 ModificationItem[] mods = new ModificationItem[1];
@@ -298,7 +297,6 @@ public class AuthentifiedADQuerier extends ADQuerier implements IAuthentifiedADQ
         } catch (NamingException e) {
             throw new SeinkSansDoozeUserNotFound();
         }
-        partialPersons.forEach(System.out::println);
         //get list of full person
         List<FullPerson> fullPersonList = partialPersons.stream().map(partialPerson -> this.getFullPersonInfo(partialPerson.getDn())).toList();
         //filter by filter on full person attribute
@@ -324,8 +322,6 @@ public class AuthentifiedADQuerier extends ADQuerier implements IAuthentifiedADQ
                 SearchResult currentPerson = res.next();
                 ModificationItem[] modificationItems = new ModificationItem[1];
                 modificationItems[0] = new ModificationItem(DirContext.REPLACE_ATTRIBUTE, new BasicAttribute(attribute, value));
-                System.out.println(currentPerson.getNameInNamespace());
-                System.out.println(modificationItems[0]);
                 try {
                     this.context.modifyAttributes(currentPerson.getNameInNamespace(), modificationItems);
                 } catch (NamingException e) {

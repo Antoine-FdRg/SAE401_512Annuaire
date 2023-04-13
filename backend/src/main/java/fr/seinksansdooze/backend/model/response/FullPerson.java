@@ -52,8 +52,7 @@ public class FullPerson extends PartialPerson {
             this.managerDN = result.getAttributes().get("manager").toString().split(": ")[1];
         } catch (NullPointerException e) {
 //            throw new RuntimeException(e);
-            System.out.println(this.login);
-                        throw new SeinkSansDoozeUserIncomplete();
+            throw new SeinkSansDoozeUserIncomplete();
         }
 
     }

@@ -6,10 +6,7 @@ import fr.seinksansdooze.backend.connectionManaging.rateLimit.RateLimiterSinglet
 import fr.seinksansdooze.backend.model.exception.SeinkSansDoozeBackException;
 import fr.seinksansdooze.backend.model.payload.NewPersonPayload;
 import fr.seinksansdooze.backend.model.payload.UserAndGroupPayload;
-import fr.seinksansdooze.backend.model.response.FullPerson;
-import fr.seinksansdooze.backend.model.response.FullStructure;
-import fr.seinksansdooze.backend.model.response.PartialGroup;
-import fr.seinksansdooze.backend.model.response.PartialPerson;
+import fr.seinksansdooze.backend.model.response.*;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
@@ -77,7 +74,7 @@ public class AdminController {
             @ApiResponse(responseCode = "409", description = "Erreur lors de la création de l'utilisateur.")
     })
     @PostMapping("/member/create")
-    public ResponseEntity<String> createUser(@RequestHeader(HttpHeaders.AUTHORIZATION) String token, @Valid @RequestBody NewPersonPayload payload, ServerHttpRequest request) {
+    public ResponseEntity<SeinkSansDoozeSuccessResponse> createUser(@RequestHeader(HttpHeaders.AUTHORIZATION) String token, @Valid @RequestBody NewPersonPayload payload, ServerHttpRequest request) {
         RateLimiterSingleton.INSTANCE.get().tryConsume(String.valueOf(request.getLocalAddress()));
         try {
             ADConnectionManagerSingleton.INSTANCE.get().getQuerier(token).createPerson(payload);
@@ -87,7 +84,7 @@ public class AdminController {
                     "Erreur de connexion, la session a peut être expirée, veuillez vous reconnecter."
             );
         }
-        return new ResponseEntity<>("Utilisateur créé avec succès.", HttpStatus.CREATED);
+        return new ResponseEntity<>(new SeinkSansDoozeSuccessResponse("Utilisateur créé avec succès."), HttpStatus.CREATED);
     }
 
     @Operation(summary = "Supprime un utilisateur de l'Active Directory.")
@@ -98,7 +95,7 @@ public class AdminController {
             @ApiResponse(responseCode = "404", description = "Utilisateur non trouvé.")
     })
     @DeleteMapping("/member/delete")
-    public ResponseEntity<String> deleteUser(@RequestHeader(HttpHeaders.AUTHORIZATION) String token, @RequestParam String dn, ServerHttpRequest request) {
+    public ResponseEntity<SeinkSansDoozeSuccessResponse> deleteUser(@RequestHeader(HttpHeaders.AUTHORIZATION) String token, @RequestParam String dn, ServerHttpRequest request) {
         RateLimiterSingleton.INSTANCE.get().tryConsume(String.valueOf(request.getLocalAddress()));
         try {
             ADConnectionManagerSingleton.INSTANCE.get().getQuerier(token).deletePerson(dn);
@@ -108,7 +105,7 @@ public class AdminController {
                     "Erreur de connexion, la session a peut être expirée, veuillez vous reconnecter."
             );
         }
-        return new ResponseEntity<>("Utilisateur supprimé avec succès.", HttpStatus.OK);
+        return new ResponseEntity<>(new SeinkSansDoozeSuccessResponse("Utilisateur supprimé avec succès."), HttpStatus.OK);
     }
 
 
@@ -138,7 +135,7 @@ public class AdminController {
             @ApiResponse(responseCode = "409", description = "Le groupe existe déjà.")
     })
     @PostMapping("/group/create")
-    public ResponseEntity<String> createGroup(@RequestHeader(HttpHeaders.AUTHORIZATION) String token, @RequestBody PartialGroup group, ServerHttpRequest request) {
+    public ResponseEntity<SeinkSansDoozeSuccessResponse> createGroup(@RequestHeader(HttpHeaders.AUTHORIZATION) String token, @RequestBody PartialGroup group, ServerHttpRequest request) {
         RateLimiterSingleton.INSTANCE.get().tryConsume(String.valueOf(request.getLocalAddress()));
         boolean isGroupCreated;
         try {
@@ -149,7 +146,13 @@ public class AdminController {
                     "Erreur de connexion, la session a peut être expirée, veuillez vous reconnecter."
             );
         }
-        return isGroupCreated ? new ResponseEntity<>("Groupe créé avec succès.", HttpStatus.OK) : new ResponseEntity<>("Erreur lors de la création du groupe.", HttpStatus.CONFLICT);
+        if (!isGroupCreated) {
+            throw new SeinkSansDoozeBackException(
+                    HttpStatus.CONFLICT,
+                    "Le groupe existe déjà."
+            );
+        }
+        return new ResponseEntity<>(new SeinkSansDoozeSuccessResponse("Groupe créé avec succès "), HttpStatus.CREATED);
     }
 
     @Operation(summary = "Renvoie la liste des membres d'un groupe à partir de son CN.")
@@ -174,13 +177,13 @@ public class AdminController {
 
     @Operation(summary = "Supprime un groupe de l'Active Directory à partir de son CN.")
     @ApiResponses({
-            @ApiResponse(responseCode = "200", description = "Groupe supprimé avec succès"),
+            @ApiResponse(responseCode = "200", description = "Groupe supprimé avec succès."),
             @ApiResponse(responseCode = "400", description = "Requête invalide."),
             @ApiResponse(responseCode = "401", description = "Token invalide."),
             @ApiResponse(responseCode = "404", description = "Groupe non trouvé.")
     })
     @DeleteMapping("/group/delete")
-    public ResponseEntity<String> deleteGroup(@RequestHeader(HttpHeaders.AUTHORIZATION) String token, @RequestBody PartialGroup group, ServerHttpRequest request) {
+    public ResponseEntity<SeinkSansDoozeSuccessResponse> deleteGroup(@RequestHeader(HttpHeaders.AUTHORIZATION) String token, @RequestBody PartialGroup group, ServerHttpRequest request) {
         RateLimiterSingleton.INSTANCE.get().tryConsume(String.valueOf(request.getLocalAddress()));
         try {
             ADConnectionManagerSingleton.INSTANCE.get().getQuerier(token).deleteGroup(group.getCn());
@@ -191,7 +194,7 @@ public class AdminController {
             );
         }
 
-        return new ResponseEntity<>("Groupe supprimé avec succès.", HttpStatus.OK);
+        return new ResponseEntity<>(new SeinkSansDoozeSuccessResponse("Groupe supprimé avec succès."), HttpStatus.OK);
     }
 
     @Operation(summary = "Ajoute un utilisateur à un groupe à partir de son DN et du CN du groupe.")
@@ -203,7 +206,7 @@ public class AdminController {
             @ApiResponse(responseCode = "409", description = "L'utilisateur est déjà dans le groupe.")
     })
     @PutMapping("/group/addUser")
-    public ResponseEntity<String> addUserToGroup(@RequestHeader(HttpHeaders.AUTHORIZATION) String token, @RequestBody UserAndGroupPayload payload, ServerHttpRequest request) {
+    public ResponseEntity<SeinkSansDoozeSuccessResponse> addUserToGroup(@RequestHeader(HttpHeaders.AUTHORIZATION) String token, @RequestBody UserAndGroupPayload payload, ServerHttpRequest request) {
         RateLimiterSingleton.INSTANCE.get().tryConsume(String.valueOf(request.getLocalAddress()));
         boolean isUserAdded;
         try {
@@ -214,7 +217,13 @@ public class AdminController {
                     "Erreur de connexion, la session a peut être expirée, veuillez vous reconnecter."
             );
         }
-        return isUserAdded ? new ResponseEntity<>("Utilisateur ajouté au groupe avec succès.", HttpStatus.OK) : new ResponseEntity<>("Erreur lors de l'ajout de l'utilisateur au groupe.", HttpStatus.NOT_ACCEPTABLE);
+        if (!isUserAdded) {
+            throw new SeinkSansDoozeBackException(
+                    HttpStatus.CONFLICT,
+                    "L'utilisateur est déjà dans le groupe."
+            );
+        }
+        return new ResponseEntity<>(new SeinkSansDoozeSuccessResponse("Utilisateur ajouté au groupe avec succès."), HttpStatus.OK);
     }
 
     @Operation(summary = "Supprime un utilisateur d'un groupe.")
@@ -225,7 +234,7 @@ public class AdminController {
             @ApiResponse(responseCode = "404", description = "Utilisateur ou groupe non trouvé."),
     })
     @DeleteMapping("/group/removeUser")
-    public ResponseEntity<String> removeUserFromGroup(@RequestHeader(HttpHeaders.AUTHORIZATION) String token, @RequestBody UserAndGroupPayload payload, ServerHttpRequest request) {
+    public ResponseEntity<SeinkSansDoozeSuccessResponse> removeUserFromGroup(@RequestHeader(HttpHeaders.AUTHORIZATION) String token, @RequestBody UserAndGroupPayload payload, ServerHttpRequest request) {
         RateLimiterSingleton.INSTANCE.get().tryConsume(String.valueOf(request.getLocalAddress()));
         boolean isUserRemoved;
         try {
@@ -236,7 +245,13 @@ public class AdminController {
                     "Erreur de connexion, la session a peut être expirée, veuillez vous reconnecter."
             );
         }
-        return isUserRemoved ? new ResponseEntity<>("Utilisateur supprimé du groupe avec succès.", HttpStatus.OK) : new ResponseEntity<>("L'utilisateur ne semble pas être dans le groupe.", HttpStatus.NOT_FOUND);
+        if (!isUserRemoved) {
+            throw new SeinkSansDoozeBackException(
+                    HttpStatus.NOT_FOUND,
+                    "L'utilisateur ne semble pas être dans le groupe."
+            );
+        }
+        return new ResponseEntity<>(new SeinkSansDoozeSuccessResponse("Utilisateur supprimé du groupe avec succès."), HttpStatus.OK);
     }
 
     @Operation(summary = "Recherche un utilisateur dans l'Active Directory selon un filtre.")
