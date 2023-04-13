@@ -13,6 +13,7 @@ import fr.seinksansdooze.backend.model.response.PartialPerson;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
+import jakarta.validation.Valid;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -76,7 +77,7 @@ public class AdminController {
             @ApiResponse(responseCode = "409", description = "Erreur lors de la création de l'utilisateur.")
     })
     @PostMapping("/member/create")
-    public ResponseEntity<String> createUser(@RequestHeader(HttpHeaders.AUTHORIZATION) String token, @RequestBody NewPersonPayload payload, ServerHttpRequest request) {
+    public ResponseEntity<String> createUser(@RequestHeader(HttpHeaders.AUTHORIZATION) String token, @Valid @RequestBody NewPersonPayload payload, ServerHttpRequest request) {
         RateLimiterSingleton.INSTANCE.get().tryConsume(String.valueOf(request.getLocalAddress()));
         try {
             ADConnectionManagerSingleton.INSTANCE.get().getQuerier(token).createPerson(payload);
