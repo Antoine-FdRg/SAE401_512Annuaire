@@ -1,0 +1,17 @@
+<header>
+  <div class="bouton512" routerLink="home">
+    <img src="../assets/512_bank_officiel.png" alt="512Bank" />
+    <div>512 Bank</div>
+  </div>
+  <div *ngIf="isAdmin()" id="controlPanel">CONTROL PANEL</div>
+  <section id="right-part-header">
+    <div routerLink="/controlPanel" class="help clickable">Control Panel</div>
+    <app-profile></app-profile>
+  </section>
+</header>
+<main>
+  <div [@routeAnimations]="prepareRoute(outlet)">
+    <router-outlet #outlet="outlet"></router-outlet>
+  </div>
+
+</main>

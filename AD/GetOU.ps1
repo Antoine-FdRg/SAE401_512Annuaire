@@ -1,0 +1,1 @@
+Get-ADOrganizationalUnit -Properties CanonicalName -Filter * | Sort-Object CanonicalName | select Name, DistinguishedName | export-csv -path "C:\Users\Administrateur\Documents\exportOU.csv" -Encoding UTF8

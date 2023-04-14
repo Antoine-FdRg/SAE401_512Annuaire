@@ -1,0 +1,149 @@
+/* You can add global styles to this file, and also import other style files */
+@import url("https://fonts.googleapis.com/css2?family=Poppins:wght@100;200;300;400;500;600;700&display=swap");
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: "Poppins";
+  font-style: normal;
+  font-weight: 700;
+  /* outline: 2px green solid; */
+  scroll-behavior: smooth;
+}
+:root {
+  --blue512: #5271ff;
+  --background512: #afd9fa;
+  --very-dark-blue-512: #005699;
+  --orange512: #ffa21b;
+  --white-text: white;
+  --white-gradient: white;
+  --dark_blue_512: #1169d1;
+  --person512: #f6f6f6;
+  /*
+    TODO à modifier :
+    (à obtenir avec 1ere lettre du prénom et premiere lettre du nom de l'utilisateur)
+  */
+  --initials: "JP";
+  --shadow-admin: 20px 20px 7px 2px #005699;
+}
+
+body {
+  background: var(--background512);
+}
+
+.orange-style {
+  background-color: var(--orange512);
+  box-shadow: 6px 10px 20px rgba(0, 0, 0, 0.25);
+  /* border-radius: 25px; */
+  color: var(--white-text);
+  border-radius: 20px;
+  padding: 15px;
+  text-align: center;
+  border: none;
+}
+.cdk-global-overlay-wrapper {
+  position: fixed;
+  top: 0;
+  left: 0;
+  height: 100vh;
+  display: flex;
+  width: 100vw;
+  backdrop-filter: blur(12px);
+  justify-content: center !important;
+  align-items: center !important;
+}
+
+.cdk-global-overlay-wrapper button{
+  margin: 0 1em;
+}
+
+.cdk-global-overlay-wrapper #danger{
+  color: crimson;
+}
+.cdk-global-overlay-wrapper #danger:hover{
+  background: crimson;
+  color: white;
+  transition: 0.1s;
+}
+
+.blue-style {
+  background: var(--blue512);
+  box-shadow: 6px 10px 20px rgba(0, 0, 0, 0.25);
+  /* border-radius: 25px; */
+  color: var(--white-text);
+  border-radius: 20px;
+  padding: 15px;
+  text-align: center;
+  border: none;
+}
+
+.white-style {
+  background-color: var(--white-gradient);
+  padding: 25px;
+  color: black;
+  border-radius: 20px;
+  border: none;
+}
+
+.clickable {
+  cursor: pointer;
+  transition: 0.3s;
+}
+
+.clickable:hover {
+  filter: grayscale(40%);
+  transition: 0.1s;
+}
+
+.profile-picture {
+  user-select: none;
+  cursor: pointer;
+  background-color: var(--blue512);
+  font-size: 28px;
+  padding: 0px;
+  border-radius: 100%;
+  color: var(--white-gradient);
+  width: 100px;
+  height: 100px;
+  border-style: solid;
+  border-color: var(--very-dark-blue-512);
+  border-width: 7px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.profile-picture > div {
+  font-size: 1.2em;
+}
+
+.blue-shadow {
+  box-shadow: 12px 13px 2px 2px #3d83ff;
+}
+
+/*
+.profile-picture::after {
+
+
+  display: table-cell !important;
+  vertical-align: middle;
+  text-align: center;
+}*/
+
+.noselect {
+  -webkit-touch-callout: none;
+  -webkit-user-select: none;
+  -khtml-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+}
+
+html,
+body {
+  height: 100%;
+}
+body {
+  margin: 0;
+  font-family: Roboto, "Helvetica Neue", sans-serif;
+}

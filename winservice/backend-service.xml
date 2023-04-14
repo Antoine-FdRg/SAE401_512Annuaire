@@ -1,0 +1,25 @@
+<service>
+    <!-- 
+        Référence :
+            https://github.com/winsw/winsw/blob/v3/docs/xml-config-file.md
+     -->
+
+    <id>512backend</id>
+    <name>512backend</name>
+    <description>Ce service s'occupe de la backend du projet 512.</description>
+
+    <executable>C:\Program Files\jdk-19.0.2\bin\java</executable>
+    <!-- Ne pas oublier de changer le nom du jar si besoin -->
+    <arguments>-jar backend.jar</arguments>
+
+    <!-- On veut démarer le service une fois qu'on a accès à internet -->
+    <!-- Merci : https://stackoverflow.com/a/10856951 -->
+    <depend>LanmanServer</depend>
+
+    <log mode="roll-by-size">
+        <sizeThreshold>10240</sizeThreshold>
+        <keepFiles>8</keepFiles>
+    </log>
+
+    <onfailure action="restart" />
+</service>

@@ -1,0 +1,30 @@
+<div id="status-zone" (click)="connexionClicked()">
+  <div id="connexionButton" class="blue-style clickable noselect" *ngIf="visibility.connexion">
+    Connexion
+  </div>
+  <div *ngIf="this.status == 0">
+    <div class="profile-picture" *ngIf="visibility.profilePicture">
+      {{ initials }}
+    </div>
+    <div id="profileMenu" *ngIf="visibility.infoMenu">
+      <div id="presentation">
+        <div class="profile-picture">
+          <div>{{ initials }}</div>
+        </div>
+
+        <div id="names">
+          <div id="name">{{ name }}</div>
+          <div id="surname">{{ surname }}</div>
+        </div>
+      </div>
+
+      <div id="informations" class="clickable" (click)="this.loginService.updateUser()" routerLink="/infos">Plus d'informations</div>
+
+      <div id="deconnexion" class="clickable" (click)="logout()" class="clickable">
+        <span class="material-symbols-outlined"> logout </span>
+
+        <span> Déconnexion </span>
+      </div>
+    </div>
+  </div>
+</div>

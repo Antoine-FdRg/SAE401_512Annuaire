@@ -1,0 +1,63 @@
+<div>
+  <div class="mainContainer">
+    <div class="group5-frame20">
+      <div class="group5-frame4" (click)="toggleShowCreatePopup()">
+        <span class="group5-text"><span>ANNULER</span></span>
+      </div>
+      <div class="group5-frame3" (click)="onCreatePressed()">
+        <span class="group5-text02"><span>CRÉER</span></span>
+      </div>
+
+      <div class="formContainer">
+        <div class="left half">
+
+          <input [formControl]="lastname" placeholder="Nom" type="text"/>
+          <input [formControl]="firstname" placeholder="Prénom" type="text"/>
+          <input [formControl]="email" placeholder="Adresse mail" type="email"/>
+          <input [formControl]="address" placeholder="Adresse" type="text"/>
+        </div>
+        <div class="half right">
+          <input [formControl]="phone" placeholder="Téléphone" type="phone"/>
+          <input [formControl]="title" placeholder="Poste" type="text"/>
+          <input [formControl]="dateOfBirth" placeholder="Date de naissance" type="text"/>
+          <select name="" [formControl]="manager" id="">
+            <option value="" selected disabled hidden>Choisir un manager</option>
+
+            <option *ngFor="let person of this.personList" value="{{person.dn}}">
+              {{person.firstName}}
+            </option>
+
+          </select>
+          <select name="" [formControl]="depSect" id="secteur">
+            <option value="" selected disabled hidden>Choisir un département/secteur</option>
+            <option *ngFor="let secteur of this.secteurList" value="{{secteur.dn}}">
+              {{secteur.department}}/{{secteur.name}}
+            </option>
+          </select>
+        </div>
+      </div>
+      <!--
+      <div class="group5-frame21">
+        <span class="group5-text06"><input #name placeholder="Nom" type="text"/>
+        </span>
+      </div>
+      <div class="group5-frame7">
+        <span class="group5-text08"> <input #firstname placeholder="Prénom" type="text"/></span>
+      </div>
+      <div class="group5-frame23">
+        <span class="group5-text10"><input #email placeholder="Adresse mail" type="text"/></span>
+      </div>
+      <div class="group5-frame24">
+        <span class="group5-text12"><input #addresse placeholder="Adresse" type="text"/></span>
+      </div>
+      <div class="group5-frame25">
+        <span class="group5-text14"><input #telephone placeholder="Téléphone" type="text"/></span>
+      </div>
+      <div class="group5-frame71">
+        <span class="group5-text16"><input #login placeholder="Login" type="text"/></span>
+      </div>
+      <span class="group5-text18"><span>CREATION DE COMPTE</span></span>
+    </div>
+     -->
+    </div>
+  </div>
